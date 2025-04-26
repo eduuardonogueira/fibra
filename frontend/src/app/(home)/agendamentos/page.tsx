@@ -46,11 +46,9 @@ import DetailsModal from "./detailsModal";
 import { StatusBadge } from "./statusBadge";
 import { CustomerTypeBadge } from "./customerTypeBadge";
 
-// Mock data for appointments
 const appointments = MockAppointmentsData;
 type Appointment = (typeof appointments)[0];
 
-// Extract unique service types for filter
 const statusTypes = Array.from(
   new Set(appointments.map((appointment) => appointment.status.toLowerCase()))
 );
@@ -61,16 +59,11 @@ const serviceTypes = Array.from(
   )
 );
 
-// Extract unique customer types for filter
 const customerTypes = Array.from(
   new Set(
     appointments.map((appointment) => appointment.customerType.toLowerCase())
   )
 );
-
-// Status badge component
-
-// Customer type badge component
 
 export default function AppointmentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -103,9 +96,7 @@ export default function AppointmentsPage() {
       );
   };
 
-  // Filter appointments based on search query and filters
   const filteredAppointments = appointments.filter((appointment) => {
-    // Search filter
     const matchesSearch = appointment.customerName
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
@@ -133,7 +124,6 @@ export default function AppointmentsPage() {
     );
   });
 
-  // Add pagination calculation
   const totalPages = Math.ceil(filteredAppointments.length / itemsPerPage);
   const paginatedAppointments = filteredAppointments.slice(
     (currentPage - 1) * itemsPerPage,
@@ -173,13 +163,11 @@ export default function AppointmentsPage() {
     );
   };
 
-  // Add function to open the appointment details modal
   const openAppointmentDetails = (appointment: (typeof appointments)[0]) => {
     setSelectedAppointment(appointment);
     setIsModalOpen(true);
   };
 
-  // Add function to handle page changes
   const changePage = (page: number) => {
     setCurrentPage(page);
   };
@@ -217,12 +205,11 @@ export default function AppointmentsPage() {
               )}
             </div>
 
-            {/* Date filter */}
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="min-w-[200px] justify-start text-left font-normal"
+                  className="min-w-[200px] justify-start text-left font-normal hover:cursor-pointer"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {dateFilter ? (
@@ -242,10 +229,12 @@ export default function AppointmentsPage() {
               </PopoverContent>
             </Popover>
 
-            {/* Status filter */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="min-w-[150px]">
+                <Button
+                  variant="outline"
+                  className="min-w-[150px] hover:cursor-pointer"
+                >
                   {statusFilter.length > 0
                     ? `Status (${statusFilter.length})`
                     : "Status"}
@@ -255,7 +244,7 @@ export default function AppointmentsPage() {
                 {statusTypes.map((status) => (
                   <DropdownMenuCheckboxItem
                     key={status}
-                    className="capitalize"
+                    className="capitalize hover:cursor-pointer"
                     checked={statusFilter.includes(status)}
                     onCheckedChange={() => toggleStatusFilter(status)}
                   >
@@ -265,10 +254,12 @@ export default function AppointmentsPage() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Customer type filter - changed to multi-select dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="min-w-[150px]">
+                <Button
+                  variant="outline"
+                  className="min-w-[150px] hover:cursor-pointer"
+                >
                   {customerTypeFilter.length > 0
                     ? `Tipo (${customerTypeFilter.length})`
                     : "Tipo de Cliente"}
@@ -278,7 +269,7 @@ export default function AppointmentsPage() {
                 {customerTypes.map((type) => (
                   <DropdownMenuCheckboxItem
                     key={type}
-                    className="capitalize"
+                    className="capitalize hover:cursor-pointer"
                     checked={customerTypeFilter.includes(type)}
                     onCheckedChange={() => toggleCustomerTypeFilter(type)}
                   >
@@ -288,10 +279,12 @@ export default function AppointmentsPage() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Service type filter */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="min-w-[200px]">
+                <Button
+                  variant="outline"
+                  className="min-w-[200px] hover:cursor-pointer"
+                >
                   {serviceTypeFilter.length > 0
                     ? `Serviço (${serviceTypeFilter.length})`
                     : "Tipo de Atendimento"}
@@ -301,7 +294,7 @@ export default function AppointmentsPage() {
                 {serviceTypes.map((serviceType) => (
                   <DropdownMenuCheckboxItem
                     key={serviceType}
-                    className="capitalize"
+                    className="capitalize hover:cursor-pointer"
                     checked={serviceTypeFilter.includes(serviceType)}
                     onCheckedChange={() => toggleServiceTypeFilter(serviceType)}
                   >
@@ -315,21 +308,26 @@ export default function AppointmentsPage() {
               onValueChange={(value) => setItemsPerPage(parseInt(value))}
               value={itemsPerPage.toString()}
             >
-              <SelectTrigger className="min-w-[80px] w-full md:w-[80px]">
+              <SelectTrigger className="min-w-[80px] w-full md:w-[80px] hover:cursor-pointer">
                 <SelectValue placeholder="Itens por página" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="5">5</SelectItem>
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="15">15</SelectItem>
+                {Array.from([5, 10, 15]).map((quantity) => (
+                  <SelectItem
+                    key={quantity}
+                    value={quantity.toString()}
+                    className="hover:cursor-pointer"
+                  >
+                    {quantity}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
 
-            {/* Clear filters button */}
             <Button
               variant="ghost"
               onClick={clearFilters}
-              className="min-w-[120px]"
+              className="min-w-[120px] border-1 not-disabled:border-gray-600 hover:cursor-pointer"
               disabled={
                 !searchQuery &&
                 statusFilter.length === 0 &&
@@ -412,6 +410,7 @@ export default function AppointmentsPage() {
                 size="icon"
                 onClick={() => changePage(currentPage - 1)}
                 disabled={currentPage === 1}
+                className="hover:cursor-pointer"
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span className="sr-only">Página anterior</span>
@@ -424,6 +423,7 @@ export default function AppointmentsPage() {
                 size="icon"
                 onClick={() => changePage(currentPage + 1)}
                 disabled={currentPage === totalPages}
+                className="hover:cursor-pointer"
               >
                 <ChevronRight className="h-4 w-4" />
                 <span className="sr-only">Próxima página</span>

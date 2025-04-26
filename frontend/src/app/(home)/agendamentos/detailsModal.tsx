@@ -6,10 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Dispatch, SetStateAction } from "react";
-import { StatusBadge } from "./statusBadge";
-import { CustomerTypeBadge } from "./customerTypeBadge";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { detailsModal, IDetailsModal } from "@/hooks/useDetailsModal";
 
 interface IModalProps {
   selectedAppointment: {
@@ -28,6 +25,13 @@ interface IModalProps {
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
+const renderValue = (details: IDetailsModal, value: string | number | Date) => {
+  if (details.component) return details.component(value);
+  if (details.format) return details.format(value);
+  if (value instanceof Date) return value.toLocaleString();
+  return value;
+};
+
 export default function DetailsModal({
   selectedAppointment,
   isModalOpen,
@@ -42,61 +46,24 @@ export default function DetailsModal({
             Informações completas sobre o agendamento selecionado.
           </DialogDescription>
         </DialogHeader>
-        {selectedAppointment && (
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-medium col-span-1">Nome:</div>
-              <div className="col-span-3">
-                {selectedAppointment.customerName}
+        {selectedAppointment &&
+          detailsModal.map((details) => {
+            const rawValue = selectedAppointment[details.field];
+            const renderedValue: string | React.ReactNode = renderValue(
+              details,
+              rawValue
+            );
+
+            return (
+              <div
+                key={details.label}
+                className="grid grid-cols-[100px_1fr] md:grid-cols-[160px_1fr] items-start gap-4"
+              >
+                <div className="font-medium col-span-1">{details.label}:</div>
+                <div className="col-span-1">{renderedValue}</div>
               </div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-medium">Idade:</div>
-              <div className="col-span-3">{selectedAppointment.age} anos</div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-medium">Telefone:</div>
-              <div className="col-span-3">{selectedAppointment.phone}</div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-medium">Profissional:</div>
-              <div className="col-span-3">
-                {selectedAppointment.professional}
-              </div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-medium">Data:</div>
-              <div className="col-span-3">
-                {format(selectedAppointment.dateTime, "PPP", {
-                  locale: ptBR,
-                })}{" "}
-                às {format(selectedAppointment.dateTime, "HH:mm")} horas
-              </div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-medium">Tipo de Atendimento:</div>
-              <div className="col-span-3">
-                {selectedAppointment.serviceType}
-              </div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-medium">Status:</div>
-              <div className="col-span-3">
-                <StatusBadge status={selectedAppointment.status} />
-              </div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-medium">Tipo de Paciente:</div>
-              <div className="col-span-3">
-                <CustomerTypeBadge type={selectedAppointment.customerType} />
-              </div>
-            </div>
-            <div className="grid grid-cols-4 items-start gap-4">
-              <div className="font-medium">Observações:</div>
-              <div className="col-span-3">{selectedAppointment.notes}</div>
-            </div>
-          </div>
-        )}
+            );
+          })}
       </DialogContent>
     </Dialog>
   );
