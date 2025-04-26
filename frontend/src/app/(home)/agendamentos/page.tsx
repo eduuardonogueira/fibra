@@ -233,22 +233,22 @@ export default function AppointmentsPage() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="min-w-[150px] hover:cursor-pointer"
+                  className="min-w-[200px] hover:cursor-pointer"
                 >
-                  {statusFilter.length > 0
-                    ? `Status (${statusFilter.length})`
-                    : "Status"}
+                  {serviceTypeFilter.length > 0
+                    ? `Serviço (${serviceTypeFilter.length})`
+                    : "Tipo de Atendimento"}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[200px]">
-                {statusTypes.map((status) => (
+              <DropdownMenuContent align="end" className="min-w-[250px]">
+                {serviceTypes.map((serviceType) => (
                   <DropdownMenuCheckboxItem
-                    key={status}
+                    key={serviceType}
                     className="capitalize hover:cursor-pointer"
-                    checked={statusFilter.includes(status)}
-                    onCheckedChange={() => toggleStatusFilter(status)}
+                    checked={serviceTypeFilter.includes(serviceType)}
+                    onCheckedChange={() => toggleServiceTypeFilter(serviceType)}
                   >
-                    {status}
+                    {serviceType}
                   </DropdownMenuCheckboxItem>
                 ))}
               </DropdownMenuContent>
@@ -283,22 +283,22 @@ export default function AppointmentsPage() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="min-w-[200px] hover:cursor-pointer"
+                  className="min-w-[150px] hover:cursor-pointer"
                 >
-                  {serviceTypeFilter.length > 0
-                    ? `Serviço (${serviceTypeFilter.length})`
-                    : "Tipo de Atendimento"}
+                  {statusFilter.length > 0
+                    ? `Status (${statusFilter.length})`
+                    : "Status"}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-[250px]">
-                {serviceTypes.map((serviceType) => (
+              <DropdownMenuContent align="end" className="w-[200px]">
+                {statusTypes.map((status) => (
                   <DropdownMenuCheckboxItem
-                    key={serviceType}
+                    key={status}
                     className="capitalize hover:cursor-pointer"
-                    checked={serviceTypeFilter.includes(serviceType)}
-                    onCheckedChange={() => toggleServiceTypeFilter(serviceType)}
+                    checked={statusFilter.includes(status)}
+                    onCheckedChange={() => toggleStatusFilter(status)}
                   >
-                    {serviceType}
+                    {status}
                   </DropdownMenuCheckboxItem>
                 ))}
               </DropdownMenuContent>
@@ -312,7 +312,7 @@ export default function AppointmentsPage() {
                 <SelectValue placeholder="Itens por página" />
               </SelectTrigger>
               <SelectContent>
-                {Array.from([5, 10, 15]).map((quantity) => (
+                {Array.from([5, 10, 20]).map((quantity) => (
                   <SelectItem
                     key={quantity}
                     value={quantity.toString()}
@@ -341,7 +341,6 @@ export default function AppointmentsPage() {
             </Button>
           </div>
 
-          {/* Appointments table */}
           <div className="rounded-md border overflow-hidden">
             <Table>
               <TableHeader>
@@ -352,11 +351,11 @@ export default function AppointmentsPage() {
                     Telefone
                   </TableHead>
                   <TableHead>Data Agendamento</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="hidden sm:table-cell">Tipo</TableHead>
                   <TableHead className="hidden md:table-cell">
                     Tipo de Atendimento
                   </TableHead>
+                  <TableHead className="hidden sm:table-cell">Tipo</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -382,14 +381,14 @@ export default function AppointmentsPage() {
                           {format(appointment.dateTime, "HH:mm")}
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <StatusBadge status={appointment.status} />
+                      <TableCell className="hidden md:table-cell">
+                        {appointment.serviceType}
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
                         <CustomerTypeBadge type={appointment.customerType} />
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {appointment.serviceType}
+                      <TableCell>
+                        <StatusBadge status={appointment.status} />
                       </TableCell>
                     </TableRow>
                   ))
