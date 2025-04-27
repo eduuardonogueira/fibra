@@ -2,25 +2,20 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Dispatch, SetStateAction } from "react";
 import { detailsModal, IDetailsModal } from "@/hooks/useDetailsModal";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Edit } from "lucide-react";
+import { IFormatedAppointment } from "@/types/appointments";
+import { CUSTOMER_ROUTE } from "@/constants/routes";
 
 interface IModalProps {
-  selectedAppointment: {
-    id: number;
-    customerName: string;
-    age: number;
-    phone: string;
-    dateTime: Date;
-    status: string;
-    customerType: string;
-    professional: string;
-    serviceType: string;
-    notes: string;
-  } | null;
+  selectedAppointment: IFormatedAppointment | null;
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -64,6 +59,14 @@ export default function DetailsModal({
               </div>
             );
           })}
+        <DialogFooter className="mt-2 ">
+          <Link href={`${CUSTOMER_ROUTE}/${selectedAppointment?.customerId}`}>
+            <Button className="hover:cursor-pointer">
+              <Edit className="mr-2 h-4 w-4" />
+              Editar Informações do Cliente
+            </Button>
+          </Link>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

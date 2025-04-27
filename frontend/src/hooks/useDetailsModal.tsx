@@ -1,12 +1,12 @@
-import { CustomerTypeBadge } from "@/app/(home)/agendamentos/customerTypeBadge";
-import { StatusBadge } from "@/app/(home)/agendamentos/statusBadge";
-import { Appointment } from "@/types/appointments";
+import { CustomerTypeBadge } from "@/app/(home)/(auth)/agendamentos/customerTypeBadge";
+import { StatusBadge } from "@/app/(home)/(auth)/agendamentos/statusBadge";
+import { IFormatedAppointment } from "@/types/appointments";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export interface IDetailsModal {
   label: string;
-  field: keyof Appointment;
+  field: keyof IFormatedAppointment;
   format?: (prop: string | number | Date) => string;
   component?: (prop: string | number | Date) => React.ReactNode;
 }

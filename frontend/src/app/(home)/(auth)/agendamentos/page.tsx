@@ -45,9 +45,9 @@ import { MockAppointmentsData } from "./mock";
 import DetailsModal from "./detailsModal";
 import { StatusBadge } from "./statusBadge";
 import { CustomerTypeBadge } from "./customerTypeBadge";
+import { IFormatedAppointment } from "@/types/appointments";
 
-const appointments = MockAppointmentsData;
-type Appointment = (typeof appointments)[0];
+const appointments: IFormatedAppointment[] = MockAppointmentsData;
 
 const statusTypes = Array.from(
   new Set(appointments.map((appointment) => appointment.status.toLowerCase()))
@@ -71,9 +71,8 @@ export default function AppointmentsPage() {
   const [customerTypeFilter, setCustomerTypeFilter] = useState<string[]>([]);
   const [serviceTypeFilter, setServiceTypeFilter] = useState<string[]>([]);
   const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined);
-  const [selectedAppointment, setSelectedAppointment] = useState<
-    (typeof appointments)[0] | null
-  >(null);
+  const [selectedAppointment, setSelectedAppointment] =
+    useState<IFormatedAppointment | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const defaultItemPerPageValue = 5;
@@ -81,8 +80,8 @@ export default function AppointmentsPage() {
 
   const matchesFilter = (
     filter: string[] | Date | undefined,
-    field: keyof Appointment,
-    appointment: Appointment
+    field: keyof IFormatedAppointment,
+    appointment: IFormatedAppointment
   ) => {
     if (filter instanceof Array && filter.length === 0) return true;
 
@@ -173,7 +172,7 @@ export default function AppointmentsPage() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container mx-auto">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Agendamentos</CardTitle>
