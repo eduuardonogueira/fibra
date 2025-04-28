@@ -6,19 +6,19 @@ import { Loader2, Save } from "lucide-react";
 import { ICustomerAndAppointments } from "@/types/customers";
 import { Dispatch, SetStateAction } from "react";
 
-interface ICardFooterProps {
+interface ICustomerFormFooter {
   setIsEditing: (prop: boolean) => void;
   isSaving: boolean;
   setEditedUser: Dispatch<SetStateAction<ICustomerAndAppointments | null>>;
   user: ICustomerAndAppointments;
 }
 
-export function FormFooter({
+export function CustomerFormFooter({
   isSaving,
   setIsEditing,
   setEditedUser,
   user,
-}: ICardFooterProps) {
+}: ICustomerFormFooter) {
   return (
     <CardFooter className="flex justify-between mt-6">
       <Button

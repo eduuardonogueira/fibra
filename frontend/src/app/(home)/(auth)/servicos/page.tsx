@@ -150,7 +150,7 @@ export default function ServicesPage() {
                       Descrição
                     </TableHead>
                     <TableHead>Responsáveis</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
+                    <TableHead className="text-center">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

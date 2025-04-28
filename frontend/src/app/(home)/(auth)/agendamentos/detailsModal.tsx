@@ -12,7 +12,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { IFormatedAppointment } from "@/types/appointments";
-import { CUSTOMER_ROUTE } from "@/constants/routes";
+import { UPDATE_CUSTOMER_ROUTE } from "@/constants/routes";
 
 interface IModalProps {
   selectedAppointment: IFormatedAppointment | null;
@@ -60,7 +60,9 @@ export default function DetailsModal({
             );
           })}
         <DialogFooter className="mt-2 ">
-          <Link href={`${CUSTOMER_ROUTE}/${selectedAppointment?.customerId}`}>
+          <Link
+            href={`${UPDATE_CUSTOMER_ROUTE}/${selectedAppointment?.customerId}`}
+          >
             <Button className="hover:cursor-pointer">
               <Edit className="mr-2 h-4 w-4" />
               Editar Informações do Cliente

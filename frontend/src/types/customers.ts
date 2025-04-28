@@ -9,7 +9,8 @@ export interface ICustomer {
 }
 
 export interface ICustomerAndAppointments extends ICustomer {
-  appointmentsId: string[];
+  appointmentsId?: string[];
+  appointmentsCount: number;
 }
 
 export type CustomerType = "adulto" | "mirim" | "familiar";

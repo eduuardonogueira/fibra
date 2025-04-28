@@ -41,148 +41,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
+import { mockCustomers } from "./mock";
+import { CustomerTypeBadge } from "@/components/customerTypeBadge";
+import { ICustomerAndAppointments } from "@/types/customers";
+import { Pagination } from "@/components/pagination";
+import {
+  CREATE_CUSTOMER_ROUTE,
+  UPDATE_CUSTOMER_ROUTE,
+} from "@/constants/routes";
 
-// Mock data for clients
-const initialClients = [
-  {
-    id: "1",
-    fullName: "John Doe",
-    phone: "(+55) 98765-4321",
-    age: 35,
-    address: "Rua das Flores, 123, São Paulo, SP",
-    photo: "/placeholder.svg?height=40&width=40",
-    customerType: "adulto",
-    appointmentsCount: 4,
-  },
-  {
-    id: "2",
-    fullName: "Jane Smith",
-    phone: "(+55) 91234-5678",
-    age: 28,
-    address: "Avenida Paulista, 1000, São Paulo, SP",
-    photo: "/placeholder.svg?height=40&width=40",
-    customerType: "mirim",
-    appointmentsCount: 3,
-  },
-  {
-    id: "3",
-    fullName: "Robert Johnson",
-    phone: "(+55) 99876-5432",
-    age: 42,
-    address: "Rua Augusta, 500, São Paulo, SP",
-    photo: "/placeholder.svg?height=40&width=40",
-    customerType: "familiar",
-    appointmentsCount: 2,
-  },
-  {
-    id: "4",
-    fullName: "Emily Davis",
-    phone: "(+55) 97654-3210",
-    age: 31,
-    address: "Rua Oscar Freire, 300, São Paulo, SP",
-    photo: "/placeholder.svg?height=40&width=40",
-    customerType: "adulto",
-    appointmentsCount: 4,
-  },
-  {
-    id: "5",
-    fullName: "Michael Wilson",
-    phone: "(+55) 95555-4444",
-    age: 45,
-    address: "Alameda Santos, 800, São Paulo, SP",
-    photo: "/placeholder.svg?height=40&width=40",
-    customerType: "adulto",
-    appointmentsCount: 1,
-  },
-  {
-    id: "6",
-    fullName: "Sarah Brown",
-    phone: "(+55) 94444-3333",
-    age: 29,
-    address: "Rua Haddock Lobo, 400, São Paulo, SP",
-    photo: "/placeholder.svg?height=40&width=40",
-    customerType: "mirim",
-    appointmentsCount: 2,
-  },
-  {
-    id: "7",
-    fullName: "David Miller",
-    phone: "(+55) 93333-2222",
-    age: 38,
-    address: "Avenida Rebouças, 600, São Paulo, SP",
-    photo: "/placeholder.svg?height=40&width=40",
-    customerType: "adulto",
-    appointmentsCount: 0,
-  },
-  {
-    id: "8",
-    fullName: "Jennifer Taylor",
-    phone: "(+55) 92222-1111",
-    age: 33,
-    address: "Rua da Consolação, 700, São Paulo, SP",
-    photo: "/placeholder.svg?height=40&width=40",
-    customerType: "adulto",
-    appointmentsCount: 1,
-  },
-  {
-    id: "9",
-    fullName: "Thomas Anderson",
-    phone: "(+55) 91111-0000",
-    age: 41,
-    address: "Avenida Brigadeiro Faria Lima, 1500, São Paulo, SP",
-    photo: "/placeholder.svg?height=40&width=40",
-    customerType: "familiar",
-    appointmentsCount: 3,
-  },
-  {
-    id: "10",
-    fullName: "Lisa White",
-    phone: "(+55) 90000-9999",
-    age: 27,
-    address: "Rua Bela Cintra, 300, São Paulo, SP",
-    photo: "/placeholder.svg?height=40&width=40",
-    customerType: "mirim",
-    appointmentsCount: 2,
-  },
-];
-
-// Customer type badge component
-const CustomerTypeBadge = ({ type }: { type: string }) => {
-  const typeStyles = {
-    adulto: "bg-gray-100 text-gray-800 hover:bg-gray-100",
-    mirim: "bg-purple-100 text-purple-800 hover:bg-purple-100",
-    familiar: "bg-amber-100 text-amber-800 hover:bg-amber-100",
-  };
-
-  return (
-    <Badge
-      variant="outline"
-      className={`capitalize ${typeStyles[type as keyof typeof typeStyles]}`}
-    >
-      {type === "adulto" ? "Adulto" : type === "mirim" ? "Mirim" : "Familiar"}
-    </Badge>
-  );
-};
-
-type Client = {
-  id: string;
-  fullName: string;
-  phone: string;
-  age: number;
-  address: string;
-  photo: string;
-  customerType: string;
-  appointmentsCount: number;
-};
+const initialCustomers = mockCustomers;
 
 export default function ClientsPage() {
   const router = useRouter();
-  const [clients, setClients] = useState<Client[]>([]);
+  const [clients, setClients] = useState<ICustomerAndAppointments[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [currentClient, setCurrentClient] = useState<Client | null>(null);
+  const [currentClient, setCurrentClient] =
+    useState<ICustomerAndAppointments | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
@@ -191,7 +68,7 @@ export default function ClientsPage() {
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 500));
-      setClients(initialClients);
+      setClients(initialCustomers);
     } catch (error) {
       toast("Erro", {
         description: "Falha ao carregar clientes",
@@ -220,13 +97,12 @@ export default function ClientsPage() {
     currentPage * itemsPerPage
   );
 
-  // Navigate to edit client page
   const navigateToEditClient = (clientId: string) => {
-    router.push(`/editar-usuario/${clientId}`);
+    router.push(`${UPDATE_CUSTOMER_ROUTE}/${clientId}`);
   };
 
   // Open dialog for deleting a client
-  const openDeleteDialog = (client: Client) => {
+  const openDeleteDialog = (client: ICustomerAndAppointments) => {
     setCurrentClient(client);
     setIsDeleteDialogOpen(true);
   };
@@ -255,13 +131,8 @@ export default function ClientsPage() {
     }
   };
 
-  // Handle page changes
-  const changePage = (page: number) => {
-    setCurrentPage(page);
-  };
-
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container mx-auto">
       <Card>
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -271,14 +142,16 @@ export default function ClientsPage() {
                 Gerencie os clientes cadastrados
               </CardDescription>
             </div>
-            <Button onClick={() => router.push("/cadastrar-cliente")}>
+            <Button
+              onClick={() => router.push(CREATE_CUSTOMER_ROUTE)}
+              className="hover:cursor-pointer"
+            >
               <UserPlus className="mr-2 h-4 w-4" />
               Novo Cliente
             </Button>
           </div>
         </CardHeader>
         <CardContent>
-          {/* Search */}
           <div className="relative mb-6">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -324,7 +197,7 @@ export default function ClientsPage() {
                     <TableHead className="hidden sm:table-cell">
                       Agendamentos
                     </TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
+                    <TableHead className="text-center">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -334,9 +207,9 @@ export default function ClientsPage() {
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <div className="relative h-10 w-10 rounded-full overflow-hidden">
-                              {client.photo ? (
+                              {client.photoUrl ? (
                                 <Image
-                                  src={client.photo || "/placeholder.svg"}
+                                  src={client.photoUrl || "/placeholder.svg"}
                                   alt={client.fullName}
                                   fill
                                   className="object-cover"
@@ -371,6 +244,7 @@ export default function ClientsPage() {
                               variant="ghost"
                               size="icon"
                               onClick={() => navigateToEditClient(client.id)}
+                              className="hover:cursor-pointer hover:bg-yellow-500"
                             >
                               <Pencil className="h-4 w-4" />
                               <span className="sr-only">Editar</span>
@@ -379,6 +253,7 @@ export default function ClientsPage() {
                               variant="ghost"
                               size="icon"
                               onClick={() => openDeleteDialog(client)}
+                              className="hover:cursor-pointer hover:bg-red-500"
                               disabled={client.appointmentsCount > 0}
                               title={
                                 client.appointmentsCount > 0
@@ -407,34 +282,14 @@ export default function ClientsPage() {
             </div>
           )}
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center space-x-2 py-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => changePage(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                Anterior
-              </Button>
-              <div className="text-sm text-muted-foreground">
-                Página {currentPage} de {totalPages}
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => changePage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Próxima
-              </Button>
-            </div>
-          )}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+          />
         </CardContent>
       </Card>
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}

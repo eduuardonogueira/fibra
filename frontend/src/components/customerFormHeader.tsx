@@ -5,7 +5,15 @@ import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export function FormHeader() {
+interface ICustomerFormHeader {
+  title: string;
+  description: string;
+}
+
+export function CustomerFormHeader({
+  title,
+  description,
+}: ICustomerFormHeader) {
   const router = useRouter();
   return (
     <CardHeader>

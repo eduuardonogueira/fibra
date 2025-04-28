@@ -1,4 +1,4 @@
-export const MockAppointmentsData = [
+export const mockAppointments = [
   {
     id: "1",
     customerName: "John Doe",

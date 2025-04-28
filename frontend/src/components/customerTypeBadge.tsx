@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
-export const CustomerTypeBadge = ({ type }: { type: string }) => {
+export function CustomerTypeBadge({ type }: { type: string }) {
   const typeStyles = {
     adulto: "bg-gray-100 text-gray-800 hover:bg-gray-100",
     mirim: "bg-purple-100 text-purple-800 hover:bg-purple-100",
@@ -16,4 +16,4 @@ export const CustomerTypeBadge = ({ type }: { type: string }) => {
       {type}
     </Badge>
   );
-};
+}

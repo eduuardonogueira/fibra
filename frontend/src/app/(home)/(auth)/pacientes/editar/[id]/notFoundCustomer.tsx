@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { APPOINTMENTS_ROUTE } from "@/constants/routes";
+import { CUSTOMERS_ROUTE } from "@/constants/routes";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -21,10 +21,10 @@ export function NotFoundCustomer() {
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <Link href={APPOINTMENTS_ROUTE} className="hover:cursor-pointer">
-            <Button>
+          <Link href={CUSTOMERS_ROUTE} >
+            <Button className="hover:cursor-pointer">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Voltar para Agendamentos
+              Voltar para Pacientes
             </Button>
           </Link>
         </CardFooter>

@@ -33,6 +33,12 @@
     "body": ["className='${1:flex}'"],
     "description": "use for scss classnames"
   },
+
+  "Cursor Pointer": {
+    "prefix": "csp",
+    "body": ["className='hover:cursor-pointer ${1:}'"],
+    "description": "use for add pointer"
+  },
   "Image": {
     "prefix": "img",
     "body": ["export { default as ${1:Foo} } from './${2:foo}'"]

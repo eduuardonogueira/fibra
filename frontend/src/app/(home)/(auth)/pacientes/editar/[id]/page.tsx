@@ -17,8 +17,8 @@ import { toast } from "sonner";
 import { usersMock } from "./mock";
 
 import Loading from "./loading";
-import { FormFooter } from "./formFooter";
-import { FormHeader } from "./formHeader";
+import { CustomerFormHeader } from "@/components/customerFormHeader";
+import { CustomerFormFooter } from "@/components/customerFormFooter";
 import { NotFoundCustomer } from "./notFoundCustomer";
 
 import { CustomerType, ICustomerAndAppointments } from "@/types/customers";
@@ -127,7 +127,7 @@ export default function EditUserPage({
                 <Button
                   type="button"
                   size="icon"
-                  className="absolute bottom-0 right-0 rounded-full h-10 w-10"
+                  className="absolute bottom-0 right-0 rounded-full h-10 w-10 hover:cursor-pointer"
                 >
                   <Camera className="h-4 w-4" />
                   <span className="sr-only">Alterar foto</span>

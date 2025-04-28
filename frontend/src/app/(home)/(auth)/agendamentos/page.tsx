@@ -40,14 +40,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { MockAppointmentsData } from "./mock";
+import { mockAppointments } from "./mock";
 import DetailsModal from "./detailsModal";
 import { StatusBadge } from "./statusBadge";
-import { CustomerTypeBadge } from "./customerTypeBadge";
+import { CustomerTypeBadge } from "@/components/customerTypeBadge";
 import { IFormatedAppointment } from "@/types/appointments";
+import { Pagination } from "@/components/pagination";
 
-const appointments: IFormatedAppointment[] = MockAppointmentsData;
+const appointments: IFormatedAppointment[] = mockAppointments;
 
 const statusTypes = Array.from(
   new Set(appointments.map((appointment) => appointment.status.toLowerCase()))
@@ -167,10 +167,6 @@ export default function AppointmentsPage() {
     setIsModalOpen(true);
   };
 
-  const changePage = (page: number) => {
-    setCurrentPage(page);
-  };
-
   return (
     <div className="container mx-auto">
       <Card>
@@ -181,7 +177,6 @@ export default function AppointmentsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Search and filters */}
           <div className="flex flex-col md:flex-row gap-4 mb-6 flex-wrap">
             <div className="relative flex-1 min-w-[250px]">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -401,33 +396,11 @@ export default function AppointmentsPage() {
               </TableBody>
             </Table>
           </div>
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center space-x-2 py-4">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => changePage(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="hover:cursor-pointer"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Página anterior</span>
-              </Button>
-              <div className="text-sm text-muted-foreground">
-                Página {currentPage} de {totalPages}
-              </div>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => changePage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="hover:cursor-pointer"
-              >
-                <ChevronRight className="h-4 w-4" />
-                <span className="sr-only">Próxima página</span>
-              </Button>
-            </div>
-          )}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+          />
         </CardContent>
       </Card>
       <DetailsModal
