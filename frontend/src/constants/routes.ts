@@ -1,7 +1,7 @@
-export const HOME_ROUTE = "/home"
-export const LOGIN_ROUTE = "/login"
-export const APPOINTMENTS_ROUTE = "/agendamentos"
-export const CUSTOMERS_ROUTE = "/pacientes"
-export const CUSTOMER_ROUTE = "/paciente"
-export const SERVICES_ROUTE = "/servicos"
-export const SERVICE_ROUTE = "/servico"
+export const HOME_ROUTE = "/";
+export const LOGIN_ROUTE = "/login";
+export const APPOINTMENTS_ROUTE = "/agendamentos";
+export const CUSTOMERS_ROUTE = "/pacientes";
+export const CUSTOMER_ROUTE = "/paciente";
+export const SERVICES_ROUTE = "/servicos";
+export const SERVICE_ROUTE = "/servico";
