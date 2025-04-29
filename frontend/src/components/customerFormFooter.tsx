@@ -9,7 +9,9 @@ import { Dispatch, SetStateAction } from "react";
 interface ICustomerFormFooter {
   setIsEditing: (prop: boolean) => void;
   isSaving: boolean;
-  setEditedUser: Dispatch<SetStateAction<ICustomerAndAppointments | null>>;
+  setEditedUser:
+    | Dispatch<SetStateAction<ICustomerAndAppointments>>
+    | Dispatch<SetStateAction<ICustomerAndAppointments | null>>;
   user: ICustomerAndAppointments;
 }
 

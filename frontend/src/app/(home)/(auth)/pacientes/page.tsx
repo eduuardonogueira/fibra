@@ -52,7 +52,7 @@ import {
 
 const initialCustomers = mockCustomers;
 
-export default function ClientsPage() {
+export default function CustomerPage() {
   const router = useRouter();
   const [clients, setClients] = useState<ICustomerAndAppointments[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,10 +63,8 @@ export default function ClientsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
-  // Load clients
   const fetchClients = useCallback(async () => {
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 500));
       setClients(initialCustomers);
     } catch (error) {
@@ -173,7 +171,6 @@ export default function ClientsPage() {
             )}
           </div>
 
-          {/* Clients table */}
           {isLoading ? (
             <div className="flex justify-center items-center py-8">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -303,10 +300,10 @@ export default function ClientsPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel className='hover:cursor-pointer '>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-red-600 hover:bg-red-700 hover:cursor-pointer"
             >
               Excluir
             </AlertDialogAction>

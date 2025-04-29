@@ -1,6 +1,7 @@
 import { AppSidebar } from "@/components/appSidebar";
 import { HeaderBreadcrumb } from "@/components/headerBreadcrumb";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/contexts/auth/authProvider";
 
 export default function HomeLayout({
@@ -18,6 +19,7 @@ export default function HomeLayout({
             <HeaderBreadcrumb />
           </div>
           {children}
+          <Toaster />
         </main>
       </SidebarProvider>
     </AuthProvider>

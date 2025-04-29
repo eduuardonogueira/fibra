@@ -121,3 +121,7 @@
   }
 }
 
+.toastDescriptionColor {
+  color: var(--color-gray-800) !important;
+}
+

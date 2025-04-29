@@ -1,6 +1,7 @@
 import { ICustomerAndAppointments } from "@/types/customers";
+import { ICustomerType } from "@/types/customerTypes";
 
-export const usersMock: ICustomerAndAppointments[] = [
+export const mockUsers: ICustomerAndAppointments[] = [
   {
     id: "1",
     fullName: "John Doe",
@@ -44,5 +45,20 @@ export const usersMock: ICustomerAndAppointments[] = [
     customerType: "adulto",
     appointmentsId: ["4"],
     appointmentsCount: 1,
+  },
+];
+
+export const mockCustomerTypes: ICustomerType[] = [
+  {
+    id: "1",
+    name: "adulto",
+  },
+  {
+    id: "2",
+    name: "mirim",
+  },
+  {
+    id: "3",
+    name: "familiar",
   },
 ];

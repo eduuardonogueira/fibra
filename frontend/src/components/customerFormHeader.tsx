@@ -28,12 +28,8 @@ export function CustomerFormHeader({
           <span className="sr-only">Voltar</span>
         </Button>
         <div>
-          <CardTitle className="text-2xl">
-            Editar Informações do Paciente
-          </CardTitle>
-          <CardDescription>
-            Atualize os dados cadastrais do paciente
-          </CardDescription>
+          <CardTitle className="text-2xl">{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
         </div>
       </div>
     </CardHeader>
