@@ -1,4 +1,6 @@
-export const mockAppointments = [
+import { IFormatedAppointment } from "@/types/appointments";
+
+export const mockAppointments: IFormatedAppointment[] = [
   {
     id: "1",
     customerName: "John Doe",
@@ -11,6 +13,7 @@ export const mockAppointments = [
     professional: "Dra. Ana Silva",
     serviceType: "Preventivo para mulher",
     notes: "Paciente com histórico de hipertensão. Verificar medicação atual.",
+    duration: 50,
   },
   {
     id: "2",
@@ -24,6 +27,7 @@ export const mockAppointments = [
     professional: "Dr. Carlos Mendes",
     serviceType: "Vacinação para criança e adulto",
     notes: "Nova paciente. Realizar avaliação completa.",
+    duration: 50,
   },
   {
     id: "3",
@@ -37,6 +41,7 @@ export const mockAppointments = [
     professional: "Dra. Mariana Costa",
     serviceType: "Atendimento nutricional",
     notes: "Acompanhamento pós-tratamento.",
+    duration: 50,
   },
   {
     id: "4",
@@ -50,6 +55,7 @@ export const mockAppointments = [
     professional: "Dr. Paulo Ribeiro",
     serviceType: "Atendimento voltado para diabéticos",
     notes: "Paciente cancelou devido ao compromisso de trabalho.",
+    duration: 40,
   },
   {
     id: "5",
@@ -63,6 +69,7 @@ export const mockAppointments = [
     professional: "Dra. Ana Silva",
     serviceType: "Acupuntura",
     notes: "Consulta para toda a família. Preparar sala maior.",
+    duration: 40,
   },
   {
     id: "6",
@@ -76,6 +83,7 @@ export const mockAppointments = [
     professional: "Dr. Carlos Mendes",
     serviceType: "Fisioterapia para sequela do COVID",
     notes: "Criança sem o olfato. Priorizar atendimento.",
+    duration: 40,
   },
   {
     id: "7",
@@ -89,6 +97,7 @@ export const mockAppointments = [
     professional: "Dra. Mariana Costa",
     serviceType: "Tratamento odontológico",
     notes: "Paciente satisfeito com o atendimento.",
+    duration: 40,
   },
   {
     id: "8",
@@ -102,6 +111,7 @@ export const mockAppointments = [
     professional: "Dr. Paulo Ribeiro",
     serviceType: "Atendimento Psiquiátrico",
     notes: "Paciente com indícios de depressão.",
+    duration: 30,
   },
   {
     id: "9",
@@ -115,6 +125,7 @@ export const mockAppointments = [
     professional: "Dra. Ana Silva",
     serviceType: "Orientações jurídicas",
     notes: "Paciente solicitou reagendamento para a próxima semana.",
+    duration: 30,
   },
   {
     id: "10",
@@ -128,6 +139,7 @@ export const mockAppointments = [
     professional: "Dr. Carlos Mendes",
     serviceType: "Atendimento psquiátrico",
     notes: "Verificar resultados de exames anteriores.",
+    duration: 30,
   },
   {
     id: "11",
@@ -141,6 +153,7 @@ export const mockAppointments = [
     professional: "Dra. Mariana Costa",
     serviceType: "Tratamento odontológico",
     notes: "Paciente com histórico de diabetes.",
+    duration: 30,
   },
   {
     id: "12",
@@ -154,6 +167,7 @@ export const mockAppointments = [
     professional: "Dr. Paulo Ribeiro",
     serviceType: "Preventivo para mulher",
     notes: "Nova paciente. Verificar histórico familiar.",
+    duration: 40,
   },
   {
     id: "13",
@@ -167,6 +181,7 @@ export const mockAppointments = [
     professional: "Dra. Ana Silva",
     serviceType: "Atendimento nutricional",
     notes: "Paciente de longa data. Verificar pressão arterial.",
+    duration: 40,
   },
   {
     id: "14",
@@ -180,6 +195,7 @@ export const mockAppointments = [
     professional: "Dr. Carlos Mendes",
     serviceType: "Fisioterapia para sequela do COVID",
     notes: "Encaminhada por outro profissional.",
+    duration: 40,
   },
   {
     id: "15",
@@ -193,5 +209,6 @@ export const mockAppointments = [
     professional: "Dra. Mariana Costa",
     serviceType: "Atendimento voltado para diabéticos",
     notes: "Paciente em tratamento contínuo.",
+    duration: 40,
   },
 ];

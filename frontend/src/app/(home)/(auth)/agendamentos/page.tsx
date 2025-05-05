@@ -348,6 +348,9 @@ export default function AppointmentsPage() {
                   <TableHead className="hidden md:table-cell">
                     Tipo de Atendimento
                   </TableHead>
+                  <TableHead className="hidden sm:table-cell">
+                    Duração
+                  </TableHead>
                   <TableHead className="hidden sm:table-cell">Tipo</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
@@ -377,6 +380,9 @@ export default function AppointmentsPage() {
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
                         {appointment.serviceType}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        {appointment.duration}
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
                         <CustomerTypeBadge type={appointment.customerType} />

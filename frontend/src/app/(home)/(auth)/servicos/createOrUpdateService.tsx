@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import { myToast } from "@/components/myToast";
 
 interface ICreateOrUpdateServiceProps {
   isDialogOpen: boolean;
@@ -62,9 +62,7 @@ export function CreateOrUpdateService({
 
     try {
       if (!formData.name || !formData.description || !formData.usersId) {
-        toast("Erro", {
-          description: "Todos os campos são obrigatórios",
-        });
+        myToast("Erro", "Todos os campos são obrigatórios");
         setIsSubmitting(false);
         return;
       }
@@ -87,29 +85,25 @@ export function CreateOrUpdateService({
             : service
         );
         setServices(updatedServices);
-        toast("Sucesso", {
-          description: "Serviço atualizado com sucesso",
-        });
+        myToast("Sucesso", "Serviço atualizado com sucesso");
       } else {
         const newService: IServiceList = {
           id: `${services.length + 1}`,
           name: formData.name,
           description: formData.description,
-          users: selectedUsers,
+          professionals: selectedUsers,
+          duration: formData.duration,
         };
         setServices([...services, newService]);
-        toast("Sucesso", {
-          description: "Serviço criado com sucesso",
-        });
+        myToast("Sucesso", "Serviço criado com sucesso");
       }
 
       setIsDialogOpen(false);
     } catch (error) {
-      toast("Erro", {
-        description: currentService
-          ? "Falha ao atualizar serviço"
-          : "Falha ao criar serviço",
-      });
+      myToast(
+        "Erro",
+        currentService ? "Falha ao atualizar serviço" : "Falha ao criar serviço"
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -138,6 +132,18 @@ export function CreateOrUpdateService({
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="Ex: Consulta Regular"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="name">Duração do Serviço (minutos)</Label>
+              <Input
+                id="duration"
+                name="duration"
+                value={formData.duration}
+                onChange={handleInputChange}
+                type="number"
+                placeholder="Tempo em minutos"
                 required
               />
             </div>

@@ -1,3 +1,4 @@
+import { myToast } from "@/components/myToast";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,7 +10,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { IServiceList } from "@/types/services";
-import { toast } from "sonner";
 
 interface IDeleteServiceProps {
   isDeleteDialogOpen: boolean;
@@ -36,14 +36,10 @@ export function DeleteService({
         (service) => service.id !== currentService.id
       );
       setServices(updatedServices);
-      toast("Sucesso", {
-        description: "Serviço excluído com sucesso",
-      });
+      myToast("Sucesso", "Serviço excluído com sucesso");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast("Erro", {
-        description: "Falha ao excluir serviço",
-      });
+      myToast("Erro", "Falha ao excluir serviço");
     } finally {
       setIsDeleteDialogOpen(false);
     }

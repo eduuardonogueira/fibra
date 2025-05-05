@@ -22,12 +22,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { toast } from "sonner";
 import { mockServices } from "./mock";
 import { IServiceForm, IServiceList } from "@/types/services";
 import { Badge } from "@/components/ui/badge";
 import { CreateOrUpdateService } from "./createOrUpdateService";
 import { DeleteService } from "./deleteService";
+import { myToast } from "@/components/myToast";
 
 const initialServices = mockServices;
 
@@ -46,6 +46,7 @@ export default function ServicesPage() {
     name: "",
     description: "",
     usersId: [],
+    duration: 0,
   });
 
   useEffect(() => {
@@ -54,9 +55,7 @@ export default function ServicesPage() {
         await new Promise((resolve) => setTimeout(resolve, 500));
         setServices(initialServices);
       } catch (error) {
-        toast("Erro", {
-          description: "Falha ao carregar serviços",
-        });
+        myToast("Erro", "Falha ao carregar serviços");
       } finally {
         setIsLoading(false);
       }
@@ -69,8 +68,8 @@ export default function ServicesPage() {
     (service) =>
       service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       service.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      service.users.some((user) =>
-        user.fullName.toLowerCase().includes(searchQuery.toLowerCase())
+      service.professionals.some((professional) =>
+        professional.fullName.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
 
@@ -80,6 +79,7 @@ export default function ServicesPage() {
       name: "",
       description: "",
       usersId: [""],
+      duration: 0,
     });
     setIsDialogOpen(true);
   };
@@ -89,7 +89,10 @@ export default function ServicesPage() {
     setFormData({
       name: service.name,
       description: service.description,
-      usersId: service.users.map((user) => user.id.toString()),
+      usersId: service.professionals.map((professional) =>
+        professional.id.toString()
+      ),
+      duration: service.duration,
     });
     setIsDialogOpen(true);
   };
@@ -146,6 +149,7 @@ export default function ServicesPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Nome</TableHead>
+                    <TableHead>Duração</TableHead>
                     <TableHead className="hidden md:table-cell">
                       Descrição
                     </TableHead>
@@ -160,15 +164,18 @@ export default function ServicesPage() {
                         <TableCell className="font-medium">
                           {service.name}
                         </TableCell>
+                        <TableCell className="font-medium text-center">
+                          {service.duration.toString()}
+                        </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          {service.description.length > 100
-                            ? `${service.description.substring(0, 100)}...`
+                          {service.description.length > 60
+                            ? `${service.description.substring(0, 60)}...`
                             : service.description}
                         </TableCell>
                         <TableCell className="flex flex-col gap-2 h-full justify-center">
-                          {service.users.map((user) => (
-                            <Badge key={user.id} variant={"outline"}>
-                              {user.fullName}
+                          {service.professionals.map((professional) => (
+                            <Badge key={professional.id} variant={"outline"}>
+                              {professional.fullName}
                             </Badge>
                           ))}
                         </TableCell>

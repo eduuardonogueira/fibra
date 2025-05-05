@@ -19,7 +19,7 @@ export const detailsModal: IDetailsModal[] = [
   {
     label: "Idade",
     field: "age",
-    format: (number) => number.toString(),
+    format: (number) => `${number} anos`,
   },
   {
     label: "Telefone",
@@ -41,6 +41,11 @@ export const detailsModal: IDetailsModal[] = [
   {
     label: "Tipo de Atendimento",
     field: "serviceType",
+  },
+  {
+    label: "Duração",
+    field: "duration",
+    format: (string) => `${string} minutos`,
   },
   {
     label: "Status",

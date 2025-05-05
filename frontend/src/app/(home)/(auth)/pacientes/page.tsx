@@ -74,7 +74,7 @@ export default function CustomerPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [toast]);
+  }, []);
 
   useEffect(() => {
     fetchClients();
@@ -135,9 +135,9 @@ export default function CustomerPage() {
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <CardTitle className="text-2xl">Clientes</CardTitle>
+              <CardTitle className="text-2xl">Pacientes</CardTitle>
               <CardDescription>
-                Gerencie os clientes cadastrados
+                Gerencie os pacientes cadastrados
               </CardDescription>
             </div>
             <Button

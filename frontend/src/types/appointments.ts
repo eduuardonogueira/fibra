@@ -22,4 +22,5 @@ export interface IFormatedAppointment {
   professional: string;
   serviceType: string;
   notes: string;
+  duration: number;
 }

@@ -34,7 +34,7 @@ export default function Login() {
     },
   });
 
-  async function onSubmit({ username, password }: z.infer<typeof formSchema>) {
+  async function handleSubmit({ username, password }: z.infer<typeof formSchema>) {
     const isLogged = await login(username, password);
 
     if (isLogged) {
@@ -50,7 +50,7 @@ export default function Login() {
         <CardTitle className="text-3xl font-bold">Login</CardTitle>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className="flex flex-col items-center gap-4 w-full max-w-[300px]"
           >
             <FormField

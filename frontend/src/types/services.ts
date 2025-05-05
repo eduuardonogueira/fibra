@@ -4,7 +4,8 @@ export interface IService<TUser = IUser> {
   id: string;
   name: string;
   description: string;
-  users: TUser[];
+  duration: number;
+  professionals: TUser[];
 }
 
 export type IServiceList = IService<{
@@ -15,5 +16,6 @@ export type IServiceList = IService<{
 export interface IServiceForm {
   name: string;
   description: string;
+  duration: number;
   usersId: string[];
 }
