@@ -5,7 +5,10 @@ export interface ICustomer {
   age: number;
   address: string;
   photoUrl: string;
-  customerType: CustomerType;
+  customerType: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface ICustomerAndAppointments extends ICustomer {
@@ -13,4 +16,11 @@ export interface ICustomerAndAppointments extends ICustomer {
   appointmentsCount: number;
 }
 
-export type CustomerType = "adulto" | "mirim" | "familiar";
+export interface ICreateCustomer {
+  fullName: string;
+  phone: string;
+  age: number;
+  address: string;
+  photoUrl?: string;
+  customerType: string;
+}

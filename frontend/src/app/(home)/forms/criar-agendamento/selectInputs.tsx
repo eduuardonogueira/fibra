@@ -12,12 +12,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IRegisterCustomerForm } from "../../../../types/registerCustomerForm";
-import { mockCustomerTypes } from "../../(auth)/pacientes/editar/[id]/mock";
 import { mockServices } from "./mock";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IServiceList } from "@/types/services";
 import { ICustomerType } from "@/types/customerTypes";
 import SelectDisabled from "@/components/selectDisabled";
+import { getCustomerTypes } from "@/hooks/useApi";
+import { myToast } from "@/components/myToast";
+import { Loader2 } from "lucide-react";
 
 interface ISelectInput extends IRegisterCustomerForm {
   selectedService: IServiceList | undefined;
@@ -25,7 +27,6 @@ interface ISelectInput extends IRegisterCustomerForm {
   setSelectedProfessional: Dispatch<SetStateAction<string>>;
 }
 
-const initialCustomerTypes = mockCustomerTypes;
 const initalServices = mockServices;
 
 export default function SelectInputs({
@@ -34,7 +35,8 @@ export default function SelectInputs({
   setSelectedService,
   setSelectedProfessional,
 }: ISelectInput) {
-  const [customerTypes, setCustomersTypes] = useState<
+  const [isLoading, setIsLoading] = useState(false);
+  const [customerTypes, setCustomerTypes] = useState<
     ICustomerType[] | undefined
   >(undefined);
   const [services, setServices] = useState<IServiceList[] | undefined>(
@@ -42,14 +44,25 @@ export default function SelectInputs({
   );
 
   useEffect(() => {
-    async function fetchCustomersAndServices() {
-      await new Promise((resolver) => setTimeout(resolver, 500));
+    async function fetchCustomersTypesAndServices() {
+      try {
+        setIsLoading(true);
+        const data = await getCustomerTypes();
+        setServices(initalServices);
 
-      setCustomersTypes(initialCustomerTypes);
-      setServices(initalServices);
+        if (!data) {
+          myToast("Erro", "Erro ao buscar tipos do paciente");
+          return;
+        }
+        setCustomerTypes(data);
+      } catch (error) {
+        myToast("Error", `${error}`);
+      } finally {
+        setIsLoading(false);
+      }
     }
 
-    fetchCustomersAndServices();
+    fetchCustomersTypesAndServices();
   }, []);
 
   function handleServiceTypeChange(value: string) {
@@ -67,33 +80,43 @@ export default function SelectInputs({
   return (
     <div className="flex flex-col gap-4">
       <h3 className="text-lg font-bold">Classificação</h3>
-      <FormField
-        control={form.control}
-        name="customerType"
-        render={({ field }) => (
-          <FormItem className="w-full">
-            <FormLabel>Tipo do paciente:</FormLabel>
-            <FormControl>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <SelectTrigger className="w-full hover:cursor-pointer">
-                  <SelectValue placeholder="Selecione o tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  {customerTypes?.map((type) => (
-                    <SelectItem
-                      key={type.id}
-                      value={type.id}
-                      className="hover:cursor-pointer"
-                    >
-                      {type.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormControl>
-          </FormItem>
-        )}
-      />
+      {isLoading ? (
+        <div className="flex justify-center items-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      ) : (
+        <FormField
+          control={form.control}
+          name="customerType"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Tipo do paciente:</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger className="w-full hover:cursor-pointer">
+                    <SelectValue placeholder="Selecione o tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {customerTypes?.map((type) => (
+                      <SelectItem
+                        key={type.id}
+                        value={type.id}
+                        className="hover:cursor-pointer"
+                      >
+                        {type.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      )}
+
       <FormField
         control={form.control}
         name="service"
@@ -140,7 +163,7 @@ export default function SelectInputs({
                     <SelectValue placeholder="Selecione o profissional" />
                   </SelectTrigger>
                   <SelectContent>
-                    {selectedService.professionals.map((professional) => (
+                    {selectedService.professionals?.map((professional) => (
                       <SelectItem
                         key={professional.id}
                         value={professional.id}

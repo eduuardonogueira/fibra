@@ -1,6 +1,6 @@
 import { IDayOff } from "./dayOff";
 import { ITimeOff } from "./timeOff";
-import { IWorkSchedule } from "./workSchedule";
+import { IExpedient } from "./expedient";
 
 export interface IUser {
   id: string;
@@ -14,7 +14,7 @@ export type UserRoles = "profissional" | "admin";
 export interface IProfessionalCalendar {
   id: string;
   fullName: string;
-  expedient: IWorkSchedule[];
+  expedient: IExpedient[];
   timeOffs?: ITimeOff[];
   dayOffs?: IDayOff[];
   appointments?: {

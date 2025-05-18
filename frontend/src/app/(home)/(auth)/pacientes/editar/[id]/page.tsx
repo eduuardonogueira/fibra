@@ -14,22 +14,22 @@ import { myToast } from "@/components/myToast";
 import { NotFoundCustomer } from "./notFoundCustomer";
 import Loading from "./loading";
 
-import { CustomerType, ICustomerAndAppointments } from "@/types/customers";
+import { ICustomerAndAppointments } from "@/types/customers";
 import { ICustomerType } from "@/types/customerTypes";
 
-import { mockCustomerTypes, mockUsers } from "./mock";
 import { CUSTOMERS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-
-const initialUsers = mockUsers;
-const initialCustomerTypes = mockCustomerTypes;
+import {
+  getCustomerAndAppointmentsById,
+  getCustomerTypes,
+} from "@/hooks/useApi";
 
 export default function EditCustomerPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id: userId } = use(params);
+  const { id: customerId } = use(params);
 
   const router = useRouter();
 
@@ -39,24 +39,37 @@ export default function EditCustomerPage({
   const [customerTypes, setCustomerTypes] = useState<ICustomerType[] | null>(
     null
   );
-  const [user, setUser] = useState<ICustomerAndAppointments | null>(null);
-  const [editedUser, setEditedUser] = useState<ICustomerAndAppointments | null>(
+  const [customer, setCustumer] = useState<ICustomerAndAppointments | null>(
     null
   );
+  const [editedCustomer, setEditedCustomer] =
+    useState<ICustomerAndAppointments>({
+      id: "",
+      fullName: "",
+      age: 0,
+      address: "",
+      photoUrl: "",
+      phone: "",
+      customerType: {
+        id: "",
+        name: "adulto",
+      },
+      appointmentsCount: 0,
+    });
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchData = async () => {
       setIsLoading(true);
       try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        const foundUser = initialUsers.find((u) => u.id === userId);
+        const foundCustomerData = await getCustomerAndAppointmentsById(
+          customerId
+        );
+        const customerTypesData = await getCustomerTypes();
 
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        setCustomerTypes(initialCustomerTypes);
-
-        if (foundUser) {
-          setEditedUser(foundUser);
-          setUser(foundUser);
+        if (foundCustomerData && customerTypesData) {
+          setEditedCustomer(foundCustomerData);
+          setCustumer(foundCustomerData);
+          setCustomerTypes(customerTypesData);
         } else {
           myToast("Erro", "Usuário não encontrado");
         }
@@ -67,8 +80,8 @@ export default function EditCustomerPage({
       }
     };
 
-    fetchUser();
-  }, [userId]);
+    fetchData();
+  }, [customerId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,17 +104,24 @@ export default function EditCustomerPage({
   ) => {
     const { name, value } = e.target;
     setIsEditing(true);
-    setEditedUser((prev) => (prev ? { ...prev, [name]: value } : null));
+    setEditedCustomer((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCustomerTypeChange = (value: CustomerType) => {
+  const handleCustomerTypeChange = (value: string) => {
     setIsEditing(true);
-    setEditedUser((prev) => (prev ? { ...prev, customerType: value } : null));
+    if (!customerTypes) return;
+    setEditedCustomer((prev) => ({
+      ...prev,
+      customerType: {
+        id: customerTypes.find((type) => type.name === value)?.id ?? "",
+        name: value,
+      },
+    }));
   };
 
   if (isLoading) return <Loading />;
 
-  if (!user || !editedUser) return <NotFoundCustomer />;
+  if (!customer || !editedCustomer) return <NotFoundCustomer />;
 
   return (
     <div className="container mx-auto">
@@ -115,17 +135,17 @@ export default function EditCustomerPage({
           <CustomerFormContent
             handleInputChange={handleInputChange}
             handleCustomerTypeChange={handleCustomerTypeChange}
-            user={user}
-            editedUser={editedUser}
+            customer={customer}
+            editedCustomer={editedCustomer}
             customerTypes={customerTypes}
           />
 
           {isEditing && (
             <CustomerFormFooter
               isSaving={isSaving}
-              user={user}
+              customer={customer}
               setIsEditing={setIsEditing}
-              setEditedUser={setEditedUser}
+              setEditedCustomer={setEditedCustomer}
             />
           )}
         </form>

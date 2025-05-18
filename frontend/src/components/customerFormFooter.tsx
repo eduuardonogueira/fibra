@@ -9,17 +9,17 @@ import { Dispatch, SetStateAction } from "react";
 interface ICustomerFormFooter {
   setIsEditing: (prop: boolean) => void;
   isSaving: boolean;
-  setEditedUser:
+  setEditedCustomer:
     | Dispatch<SetStateAction<ICustomerAndAppointments>>
     | Dispatch<SetStateAction<ICustomerAndAppointments | null>>;
-  user: ICustomerAndAppointments;
+  customer: ICustomerAndAppointments;
 }
 
 export function CustomerFormFooter({
   isSaving,
   setIsEditing,
-  setEditedUser,
-  user,
+  setEditedCustomer,
+  customer,
 }: ICustomerFormFooter) {
   return (
     <CardFooter className="flex justify-between mt-6">
@@ -29,7 +29,7 @@ export function CustomerFormFooter({
         className="hover:cursor-pointer"
         onClick={() => {
           setIsEditing(false);
-          setEditedUser(user);
+          setEditedCustomer(customer);
         }}
       >
         Cancelar

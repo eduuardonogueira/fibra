@@ -4,39 +4,53 @@ import { CustomerFormContent } from "@/components/customerFormContent";
 import { CustomerFormFooter } from "@/components/customerFormFooter";
 import { CustomerFormHeader } from "@/components/customerFormHeader";
 import { Card } from "@/components/ui/card";
-import { CustomerType, ICustomerAndAppointments } from "@/types/customers";
+import { ICustomerAndAppointments } from "@/types/customers";
 import { useEffect, useState } from "react";
-import { mockCustomerTypes } from "../editar/[id]/mock";
 import { ICustomerType } from "@/types/customerTypes";
 import { myToast } from "@/components/myToast";
 import { CUSTOMERS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-
-const initialCustomerTypes = mockCustomerTypes;
+import { getCustomerTypes } from "@/hooks/useApi";
+import { Loader2 } from "lucide-react";
 
 export default function CreateCustomer() {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [customerTypes, setCustomerTypes] = useState<ICustomerType[] | null>(
     null
   );
-  const [editedUser, setEditedUser] = useState<ICustomerAndAppointments>({
+  const [editedCustomer, setEditedCustomer] = useState<ICustomerAndAppointments>({
     id: "",
     fullName: "",
     age: 0,
     address: "",
     photoUrl: "",
     phone: "",
-    customerType: "adulto",
+    customerType: {
+      id: "",
+      name: "adulto",
+    },
     appointmentsCount: 0,
   });
 
   useEffect(() => {
     async function fetchCustomerTypes() {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setCustomerTypes(initialCustomerTypes);
+      try {
+        setIsLoading(true);
+        const data = await getCustomerTypes();
+        if (!data) {
+          myToast("Erro", "Erro ao buscar tipos do paciente");
+          return;
+        }
+        setCustomerTypes(data);
+      } catch (error) {
+        myToast("Error", `${error}`);
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     fetchCustomerTypes();
@@ -64,12 +78,19 @@ export default function CreateCustomer() {
   ) => {
     const { name, value } = e.target;
     setIsEditing(true);
-    setEditedUser((prev) => ({ ...prev, [name]: value }));
+    setEditedCustomer((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCustomerTypeChange = (value: CustomerType) => {
+  const handleCustomerTypeChange = (value: string) => {
     setIsEditing(true);
-    setEditedUser((prev) => ({ ...prev, customerType: value }));
+    if (!customerTypes) return;
+    setEditedCustomer((prev) => ({
+      ...prev,
+      customerType: {
+        id: customerTypes.find((type) => type.name === value)?.id ?? "",
+        name: value,
+      },
+    }));
   };
 
   return (
@@ -80,18 +101,25 @@ export default function CreateCustomer() {
             title="Criar Paciente"
             description="Adicione os dados cadastrais do paciente"
           />
-          <CustomerFormContent
-            handleInputChange={handleInputChange}
-            handleCustomerTypeChange={handleCustomerTypeChange}
-            editedUser={editedUser}
-            customerTypes={customerTypes}
-          />
+          {isLoading ? (
+            <div className="flex justify-center items-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            <CustomerFormContent
+              handleInputChange={handleInputChange}
+              handleCustomerTypeChange={handleCustomerTypeChange}
+              editedCustomer={editedCustomer}
+              customerTypes={customerTypes}
+            />
+          )}
+
           {isEditing && (
             <CustomerFormFooter
               isSaving={isSaving}
-              user={editedUser}
+              customer={editedCustomer}
               setIsEditing={setIsEditing}
-              setEditedUser={setEditedUser}
+              setEditedCustomer={setEditedCustomer}
             />
           )}
         </form>

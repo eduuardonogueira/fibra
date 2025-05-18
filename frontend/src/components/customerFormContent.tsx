@@ -5,7 +5,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Textarea } from "./ui/textarea";
-import { CustomerType, ICustomerAndAppointments } from "@/types/customers";
+import { ICustomerAndAppointments } from "@/types/customers";
 import Image from "next/image";
 import { ICustomerType } from "@/types/customerTypes";
 
@@ -13,26 +13,26 @@ interface ICustomerFormContent {
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  handleCustomerTypeChange: (value: CustomerType) => void;
-  user?: ICustomerAndAppointments;
-  editedUser: ICustomerAndAppointments;
+  handleCustomerTypeChange: (value: string) => void;
+  customer?: ICustomerAndAppointments;
+  editedCustomer: ICustomerAndAppointments;
   customerTypes: ICustomerType[] | null;
 }
 
 export function CustomerFormContent({
   handleInputChange,
   handleCustomerTypeChange,
-  user,
-  editedUser,
+  customer,
+  editedCustomer,
   customerTypes,
 }: ICustomerFormContent) {
   return (
     <CardContent className="space-y-6">
       <div className="flex flex-col items-center space-y-4">
         <div className="relative">
-          {user && user.photoUrl ? (
+          {customer && customer.photoUrl ? (
             <Image
-              src={user.photoUrl || "/placeholder.svg"}
+              src={customer.photoUrl || "/placeholder.svg"}
               alt="Foto do perfil"
               width={150}
               height={150}
@@ -63,7 +63,7 @@ export function CustomerFormContent({
           <Input
             id="fullName"
             name="fullName"
-            value={editedUser.fullName}
+            value={editedCustomer.fullName}
             onChange={handleInputChange}
             required
           />
@@ -74,7 +74,7 @@ export function CustomerFormContent({
           <Input
             id="phone"
             name="phone"
-            value={editedUser.phone}
+            value={editedCustomer.phone}
             onChange={handleInputChange}
             required
           />
@@ -88,7 +88,7 @@ export function CustomerFormContent({
             type="number"
             min="0"
             max="120"
-            value={editedUser.age}
+            value={editedCustomer.age}
             onChange={handleInputChange}
             required
           />
@@ -99,7 +99,7 @@ export function CustomerFormContent({
             <>
               <Label>Tipo de Cliente</Label>
               <RadioGroup
-                value={editedUser.customerType}
+                value={editedCustomer.customerType.name}
                 onValueChange={handleCustomerTypeChange}
                 className="flex flex-col space-y-1"
               >
@@ -127,7 +127,7 @@ export function CustomerFormContent({
           <Textarea
             id="address"
             name="address"
-            value={editedUser.address}
+            value={editedCustomer.address}
             onChange={handleInputChange}
             rows={3}
             required

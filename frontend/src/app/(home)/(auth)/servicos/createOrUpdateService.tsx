@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
 import { myToast } from "@/components/myToast";
+import { createService, getProfessionals } from "@/hooks/useApi";
+import { IUser } from "@/types/users";
+import { useEffect, useState } from "react";
 
 interface ICreateOrUpdateServiceProps {
   isDialogOpen: boolean;
@@ -45,6 +48,32 @@ export function CreateOrUpdateService({
   isSubmitting,
   setIsSubmitting,
 }: ICreateOrUpdateServiceProps) {
+  const [professionals, setProfessionals] = useState<IUser[] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+
+        const professionalsData = await getProfessionals();
+
+        if (!professionalsData) {
+          myToast("Erro", "Falha ao carregar os profissionais");
+          return;
+        }
+
+        setProfessionals(professionalsData);
+      } catch (error) {
+        myToast("Erro", "Falha ao conectar com o servidor");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -60,26 +89,35 @@ export function CreateOrUpdateService({
     e.preventDefault();
     setIsSubmitting(true);
 
+    if (!professionals) return;
+
     try {
-      if (!formData.name || !formData.description || !formData.usersId) {
+      if (
+        !formData.name ||
+        !formData.description ||
+        !formData.usersId ||
+        !formData.duration
+      ) {
         myToast("Erro", "Todos os campos são obrigatórios");
         setIsSubmitting(false);
         return;
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      console.log(formData)
+      const response = await createService(formData);
 
       const selectedUsers = professionals.filter((user) =>
         formData.usersId.includes(user.id)
       );
 
-      if (currentService) {
+      if (currentService && response) {
         const updatedServices = services.map((service) =>
           service.id === currentService.id
             ? {
                 ...service,
                 name: formData.name,
                 description: formData.description,
+                duration: formData.duration,
                 users: selectedUsers,
               }
             : service
@@ -91,8 +129,8 @@ export function CreateOrUpdateService({
           id: `${services.length + 1}`,
           name: formData.name,
           description: formData.description,
-          professionals: selectedUsers,
           duration: formData.duration,
+          professionals: selectedUsers,
         };
         setServices([...services, newService]);
         myToast("Sucesso", "Serviço criado com sucesso");
@@ -141,7 +179,12 @@ export function CreateOrUpdateService({
                 id="duration"
                 name="duration"
                 value={formData.duration}
-                onChange={handleInputChange}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    duration: parseInt(e.target.value),
+                  }))
+                }
                 type="number"
                 placeholder="Tempo em minutos"
                 required
@@ -161,15 +204,24 @@ export function CreateOrUpdateService({
             </div>
             <div className="space-y-2">
               <Label htmlFor="userId">Profissional Responsável</Label>
-              <MultiSelect
-                options={professionals.map((user) => ({
-                  value: user.id,
-                  label: user.fullName,
-                }))}
-                selected={formData.usersId}
-                onChange={handleSelectChange}
-                placeholder="Selecione os profissionais"
-              />
+              {isLoading || !professionals ? (
+                <div className="flex flex-col items-center gap-2">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  <p className="text-muted-foreground">
+                    Carregando profissionais...
+                  </p>
+                </div>
+              ) : (
+                <MultiSelect
+                  options={professionals.map((user) => ({
+                    value: user.id,
+                    label: user.fullName,
+                  }))}
+                  selected={formData.usersId}
+                  onChange={handleSelectChange}
+                  placeholder="Selecione os profissionais"
+                />
+              )}
             </div>
           </div>
           <DialogFooter>

@@ -41,7 +41,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
-import { mockCustomers } from "./mock";
 import { CustomerTypeBadge } from "@/components/customerTypeBadge";
 import { ICustomerAndAppointments } from "@/types/customers";
 import { Pagination } from "@/components/pagination";
@@ -49,74 +48,72 @@ import {
   CREATE_CUSTOMER_ROUTE,
   UPDATE_CUSTOMER_ROUTE,
 } from "@/constants/routes";
-
-const initialCustomers = mockCustomers;
+import { getCustomersAndAppointments } from "@/hooks/useApi";
+import { myToast } from "@/components/myToast";
 
 export default function CustomerPage() {
   const router = useRouter();
-  const [clients, setClients] = useState<ICustomerAndAppointments[]>([]);
+  const [customers, setCustomers] = useState<ICustomerAndAppointments[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [currentClient, setCurrentClient] =
+  const [currentCustomer, setCurrentCustomer] =
     useState<ICustomerAndAppointments | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
-  const fetchClients = useCallback(async () => {
+  const fetchCustomers = useCallback(async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setClients(initialCustomers);
+      const data = await getCustomersAndAppointments();
+      if (!data) {
+        myToast("Erro", "Falha ao carregar clientes");
+        return;
+      }
+
+      setCustomers(data);
     } catch (error) {
-      toast("Erro", {
-        description: "Falha ao carregar clientes",
-      });
+      myToast("Erro", "Falha ao carregar clientes");
     } finally {
       setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchClients();
-  }, [fetchClients]);
+    fetchCustomers();
+  }, [fetchCustomers]);
 
-  // Filter clients based on search query
-  const filteredClients = clients.filter(
-    (client) =>
-      client.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      client.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      client.address.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCustomers = customers.filter(
+    (customers) =>
+      customers.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      customers.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      customers.address.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Pagination
-  const totalPages = Math.ceil(filteredClients.length / itemsPerPage);
-  const paginatedClients = filteredClients.slice(
+  const totalPages = Math.ceil(filteredCustomers.length / itemsPerPage);
+  const paginatedCustomers = filteredCustomers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const navigateToEditClient = (clientId: string) => {
-    router.push(`${UPDATE_CUSTOMER_ROUTE}/${clientId}`);
+  const navigateToEditCustomer = (customerId: string) => {
+    router.push(`${UPDATE_CUSTOMER_ROUTE}/${customerId}`);
   };
 
-  // Open dialog for deleting a client
-  const openDeleteDialog = (client: ICustomerAndAppointments) => {
-    setCurrentClient(client);
+  const openDeleteDialog = (customer: ICustomerAndAppointments) => {
+    setCurrentCustomer(customer);
     setIsDeleteDialogOpen(true);
   };
 
-  // Handle client deletion
   const handleDelete = async () => {
-    if (!currentClient) return;
+    if (!currentCustomer) return;
 
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const updatedClients = clients.filter(
-        (client) => client.id !== currentClient.id
+      const updatedCustomers = customers.filter(
+        (customer) => customer.id !== currentCustomer.id
       );
-      setClients(updatedClients);
+      setCustomers(updatedCustomers);
       toast("Sucesso", {
         description: "Cliente excluído com sucesso",
       });
@@ -198,16 +195,16 @@ export default function CustomerPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedClients.length > 0 ? (
-                    paginatedClients.map((client) => (
-                      <TableRow key={client.id}>
+                  {paginatedCustomers.length > 0 ? (
+                    paginatedCustomers.map((customer) => (
+                      <TableRow key={customer.id}>
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <div className="relative h-10 w-10 rounded-full overflow-hidden">
-                              {client.photoUrl ? (
+                              {customer.photoUrl ? (
                                 <Image
-                                  src={client.photoUrl || "/placeholder.svg"}
-                                  alt={client.fullName}
+                                  src={customer.photoUrl || "/placeholder.svg"}
+                                  alt={customer.fullName}
                                   fill
                                   className="object-cover"
                                 />
@@ -217,30 +214,36 @@ export default function CustomerPage() {
                                 </div>
                               )}
                             </div>
-                            <div className="font-medium">{client.fullName}</div>
+                            <div className="font-medium">
+                              {customer.fullName}
+                            </div>
                           </div>
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          {client.age} anos
+                          {customer.age} anos
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">
-                          {client.phone}
+                          {customer.phone}
                         </TableCell>
                         <TableCell className="hidden lg:table-cell max-w-[300px] truncate">
-                          {client.address}
+                          {customer.address}
                         </TableCell>
                         <TableCell>
-                          <CustomerTypeBadge type={client.customerType} />
+                          <CustomerTypeBadge
+                            type={customer.customerType.name}
+                          />
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">
-                          {client.appointmentsCount}
+                          {customer.appointmentsCount}
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => navigateToEditClient(client.id)}
+                              onClick={() =>
+                                navigateToEditCustomer(customer.id)
+                              }
                               className="hover:cursor-pointer hover:bg-yellow-500"
                             >
                               <Pencil className="h-4 w-4" />
@@ -249,11 +252,11 @@ export default function CustomerPage() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => openDeleteDialog(client)}
+                              onClick={() => openDeleteDialog(customer)}
                               className="hover:cursor-pointer hover:bg-red-500"
-                              disabled={client.appointmentsCount > 0}
+                              disabled={customer.appointmentsCount > 0}
                               title={
-                                client.appointmentsCount > 0
+                                customer.appointmentsCount > 0
                                   ? "Não é possível excluir clientes com agendamentos"
                                   : "Excluir cliente"
                               }
@@ -296,11 +299,13 @@ export default function CustomerPage() {
             <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
             <AlertDialogDescription>
               Tem certeza que deseja excluir o cliente (
-              {currentClient?.fullName})? Esta ação não pode ser desfeita.
+              {currentCustomer?.fullName})? Esta ação não pode ser desfeita.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className='hover:cursor-pointer '>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel className="hover:cursor-pointer ">
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-red-600 hover:bg-red-700 hover:cursor-pointer"

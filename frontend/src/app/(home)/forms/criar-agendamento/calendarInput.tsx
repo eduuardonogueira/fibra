@@ -22,7 +22,7 @@ import {
 import { IProfessionalCalendar } from "@/types/users";
 import { mockProfessionalsCalendar } from "./mock";
 import { IServiceList } from "@/types/services";
-import { IWorkSchedule } from "@/types/workSchedule";
+import { IExpedient } from "@/types/expedient";
 import { ITimeOff } from "@/types/timeOff";
 
 interface ICalendarInput extends IRegisterCustomerForm {
@@ -90,7 +90,7 @@ export function CalendarInput({
   );
 
   function getAvailableTimeSlots(
-    journey: IWorkSchedule[] | undefined,
+    journey: IExpedient[] | undefined,
     appointments: { id: string; dateTime: string }[] | undefined,
     breaks: ITimeOff[] | undefined,
     durationMinutes: number | undefined

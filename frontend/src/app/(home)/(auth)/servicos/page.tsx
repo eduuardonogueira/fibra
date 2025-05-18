@@ -22,14 +22,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { mockServices } from "./mock";
 import { IServiceForm, IServiceList } from "@/types/services";
 import { Badge } from "@/components/ui/badge";
 import { CreateOrUpdateService } from "./createOrUpdateService";
 import { DeleteService } from "./deleteService";
 import { myToast } from "@/components/myToast";
-
-const initialServices = mockServices;
+import { getServices } from "@/hooks/useApi";
 
 export default function ServicesPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,8 +50,9 @@ export default function ServicesPage() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        setServices(initialServices);
+        const data = await getServices();
+        if (!data) return;
+        setServices(data);
       } catch (error) {
         myToast("Erro", "Falha ao carregar serviços");
       } finally {
@@ -68,7 +67,7 @@ export default function ServicesPage() {
     (service) =>
       service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       service.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      service.professionals.some((professional) =>
+      service.professionals?.some((professional) =>
         professional.fullName.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
@@ -89,9 +88,9 @@ export default function ServicesPage() {
     setFormData({
       name: service.name,
       description: service.description,
-      usersId: service.professionals.map((professional) =>
+      usersId: service.professionals?.map((professional) =>
         professional.id.toString()
-      ),
+      ) ?? [""],
       duration: service.duration,
     });
     setIsDialogOpen(true);
@@ -173,11 +172,15 @@ export default function ServicesPage() {
                             : service.description}
                         </TableCell>
                         <TableCell className="flex flex-col gap-2 h-full justify-center">
-                          {service.professionals.map((professional) => (
-                            <Badge key={professional.id} variant={"outline"}>
-                              {professional.fullName}
-                            </Badge>
-                          ))}
+                          {service.professionals ? (
+                            service.professionals.map((professional) => (
+                              <Badge key={professional.id} variant="outline">
+                                {professional.fullName}
+                              </Badge>
+                            ))
+                          ) : (
+                            <Badge variant="outline">Nenhum profissional</Badge>
+                          )}
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
