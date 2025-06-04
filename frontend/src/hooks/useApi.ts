@@ -128,24 +128,6 @@ export async function getCustomersAndAppointments(
     });
 
     return response.json();
-
-    // if (!response) return null;
-
-    // const responseJson: IPaginationResponse<ICustomerAndAppointments[]> =
-    //   await response.json();
-
-    // const { data, ...json } = responseJson;
-
-    // const formatedCustomers = data.map((customer) => ({
-    //   ...customer,
-    //   photoUrl: "",
-    //   appointmentsCount: 0,
-    // }));
-
-    // return {
-    //   data: formatedCustomers,
-    //   ...json,
-    // };
   } catch (error) {
     console.log(error);
     return null;
@@ -170,7 +152,9 @@ export async function createCustomer(
   }
 }
 
-export async function deleteCustomer(id: string): Promise<Response | null> {
+export async function deleteCustomer(
+  id: string
+): Promise<{ status: number } | null> {
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/customers/${id}`, {
       method: "DELETE",
@@ -178,7 +162,9 @@ export async function deleteCustomer(id: string): Promise<Response | null> {
       // headers: { Authorization: `Bearer ${token}` },
     });
 
-    return response;
+    return {
+      status: response.status,
+    };
   } catch (error) {
     console.log(error);
     return null;
