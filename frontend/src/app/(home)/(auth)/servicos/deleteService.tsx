@@ -9,14 +9,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { deleteService } from "@/hooks/useApi";
 import { IServiceList } from "@/types/services";
 
 interface IDeleteServiceProps {
   isDeleteDialogOpen: boolean;
   setIsDeleteDialogOpen: (p: boolean) => void;
-  services: IServiceList[];
+  services: IServiceList[] | null;
   currentService: IServiceList | null;
-  setServices: React.Dispatch<React.SetStateAction<IServiceList[]>>;
+  setServices: React.Dispatch<React.SetStateAction<IServiceList[] | null>>;
 }
 
 export function DeleteService({
@@ -30,11 +31,16 @@ export function DeleteService({
     if (!currentService) return;
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const response = await deleteService(currentService.id);
 
-      const updatedServices = services.filter(
-        (service) => service.id !== currentService.id
-      );
+      if (!response || response.status !== 204) {
+        myToast("Erro", "Falha ao excluir serviço");
+        return;
+      }
+
+      const updatedServices = services
+        ? services.filter((service) => service.id !== currentService.id)
+        : null;
       setServices(updatedServices);
       myToast("Sucesso", "Serviço excluído com sucesso");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

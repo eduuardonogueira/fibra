@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Search, X } from "lucide-react";
+import { CalendarIcon, Loader2, Search, X } from "lucide-react";
 
 import {
   Select,
@@ -40,30 +40,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { mockAppointments } from "./mock";
 import DetailsModal from "./detailsModal";
 import { StatusBadge } from "./statusBadge";
 import { CustomerTypeBadge } from "@/components/customerTypeBadge";
-import { IFormatedAppointment } from "@/types/appointments";
+import {
+  IAppointmentsDetails,
+  IFormatedAppointment,
+} from "@/types/appointments";
 import { Pagination } from "@/components/pagination";
-
-const appointments: IFormatedAppointment[] = mockAppointments;
-
-const statusTypes = Array.from(
-  new Set(appointments.map((appointment) => appointment.status.toLowerCase()))
-);
-
-const serviceTypes = Array.from(
-  new Set(
-    appointments.map((appointment) => appointment.serviceType.toLowerCase())
-  )
-);
-
-const customerTypes = Array.from(
-  new Set(
-    appointments.map((appointment) => appointment.customerType.toLowerCase())
-  )
-);
+import { getAppointments } from "@/hooks/useApi";
+import { myToast } from "@/components/myToast";
 
 export default function AppointmentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,48 +57,86 @@ export default function AppointmentsPage() {
   const [customerTypeFilter, setCustomerTypeFilter] = useState<string[]>([]);
   const [serviceTypeFilter, setServiceTypeFilter] = useState<string[]>([]);
   const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined);
-  const [selectedAppointment, setSelectedAppointment] =
-    useState<IFormatedAppointment | null>(null);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const defaultItemPerPageValue = 5;
-  const [itemsPerPage, setItemsPerPage] = useState(defaultItemPerPageValue);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const matchesFilter = (
-    filter: string[] | Date | undefined,
-    field: keyof IFormatedAppointment,
-    appointment: IFormatedAppointment
-  ) => {
-    if (filter instanceof Array && filter.length === 0) return true;
+  const [selectedAppointment, setSelectedAppointment] =
+    useState<IAppointmentsDetails | null>(null);
+  const [appointments, setAppointments] = useState<
+    IFormatedAppointment[] | null
+  >(null);
 
-    if (typeof appointment[field] === "string" && filter instanceof Array)
-      return filter.includes(appointment[field].toLowerCase());
+  const defaultPageSize = 10;
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    pageSize: defaultPageSize,
+    totalPages: 0,
+  });
 
-    if (appointment[field] && filter instanceof Date)
-      return (
-        format(appointment[field], "yyyy-MM-dd") ===
-        format(filter, "yyyy-MM-dd")
-      );
-  };
+  useEffect(() => {
+    async function fetchAppointments() {
+      try {
+        const response = await getAppointments(pagination);
+        if (!response) return;
 
-  const filteredAppointments = appointments.filter((appointment) => {
-    const matchesSearch = appointment.customerName
+        const { data, totalPages } = response;
+        setAppointments(data);
+        setPagination((prev) => ({ ...prev, totalPages }));
+      } catch (error) {
+        myToast("Erro", `Falha ao carregar serviços ${error}`);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    setIsLoading(true);
+    fetchAppointments();
+  }, [pagination.currentPage, pagination.pageSize]);
+
+  const statusTypes = Array.from(
+    new Set(
+      appointments?.map((appointment) => appointment.status.toLowerCase())
+    )
+  );
+
+  const serviceTypes = Array.from(
+    new Set(
+      appointments?.map((appointment) => appointment.service.name.toLowerCase())
+    )
+  );
+
+  const customerTypes = Array.from(
+    new Set(
+      appointments?.map((appointment) =>
+        appointment.customer.customerType.name.toLowerCase()
+      )
+    )
+  );
+
+  const filteredAppointments = appointments?.filter((appointment) => {
+    const matchesSearch = appointment.customer.fullName
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
 
-    const matchesStatus = matchesFilter(statusFilter, "status", appointment);
-    const matchesCustomerType = matchesFilter(
-      customerTypeFilter,
-      "customerType",
-      appointment
-    );
-    const matchesServiceType = matchesFilter(
-      serviceTypeFilter,
-      "serviceType",
-      appointment
-    );
+    const matchesStatus =
+      statusFilter.length === 0 ||
+      statusFilter.includes(appointment.status.toLowerCase());
+
+    const matchesCustomerType =
+      customerTypeFilter.length === 0 ||
+      customerTypeFilter.includes(
+        appointment.customer.customerType.name.toLowerCase()
+      );
+
+    const matchesServiceType =
+      serviceTypeFilter.length === 0 ||
+      serviceTypeFilter.includes(appointment.service.name.toLowerCase());
+
     const matchesDate =
-      !dateFilter || matchesFilter(dateFilter, "dateTime", appointment);
+      !dateFilter ||
+      format(appointment.dateTime, "yyyy-MM-dd") ===
+        format(dateFilter, "yyyy-MM-dd");
 
     return (
       matchesSearch &&
@@ -123,11 +147,9 @@ export default function AppointmentsPage() {
     );
   });
 
-  const totalPages = Math.ceil(filteredAppointments.length / itemsPerPage);
-  const paginatedAppointments = filteredAppointments.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const setCurrentPage = (page: number) => {
+    setPagination((prev) => ({ ...prev, currentPage: page }));
+  };
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -135,7 +157,7 @@ export default function AppointmentsPage() {
     setCustomerTypeFilter([]);
     setServiceTypeFilter([]);
     setDateFilter(undefined);
-    setItemsPerPage(defaultItemPerPageValue);
+    setPagination((prev) => ({ ...prev, pageSize: defaultPageSize }));
   };
 
   const toggleStatusFilter = (status: string) => {
@@ -162,8 +184,24 @@ export default function AppointmentsPage() {
     );
   };
 
-  const openAppointmentDetails = (appointment: (typeof appointments)[0]) => {
-    setSelectedAppointment(appointment);
+  const openAppointmentDetails = (appointment: IFormatedAppointment) => {
+    const formatedData = {
+      id: appointment.id,
+      status: appointment.status,
+      dateTime: appointment.dateTime,
+      observations: appointment.observations,
+      customerId: appointment.customer.id,
+      customerFullName: appointment.customer.fullName,
+      phone: appointment.customer.phone,
+      age: appointment.customer.age,
+      address: appointment.customer.address,
+      photoUrl: appointment.customer.photoUrl,
+      customerType: appointment.customer.customerType.name,
+      serviceType: appointment.service.name,
+      duration: appointment.service.duration,
+      professional: appointment.professional.fullName,
+    };
+    setSelectedAppointment(formatedData);
     setIsModalOpen(true);
   };
 
@@ -177,236 +215,258 @@ export default function AppointmentsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col md:flex-row gap-4 mb-6 flex-wrap">
-            <div className="relative flex-1 min-w-[250px]">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Pesquisar por nome..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {searchQuery && (
+          {isLoading ? (
+            <div className="flex justify-center items-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            <>
+              {/* Filters */}
+              <div className="flex flex-col md:flex-row gap-4 mb-6 flex-wrap">
+                <div className="relative flex-1 min-w-[250px]">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Pesquisar por nome..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  {searchQuery && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-1 top-1 h-7 w-7 p-0"
+                      onClick={() => setSearchQuery("")}
+                    >
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Limpar pesquisa</span>
+                    </Button>
+                  )}
+                </div>
+
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="min-w-[200px] justify-start text-left font-normal hover:cursor-pointer"
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {dateFilter ? (
+                        format(dateFilter, "PPP")
+                      ) : (
+                        <span>Escolha uma data</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={dateFilter}
+                      onSelect={setDateFilter}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="min-w-[200px] hover:cursor-pointer"
+                    >
+                      {serviceTypeFilter.length > 0
+                        ? `Serviço (${serviceTypeFilter.length})`
+                        : "Tipo de Atendimento"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="min-w-[250px]">
+                    {serviceTypes.map((serviceType) => (
+                      <DropdownMenuCheckboxItem
+                        key={serviceType}
+                        className="capitalize hover:cursor-pointer"
+                        checked={serviceTypeFilter.includes(serviceType)}
+                        onCheckedChange={() =>
+                          toggleServiceTypeFilter(serviceType)
+                        }
+                      >
+                        {serviceType}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="min-w-[150px] hover:cursor-pointer"
+                    >
+                      {customerTypeFilter.length > 0
+                        ? `Tipo (${customerTypeFilter.length})`
+                        : "Tipo de Cliente"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-[200px]">
+                    {customerTypes.map((type) => (
+                      <DropdownMenuCheckboxItem
+                        key={type}
+                        className="capitalize hover:cursor-pointer"
+                        checked={customerTypeFilter.includes(type)}
+                        onCheckedChange={() => toggleCustomerTypeFilter(type)}
+                      >
+                        {type}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="min-w-[150px] hover:cursor-pointer"
+                    >
+                      {statusFilter.length > 0
+                        ? `Status (${statusFilter.length})`
+                        : "Status"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-[200px]">
+                    {statusTypes.map((status) => (
+                      <DropdownMenuCheckboxItem
+                        key={status}
+                        className="capitalize hover:cursor-pointer"
+                        checked={statusFilter.includes(status)}
+                        onCheckedChange={() => toggleStatusFilter(status)}
+                      >
+                        {status}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <Select
+                  onValueChange={(value) =>
+                    setPagination((prev) => ({
+                      ...prev,
+                      pageSize: parseInt(value),
+                    }))
+                  }
+                  value={pagination.pageSize.toString()}
+                >
+                  <SelectTrigger className="min-w-[80px] w-full md:w-[80px] hover:cursor-pointer">
+                    <SelectValue placeholder="Itens por página" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from([5, 10, 20]).map((quantity) => (
+                      <SelectItem
+                        key={quantity}
+                        value={quantity.toString()}
+                        className="hover:cursor-pointer"
+                      >
+                        {quantity}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
                 <Button
                   variant="ghost"
-                  size="sm"
-                  className="absolute right-1 top-1 h-7 w-7 p-0"
-                  onClick={() => setSearchQuery("")}
+                  onClick={clearFilters}
+                  className="min-w-[120px] border-1 not-disabled:border-gray-600 hover:cursor-pointer"
+                  disabled={
+                    !searchQuery &&
+                    statusFilter.length === 0 &&
+                    customerTypeFilter.length === 0 &&
+                    serviceTypeFilter.length === 0 &&
+                    !dateFilter &&
+                    pagination.pageSize === defaultPageSize
+                  }
                 >
-                  <X className="h-4 w-4" />
-                  <span className="sr-only">Limpar pesquisa</span>
+                  Limpar Filtros
                 </Button>
-              )}
-            </div>
+              </div>
 
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="min-w-[200px] justify-start text-left font-normal hover:cursor-pointer"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {dateFilter ? (
-                    format(dateFilter, "PPP")
-                  ) : (
-                    <span>Escolha uma data</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={dateFilter}
-                  onSelect={setDateFilter}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="min-w-[200px] hover:cursor-pointer"
-                >
-                  {serviceTypeFilter.length > 0
-                    ? `Serviço (${serviceTypeFilter.length})`
-                    : "Tipo de Atendimento"}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-[250px]">
-                {serviceTypes.map((serviceType) => (
-                  <DropdownMenuCheckboxItem
-                    key={serviceType}
-                    className="capitalize hover:cursor-pointer"
-                    checked={serviceTypeFilter.includes(serviceType)}
-                    onCheckedChange={() => toggleServiceTypeFilter(serviceType)}
-                  >
-                    {serviceType}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="min-w-[150px] hover:cursor-pointer"
-                >
-                  {customerTypeFilter.length > 0
-                    ? `Tipo (${customerTypeFilter.length})`
-                    : "Tipo de Cliente"}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[200px]">
-                {customerTypes.map((type) => (
-                  <DropdownMenuCheckboxItem
-                    key={type}
-                    className="capitalize hover:cursor-pointer"
-                    checked={customerTypeFilter.includes(type)}
-                    onCheckedChange={() => toggleCustomerTypeFilter(type)}
-                  >
-                    {type}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="min-w-[150px] hover:cursor-pointer"
-                >
-                  {statusFilter.length > 0
-                    ? `Status (${statusFilter.length})`
-                    : "Status"}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[200px]">
-                {statusTypes.map((status) => (
-                  <DropdownMenuCheckboxItem
-                    key={status}
-                    className="capitalize hover:cursor-pointer"
-                    checked={statusFilter.includes(status)}
-                    onCheckedChange={() => toggleStatusFilter(status)}
-                  >
-                    {status}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Select
-              onValueChange={(value) => setItemsPerPage(parseInt(value))}
-              value={itemsPerPage.toString()}
-            >
-              <SelectTrigger className="min-w-[80px] w-full md:w-[80px] hover:cursor-pointer">
-                <SelectValue placeholder="Itens por página" />
-              </SelectTrigger>
-              <SelectContent>
-                {Array.from([5, 10, 20]).map((quantity) => (
-                  <SelectItem
-                    key={quantity}
-                    value={quantity.toString()}
-                    className="hover:cursor-pointer"
-                  >
-                    {quantity}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Button
-              variant="ghost"
-              onClick={clearFilters}
-              className="min-w-[120px] border-1 not-disabled:border-gray-600 hover:cursor-pointer"
-              disabled={
-                !searchQuery &&
-                statusFilter.length === 0 &&
-                customerTypeFilter.length === 0 &&
-                serviceTypeFilter.length === 0 &&
-                !dateFilter &&
-                itemsPerPage === defaultItemPerPageValue
-              }
-            >
-              Limpar Filtros
-            </Button>
-          </div>
-
-          <div className="rounded-md border overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nome</TableHead>
-                  <TableHead className="hidden md:table-cell">Idade</TableHead>
-                  <TableHead className="hidden lg:table-cell">
-                    Telefone
-                  </TableHead>
-                  <TableHead>Data Agendamento</TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Tipo de Atendimento
-                  </TableHead>
-                  <TableHead className="hidden sm:table-cell">
-                    Duração
-                  </TableHead>
-                  <TableHead className="hidden sm:table-cell">Tipo</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {paginatedAppointments.length > 0 ? (
-                  paginatedAppointments.map((appointment) => (
-                    <TableRow
-                      key={appointment.id}
-                      className="cursor-pointer hover:bg-muted/50"
-                      onClick={() => openAppointmentDetails(appointment)}
-                    >
-                      <TableCell className="font-medium">
-                        {appointment.customerName}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {appointment.age}
-                      </TableCell>
-                      <TableCell className="hidden lg:table-cell">
-                        {appointment.phone}
-                      </TableCell>
-                      <TableCell>
-                        {format(appointment.dateTime, "dd/MM/yyyy")}
-                        <div className="text-sm text-muted-foreground">
-                          {format(appointment.dateTime, "HH:mm")}
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {appointment.serviceType}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {appointment.duration}
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <CustomerTypeBadge type={appointment.customerType} />
-                      </TableCell>
-                      <TableCell>
-                        <StatusBadge status={appointment.status} />
-                      </TableCell>
+              <div className="rounded-md border overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Nome</TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        Idade
+                      </TableHead>
+                      <TableHead className="hidden lg:table-cell">
+                        Telefone
+                      </TableHead>
+                      <TableHead>Data Agendamento</TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        Tipo de Atendimento
+                      </TableHead>
+                      <TableHead className="hidden sm:table-cell">
+                        Duração
+                      </TableHead>
+                      <TableHead className="hidden sm:table-cell">
+                        Tipo
+                      </TableHead>
+                      <TableHead>Status</TableHead>
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-24 text-center">
-                      Nenhum agendamento encontrado.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            setCurrentPage={setCurrentPage}
-          />
+                  </TableHeader>
+                  <TableBody>
+                    {filteredAppointments && filteredAppointments.length > 0 ? (
+                      filteredAppointments.map((appointment) => (
+                        <TableRow
+                          key={appointment.id}
+                          className="cursor-pointer hover:bg-muted/50"
+                          onClick={() => openAppointmentDetails(appointment)}
+                        >
+                          <TableCell className="font-medium">
+                            {appointment.customer.fullName}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {appointment.customer.age}
+                          </TableCell>
+                          <TableCell className="hidden lg:table-cell">
+                            {appointment.customer.phone}
+                          </TableCell>
+                          <TableCell>
+                            {format(appointment.dateTime, "dd/MM/yyyy")}
+                            <div className="text-sm text-muted-foreground">
+                              {format(appointment.dateTime, "HH:mm")}
+                            </div>
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {appointment.service.name}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {appointment.service.duration}
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell">
+                            <CustomerTypeBadge
+                              type={appointment.customer.customerType.name}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <StatusBadge status={appointment.status} />
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={7} className="h-24 text-center">
+                          Nenhum agendamento encontrado.
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  totalPages={pagination.totalPages}
+                  setCurrentPage={setCurrentPage}
+                />
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
       <DetailsModal

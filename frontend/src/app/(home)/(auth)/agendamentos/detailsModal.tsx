@@ -11,11 +11,11 @@ import { detailsModal, IDetailsModal } from "@/hooks/useDetailsModal";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
-import { IFormatedAppointment } from "@/types/appointments";
+import { IAppointmentsDetails } from "@/types/appointments";
 import { UPDATE_CUSTOMER_ROUTE } from "@/constants/routes";
 
 interface IModalProps {
-  selectedAppointment: IFormatedAppointment | null;
+  selectedAppointment: IAppointmentsDetails | null;
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }

@@ -22,5 +22,7 @@ export interface ICreateCustomer {
   age: number;
   address: string;
   photoUrl?: string;
-  customerType: string;
+  customerType: {
+    id: string;
+  };
 }

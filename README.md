@@ -1,30 +1,91 @@
-# Appointment page
+# Fibra# Fibra
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+[![Deploy](https://img.shields.io/badge/Deploy-Vercel-000?logo=vercel)](https://fibra-flame.vercel.app/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Frontend-Next.js-000?logo=nextdotjs)](https://nextjs.org/)
+[![Spring Boot](https://img.shields.io/badge/Backend-SpringBoot-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
+[![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?logo=mysql)](https://www.mysql.com/)
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/eduardo-nogueira-de-castros-projects/v0-appointment-page)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/ZHqiHJyg00F)
+**Fibra** é um sistema de agendamento simples e eficiente, onde clientes podem escolher um profissional, selecionar a data e o horário, e realizar seu agendamento de forma prática e rápida.
 
-## Overview
+🔗 **Acesse o projeto:** [fibra-flame.vercel.app](https://fibra-flame.vercel.app/)
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+---
 
-## Deployment
+## ✨ Funcionalidades
 
-Your project is live at:
+- ✅ Visualização de profissionais disponíveis.
+- ✅ Escolha de data e horário para agendamento.
+- ✅ Sistema de gerenciamento de agendamentos para profissionais.
+- ✅ Integração entre frontend e backend para uma experiência fluida.
 
-**[https://vercel.com/eduardo-nogueira-de-castros-projects/v0-appointment-page](https://vercel.com/eduardo-nogueira-de-castros-projects/v0-appointment-page)**
+---
 
-## Build your app
+## 🚀 Tecnologias utilizadas
 
-Continue building your app on:
+- **Next.js** — Framework React para desenvolvimento do frontend.
+- **Spring Boot** — Framework Java para construção da API REST no backend.
+- **MySQL** — Banco de dados relacional para persistência das informações.
 
-**[https://v0.dev/chat/projects/ZHqiHJyg00F](https://v0.dev/chat/projects/ZHqiHJyg00F)**
+---
 
-## How It Works
+## 🛠️ Como executar o projeto
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+### ✅ Pré-requisitos
+
+- Node.js e npm/yarn instalados.
+- Java 17 ou superior.
+- MySQL Server.
+
+---
+
+### ▶️ Passos
+
+#### Backend (Spring Boot)
+
+1. Clone o repositório e navegue até a pasta do backend.
+2. Configure o arquivo `application.properties` com as credenciais do seu banco de dados MySQL.
+3. Execute a aplicação com o comando:
+
+```bash
+./mvnw spring-boot:run
+```
+
+ou, caso use Gradle:
+
+```bash
+./gradlew bootRun
+```
+
+#### Frontend (Next.js)
+
+1. Navegue até a pasta do frontend.
+2. Instale as dependências:
+
+```bash
+npm install
+ou
+yarn install
+```
+
+3. Execute o servidor de desenvolvimento:
+
+```bash
+npm run dev
+ou
+yarn dev
+```
+
+4. Acesse: http://localhost:3000
+
+
+### 📂 Estrutura do projeto
+
+```bash
+fibra/
+├── backend/         # Aplicação Spring Boot
+└── frontend/        # Aplicação Next.js
+```
+
+### 🤝 Contribuição
+Sinta-se à vontade para contribuir! Abra uma issue ou envie um pull request com melhorias, correções ou novas funcionalidades.

@@ -21,21 +21,14 @@ import { useEffect, useState } from "react";
 interface ICreateOrUpdateServiceProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (p: boolean) => void;
-  services: IServiceList[];
-  setServices: React.Dispatch<React.SetStateAction<IServiceList[]>>;
+  services: IServiceList[] | null;
+  setServices: React.Dispatch<React.SetStateAction<IServiceList[] | null>>;
   currentService: IServiceList | null;
   formData: IServiceForm;
   setFormData: React.Dispatch<React.SetStateAction<IServiceForm>>;
   isSubmitting: boolean;
   setIsSubmitting: (p: boolean) => void;
 }
-
-const professionals = [
-  { id: "1", fullName: "Dra. Ana Silva" },
-  { id: "2", fullName: "Dr. Carlos Mendes" },
-  { id: "3", fullName: "Dra. Mariana Costa" },
-  { id: "4", fullName: "Dr. Paulo Ribeiro" },
-];
 
 export function CreateOrUpdateService({
   isDialogOpen,
@@ -64,6 +57,16 @@ export function CreateOrUpdateService({
         }
 
         setProfessionals(professionalsData);
+        if (currentService) {
+          setFormData((prev) => ({
+            ...prev,
+            usersId: currentService.professionals
+              ? currentService.professionals.map(
+                  (professional) => professional.id
+                )
+              : [],
+          }));
+        }
       } catch (error) {
         myToast("Erro", "Falha ao conectar com o servidor");
       } finally {
@@ -72,7 +75,7 @@ export function CreateOrUpdateService({
     }
 
     fetchData();
-  }, []);
+  }, [isDialogOpen]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -82,7 +85,8 @@ export function CreateOrUpdateService({
   };
 
   const handleSelectChange = (value: string[]) => {
-    setFormData((prev) => ({ ...prev, usersId: value }));
+    const filteredValues = value.filter(Boolean);
+    setFormData((prev) => ({ ...prev, usersId: filteredValues }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,7 +107,12 @@ export function CreateOrUpdateService({
         return;
       }
 
-      console.log(formData)
+      // remove empty strings
+      setFormData((prev) => ({
+        ...prev,
+        usersId: prev.usersId.filter((n) => n),
+      }));
+
       const response = await createService(formData);
 
       const selectedUsers = professionals.filter((user) =>
@@ -111,29 +120,34 @@ export function CreateOrUpdateService({
       );
 
       if (currentService && response) {
-        const updatedServices = services.map((service) =>
-          service.id === currentService.id
-            ? {
-                ...service,
-                name: formData.name,
-                description: formData.description,
-                duration: formData.duration,
-                users: selectedUsers,
-              }
-            : service
-        );
+        const updatedServices = services
+          ? services.map((service) =>
+              service.id === currentService.id
+                ? {
+                    ...service,
+                    name: formData.name,
+                    description: formData.description,
+                    duration: formData.duration,
+                    users: selectedUsers,
+                  }
+                : service
+            )
+          : null;
         setServices(updatedServices);
         myToast("Sucesso", "Serviço atualizado com sucesso");
       } else {
         const newService: IServiceList = {
-          id: `${services.length + 1}`,
+          id: "",
           name: formData.name,
           description: formData.description,
           duration: formData.duration,
           professionals: selectedUsers,
         };
-        setServices([...services, newService]);
-        myToast("Sucesso", "Serviço criado com sucesso");
+        setServices([...(services ?? []), newService]);
+        myToast(
+          "Sucesso",
+          `Serviço ${newService.name} criado com sucesso`
+        );
       }
 
       setIsDialogOpen(false);

@@ -48,51 +48,56 @@ import {
   CREATE_CUSTOMER_ROUTE,
   UPDATE_CUSTOMER_ROUTE,
 } from "@/constants/routes";
-import { getCustomersAndAppointments } from "@/hooks/useApi";
+import { deleteCustomer, getCustomersAndAppointments } from "@/hooks/useApi";
 import { myToast } from "@/components/myToast";
 
 export default function CustomerPage() {
   const router = useRouter();
-  const [customers, setCustomers] = useState<ICustomerAndAppointments[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const [customers, setCustomers] = useState<ICustomerAndAppointments[] | null>(
+    []
+  );
   const [currentCustomer, setCurrentCustomer] =
     useState<ICustomerAndAppointments | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    pageSize: 10,
+    totalPages: 0,
+  });
 
   const fetchCustomers = useCallback(async () => {
     try {
-      const data = await getCustomersAndAppointments();
-      if (!data) {
+      const response = await getCustomersAndAppointments(pagination);
+      if (!response) {
         myToast("Erro", "Falha ao carregar clientes");
         return;
       }
 
+      const { data, totalPages } = response;
+
       setCustomers(data);
+      setPagination((prev) => ({ ...prev, totalPages }));
     } catch (error) {
       myToast("Erro", "Falha ao carregar clientes");
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [pagination.currentPage]);
 
   useEffect(() => {
     fetchCustomers();
   }, [fetchCustomers]);
 
-  const filteredCustomers = customers.filter(
+  const filteredCustomers = customers?.filter(
     (customers) =>
       customers.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       customers.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
       customers.address.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const totalPages = Math.ceil(filteredCustomers.length / itemsPerPage);
-  const paginatedCustomers = filteredCustomers.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
   );
 
   const navigateToEditCustomer = (customerId: string) => {
@@ -108,11 +113,20 @@ export default function CustomerPage() {
     if (!currentCustomer) return;
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const response = await deleteCustomer(currentCustomer.id);
 
-      const updatedCustomers = customers.filter(
+      if (!response?.ok) {
+        toast("Erro", {
+          description: "Falha ao excluir cliente",
+        });
+        return;
+      }
+
+      const updatedCustomers = customers?.filter(
         (customer) => customer.id !== currentCustomer.id
       );
+      if (!updatedCustomers) return;
+
       setCustomers(updatedCustomers);
       toast("Sucesso", {
         description: "Cliente excluído com sucesso",
@@ -125,6 +139,9 @@ export default function CustomerPage() {
       setIsDeleteDialogOpen(false);
     }
   };
+
+  const setCurrentPage = (page: number) =>
+    setPagination((prev) => ({ ...prev, currentPage: page }));
 
   return (
     <div className="container mx-auto">
@@ -195,8 +212,8 @@ export default function CustomerPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedCustomers.length > 0 ? (
-                    paginatedCustomers.map((customer) => (
+                  {filteredCustomers && filteredCustomers.length > 0 ? (
+                    filteredCustomers.map((customer) => (
                       <TableRow key={customer.id}>
                         <TableCell>
                           <div className="flex items-center gap-3">
@@ -283,8 +300,8 @@ export default function CustomerPage() {
           )}
 
           <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
             setCurrentPage={setCurrentPage}
           />
         </CardContent>

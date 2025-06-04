@@ -19,7 +19,7 @@ export default function PersonalInputs({ form }: IPersonalInputs) {
       <h3 className="text-lg font-bold">Informações Pessoais</h3>
       <FormField
         control={form.control}
-        name="fullname"
+        name="fullName"
         render={({ field }) => (
           <FormItem className="w-full">
             <FormLabel>Nome completo:</FormLabel>

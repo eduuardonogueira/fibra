@@ -3,7 +3,7 @@ import { UseFormReturn } from "react-hook-form";
 export interface IRegisterCustomerForm {
   form: UseFormReturn<
     {
-      fullname: string;
+      fullName: string;
       phone: string;
       age: number;
       address: string;
@@ -11,10 +11,11 @@ export interface IRegisterCustomerForm {
       service: string;
       professionalId: string;
       dateTime: Date;
+      observations?: string;
     },
     unknown,
     {
-      fullname: string;
+      fullName: string;
       phone: string;
       age: number;
       address: string;
@@ -22,6 +23,7 @@ export interface IRegisterCustomerForm {
       service: string;
       professionalId: string;
       dateTime: Date;
+      observations?: string;
     }
   >;
 }

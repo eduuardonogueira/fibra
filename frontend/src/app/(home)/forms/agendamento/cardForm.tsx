@@ -11,9 +11,11 @@ import { CalendarInput } from "./calendarInput";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { IServiceList } from "@/types/services";
+import { createAppointment, createCustomer } from "@/hooks/useApi";
+import { ICreateCustomer } from "@/types/customers";
 
 const formSchema = z.object({
-  fullname: z.string().min(10).max(100),
+  fullName: z.string().min(10).max(100),
   phone: z.string().min(11).max(20),
   age: z.number().int().nonnegative().min(1).max(120),
   address: z.string().min(20).max(200),
@@ -21,6 +23,7 @@ const formSchema = z.object({
   service: z.string(),
   professionalId: z.string(),
   dateTime: z.date().min(new Date()),
+  observations: z.string().max(500).optional(),
 });
 
 export default function CardForm() {
@@ -37,8 +40,38 @@ export default function CardForm() {
     const formData = values;
     console.log(formData);
 
+    // Criar paciente
     try {
-      new Promise((resolver) => setTimeout(resolver, 500));
+      const {
+        dateTime,
+        observations,
+        professionalId,
+        service: serviceId,
+        customerType,
+        ...customerData
+      } = formData;
+
+      const createdCustomer: ICreateCustomer = {
+        ...customerData,
+        customerType: {
+          id: customerType,
+        },
+      };
+      const customerResponse = await createCustomer(createdCustomer);
+
+      if (customerResponse) {
+        const appointmentResponse = await createAppointment({
+          status: "SCHEDULE",
+          dateTime,
+          observations,
+          costumerId: customerResponse.id,
+          serviceId: serviceId,
+          userId: professionalId,
+        });
+        if (!appointmentResponse?.ok) {
+          return;
+        }
+      }
     } catch (error) {
       console.log(error);
     }

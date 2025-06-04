@@ -20,17 +20,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IProfessionalCalendar } from "@/types/users";
-import { mockProfessionalsCalendar } from "./mock";
 import { IServiceList } from "@/types/services";
 import { IExpedient } from "@/types/expedient";
 import { ITimeOff } from "@/types/timeOff";
+import { getProfessionalCalendar } from "@/hooks/useApi";
+import { myToast } from "@/components/myToast";
 
 interface ICalendarInput extends IRegisterCustomerForm {
   selectedService: IServiceList | undefined;
   selectedProfessional: string | undefined;
 }
-
-const initialProfessionalsCalendar = mockProfessionalsCalendar;
 
 export function CalendarInput({
   form,
@@ -44,11 +43,21 @@ export function CalendarInput({
 
   useEffect(() => {
     async function fetchScheduleDates() {
-      await new Promise((resolver) => setTimeout(resolver, 500));
-      const selectedProfessionalCalendar = initialProfessionalsCalendar.find(
-        (professional) => professional.id === selectedProfessional
-      );
-      setProfessionalCalendar(selectedProfessionalCalendar);
+      if (!selectedService || !selectedProfessional) return;
+
+      try {
+        const response = await getProfessionalCalendar({
+          userId: selectedProfessional,
+          serviceId: selectedService.id,
+        });
+
+        if (!response) return;
+
+        setProfessionalCalendar(response);
+      } catch (error) {
+        myToast("Error", "erro ao buscar agendamentos");
+        console.log(error);
+      }
     }
 
     resetDateAndHour();

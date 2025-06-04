@@ -28,13 +28,19 @@ import { CreateOrUpdateService } from "./createOrUpdateService";
 import { DeleteService } from "./deleteService";
 import { myToast } from "@/components/myToast";
 import { getServices } from "@/hooks/useApi";
+import { Pagination } from "@/components/pagination";
 
 export default function ServicesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [services, setServices] = useState<IServiceList[]>([]);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    pageSize: 10,
+    totalPages: 0,
+  });
+  const [services, setServices] = useState<IServiceList[] | null>([]);
   const [currentService, setCurrentService] = useState<IServiceList | null>(
     null
   );
@@ -50,20 +56,24 @@ export default function ServicesPage() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const data = await getServices();
-        if (!data) return;
+        const response = await getServices(pagination);
+        if (!response) return;
+
+        const { data, totalPages } = response;
         setServices(data);
+        setPagination((prev) => ({ ...prev, totalPages }));
       } catch (error) {
         myToast("Erro", "Falha ao carregar serviços");
       } finally {
         setIsLoading(false);
       }
     };
-
+    setServices(null);
+    setIsLoading(true);
     fetchServices();
-  }, []);
+  }, [pagination.currentPage]);
 
-  const filteredServices = services.filter(
+  const filteredServices = services?.filter(
     (service) =>
       service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       service.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -100,6 +110,9 @@ export default function ServicesPage() {
     setCurrentService(service);
     setIsDeleteDialogOpen(true);
   };
+
+  const setCurrentPage = (page: number) =>
+    setPagination((prev) => ({ ...prev, currentPage: page }));
 
   return (
     <div className="container mx-auto">
@@ -157,9 +170,9 @@ export default function ServicesPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredServices.length > 0 ? (
+                  {filteredServices && filteredServices.length > 0 ? (
                     filteredServices.map((service) => (
-                      <TableRow key={service.id}>
+                      <TableRow key={`${service.id}${service.name}`}>
                         <TableCell className="font-medium">
                           {service.name}
                         </TableCell>
@@ -174,7 +187,10 @@ export default function ServicesPage() {
                         <TableCell className="flex flex-col gap-2 h-full justify-center">
                           {service.professionals ? (
                             service.professionals.map((professional) => (
-                              <Badge key={professional.id} variant="outline">
+                              <Badge
+                                key={`${service.name}${professional.fullName}`}
+                                variant="outline"
+                              >
                                 {professional.fullName}
                               </Badge>
                             ))
@@ -217,6 +233,11 @@ export default function ServicesPage() {
                   )}
                 </TableBody>
               </Table>
+              <Pagination
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+                setCurrentPage={setCurrentPage}
+              />
             </div>
           )}
         </CardContent>

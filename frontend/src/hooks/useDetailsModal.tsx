@@ -1,12 +1,12 @@
 import { StatusBadge } from "@/app/(home)/(auth)/agendamentos/statusBadge";
 import { CustomerTypeBadge } from "@/components/customerTypeBadge";
-import { IFormatedAppointment } from "@/types/appointments";
+import { IAppointmentsDetails } from "@/types/appointments";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export interface IDetailsModal {
   label: string;
-  field: keyof IFormatedAppointment;
+  field: keyof IAppointmentsDetails;
   format?: (prop: string | number | Date) => string;
   component?: (prop: string | number | Date) => React.ReactNode;
 }
@@ -14,7 +14,7 @@ export interface IDetailsModal {
 export const detailsModal: IDetailsModal[] = [
   {
     label: "Nome",
-    field: "customerName",
+    field: "customerFullName",
   },
   {
     label: "Idade",
@@ -61,6 +61,6 @@ export const detailsModal: IDetailsModal[] = [
   },
   {
     label: "Observações",
-    field: "notes",
+    field: "observations",
   },
 ];

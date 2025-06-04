@@ -12,12 +12,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IRegisterCustomerForm } from "../../../../types/registerCustomerForm";
-import { mockServices } from "./mock";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IServiceList } from "@/types/services";
 import { ICustomerType } from "@/types/customerTypes";
 import SelectDisabled from "@/components/selectDisabled";
-import { getCustomerTypes } from "@/hooks/useApi";
+import { getCustomerTypes, getServices } from "@/hooks/useApi";
 import { myToast } from "@/components/myToast";
 import { Loader2 } from "lucide-react";
 
@@ -26,8 +25,6 @@ interface ISelectInput extends IRegisterCustomerForm {
   setSelectedService: Dispatch<SetStateAction<IServiceList | undefined>>;
   setSelectedProfessional: Dispatch<SetStateAction<string>>;
 }
-
-const initalServices = mockServices;
 
 export default function SelectInputs({
   form,
@@ -47,15 +44,21 @@ export default function SelectInputs({
     async function fetchCustomersTypesAndServices() {
       try {
         setIsLoading(true);
-        const data = await getCustomerTypes();
-        setServices(initalServices);
+        const customerTypesData = await getCustomerTypes();
+        const servicesResponse = await getServices({
+          currentPage: 1,
+          pageSize: 50,
+        });
 
-        if (!data) {
-          myToast("Erro", "Erro ao buscar tipos do paciente");
-          return;
-        }
-        setCustomerTypes(data);
+        if (!servicesResponse || !customerTypesData) return;
+
+        const { data } = servicesResponse;
+
+        setServices(data);
+        setCustomerTypes(customerTypesData);
       } catch (error) {
+        myToast("Erro", "Erro ao buscar tipos do paciente");
+
         myToast("Error", `${error}`);
       } finally {
         setIsLoading(false);
@@ -64,6 +67,10 @@ export default function SelectInputs({
 
     fetchCustomersTypesAndServices();
   }, []);
+
+  function handleCustomerTypeChange(value: string) {
+    form.setValue("customerType", value);
+  }
 
   function handleServiceTypeChange(value: string) {
     form.setValue("service", value);
@@ -93,7 +100,7 @@ export default function SelectInputs({
               <FormLabel>Tipo do paciente:</FormLabel>
               <FormControl>
                 <Select
-                  onValueChange={field.onChange}
+                  onValueChange={(value) => handleCustomerTypeChange(value)}
                   defaultValue={field.value}
                 >
                   <SelectTrigger className="w-full hover:cursor-pointer">

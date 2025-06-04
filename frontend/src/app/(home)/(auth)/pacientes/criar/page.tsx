@@ -10,7 +10,7 @@ import { ICustomerType } from "@/types/customerTypes";
 import { myToast } from "@/components/myToast";
 import { CUSTOMERS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-import { getCustomerTypes } from "@/hooks/useApi";
+import { createCustomer, getCustomerTypes } from "@/hooks/useApi";
 import { Loader2 } from "lucide-react";
 
 export default function CreateCustomer() {
@@ -22,19 +22,20 @@ export default function CreateCustomer() {
   const [customerTypes, setCustomerTypes] = useState<ICustomerType[] | null>(
     null
   );
-  const [editedCustomer, setEditedCustomer] = useState<ICustomerAndAppointments>({
-    id: "",
-    fullName: "",
-    age: 0,
-    address: "",
-    photoUrl: "",
-    phone: "",
-    customerType: {
+  const [editedCustomer, setEditedCustomer] =
+    useState<ICustomerAndAppointments>({
       id: "",
-      name: "adulto",
-    },
-    appointmentsCount: 0,
-  });
+      fullName: "",
+      age: 0,
+      address: "",
+      photoUrl: "",
+      phone: "",
+      customerType: {
+        id: "",
+        name: "adulto",
+      },
+      appointmentsCount: 0,
+    });
 
   useEffect(() => {
     async function fetchCustomerTypes() {
@@ -61,10 +62,15 @@ export default function CreateCustomer() {
     setIsSaving(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await createCustomer(editedCustomer);
+
+      if (!response) return;
 
       myToast("Sucesso", "Usuário criado com sucesso");
-      router.push(CUSTOMERS_ROUTE);
+
+      setTimeout(() => {
+        router.push(CUSTOMERS_ROUTE);
+      }, 1000);
     } catch (error) {
       console.log(error);
       myToast("Error", "Falha ao criar usuário");
