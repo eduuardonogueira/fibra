@@ -1,7 +1,7 @@
 "use client";
 
-import { CustomerFormContent } from "@/components/customerFormContent";
-import { CustomerFormFooter } from "@/components/customerFormFooter";
+import { CustomerFormContent } from "@/app/(home)/(auth)/pacientes/customerFormContent";
+import { CustomerFormFooter } from "@/app/(home)/(auth)/pacientes/customerFormFooter";
 import { CustomerFormHeader } from "@/components/customerFormHeader";
 import { Card } from "@/components/ui/card";
 import { ICustomerAndAppointments } from "@/types/customers";

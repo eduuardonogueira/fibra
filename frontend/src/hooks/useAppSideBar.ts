@@ -1,32 +1,52 @@
-import { CalendarCheck, Hammer, Home, LucideProps, UserRound } from "lucide-react";
+import {
+  APPOINTMENTS_ROUTE,
+  CUSTOMERS_ROUTE,
+  HOME_ROUTE,
+  PROFESSIONALS_ROUTE,
+  SERVICES_ROUTE,
+} from "@/constants/routes";
+import {
+  BriefcaseBusiness,
+  CalendarCheck,
+  Hammer,
+  Home,
+  LucideProps,
+  UserRound,
+} from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
 export interface ISidebarItem {
-  title: string,
-  url: string,
-  icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>
+  title: string;
+  url: string;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
 }
 
 export const sidebarItems: ISidebarItem[] = [
   {
     title: "Home",
-    url: "/",
-    icon: Home
+    url: HOME_ROUTE,
+    icon: Home,
   },
   {
     title: "Agendamentos",
-    url: "/agendamentos",
-    icon: CalendarCheck
+    url: APPOINTMENTS_ROUTE,
+    icon: CalendarCheck,
   },
   {
     title: "Serviços",
-    url: "/servicos",
-    icon: Hammer
+    url: SERVICES_ROUTE,
+    icon: Hammer,
   },
   {
     title: "Pacientes",
-    url: "/pacientes",
-    icon: UserRound
+    url: CUSTOMERS_ROUTE,
+    icon: UserRound,
   },
-
-]
+  {
+    title: "Profissionais",
+    url: PROFESSIONALS_ROUTE,
+    icon: BriefcaseBusiness,
+  },
+];

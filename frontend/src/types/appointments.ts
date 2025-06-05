@@ -61,13 +61,13 @@ export interface ICreateAppointment {
   status: AppointmentStatus;
   dateTime: Date;
   observations?: string;
-  costumerId: string;
+  customerId: string;
   serviceId: string;
   userId: string;
 }
 
 export type AppointmentStatus =
-  | "SCHEDULE"
+  | "SCHEDULED"
   | "COMPLETED"
   | "CANCELED"
   | "DELAYED";

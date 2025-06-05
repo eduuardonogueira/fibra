@@ -7,8 +7,8 @@ import { useState, useEffect, use } from "react";
 import { Card } from "@/components/ui/card";
 
 import { CustomerFormHeader } from "@/components/customerFormHeader";
-import { CustomerFormFooter } from "@/components/customerFormFooter";
-import { CustomerFormContent } from "@/components/customerFormContent";
+import { CustomerFormFooter } from "@/app/(home)/(auth)/pacientes/customerFormFooter";
+import { CustomerFormContent } from "@/app/(home)/(auth)/pacientes/customerFormContent";
 import { myToast } from "@/components/myToast";
 
 import { NotFoundCustomer } from "./notFoundCustomer";

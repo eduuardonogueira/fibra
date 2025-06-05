@@ -13,6 +13,8 @@ import { useState } from "react";
 import { IServiceList } from "@/types/services";
 import { createAppointment, createCustomer } from "@/hooks/useApi";
 import { ICreateCustomer } from "@/types/customers";
+import { Loader2 } from "lucide-react";
+import { myToast } from "@/components/myToast";
 
 const formSchema = z.object({
   fullName: z.string().min(10).max(100),
@@ -31,12 +33,15 @@ export default function CardForm() {
     IServiceList | undefined
   >(undefined);
   const [selectedProfessional, setSelectedProfessional] = useState<string>("");
+  const [isSubmiting, setIsSubmiting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   async function handleSubmit({ ...values }: z.infer<typeof formSchema>) {
+    setIsSubmiting(true);
+
     const formData = values;
     console.log(formData);
 
@@ -59,21 +64,33 @@ export default function CardForm() {
       };
       const customerResponse = await createCustomer(createdCustomer);
 
-      if (customerResponse) {
-        const appointmentResponse = await createAppointment({
-          status: "SCHEDULE",
-          dateTime,
-          observations,
-          costumerId: customerResponse.id,
-          serviceId: serviceId,
-          userId: professionalId,
-        });
-        if (!appointmentResponse?.ok) {
-          return;
-        }
+      if (!customerResponse) {
+        myToast("Erro", "Erro ao criar paciente, tente novamente mais tarde!");
+        return;
       }
+
+      const appointmentResponse = await createAppointment({
+        status: "SCHEDULED",
+        dateTime,
+        observations,
+        customerId: customerResponse.id.toString(),
+        serviceId: serviceId,
+        userId: professionalId,
+      });
+
+      if (!appointmentResponse) {
+        myToast(
+          "Erro",
+          "Erro ao registrar seu agendamento, tente novamente mais tarde!"
+        );
+        return;
+      }
+
+      myToast("Sucesso", "Seu agendamento foi registrado com sucesso!");
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsSubmiting(false);
     }
   }
 
@@ -97,10 +114,10 @@ export default function CardForm() {
           selectedProfessional={selectedProfessional}
         />
         <Button
-          className="col-start-1 col-end-3 w-full max-w-[500px] hover:cursor-pointer justify-self-center"
+          className="w-full md:col-start-1 md:col-end-3 md:max-w-[500px] hover:cursor-pointer md:justify-self-center"
           type="submit"
         >
-          Enviar
+          {isSubmiting ? <Loader2 /> : "Enviar"}
         </Button>
       </form>
     </Form>

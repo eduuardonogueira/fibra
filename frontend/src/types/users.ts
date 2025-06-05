@@ -9,7 +9,21 @@ export interface IUser {
   role: UserRoles;
 }
 
-export type UserRoles = "profissional" | "admin";
+export type UserRoles = "USER" | "PROFESSIONAL" | "ADMIN";
+
+export interface ICreateProfessional {
+  fullName: string;
+  email: string;
+  role: UserRoles;
+  password?: string;
+}
+
+export interface IUserWithServices extends IUser {
+  services: {
+    id: string;
+    name: string;
+  }[];
+}
 
 export interface IProfessionalCalendar {
   id: string;

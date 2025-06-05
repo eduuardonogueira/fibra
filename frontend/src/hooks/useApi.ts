@@ -7,7 +7,12 @@ import {
   ICustomerAndAppointments,
 } from "@/types/customers";
 import { ICustomerType } from "@/types/customerTypes";
-import { IProfessionalCalendar, IUser } from "@/types/users";
+import {
+  ICreateProfessional,
+  IProfessionalCalendar,
+  IUser,
+  IUserWithServices,
+} from "@/types/users";
 import { cookies } from "next/headers";
 import { ICreateAppointment, IFormatedAppointment } from "@/types/appointments";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
@@ -207,6 +212,80 @@ export async function getProfessionals(): Promise<IUser[] | null> {
   }
 }
 
+export async function getProfessionalById(id: string): Promise<IUser | null> {
+  try {
+    const response = await fetch(`${process.env.BACKEND_URL}/users2/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      // headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function deleteProfessional(
+  id: string
+): Promise<{ status: number } | null> {
+  try {
+    const response = await fetch(`${process.env.BACKEND_URL}/users2/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      // headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return {
+      status: response.status,
+    };
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function createProfessional(
+  customer: ICreateProfessional
+): Promise<IUser | null> {
+  try {
+    const response = await fetch(`${process.env.BACKEND_URL}/users2`, {
+      method: "POST",
+      body: JSON.stringify(customer),
+      headers: { "Content-Type": "application/json" },
+      // headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function getProfessionalsAndServices(
+  paginationProps: IPaginationProps
+): Promise<IPaginationResponse<IUserWithServices[]> | null> {
+  const url = getUrlApiPagination(
+    process.env.BACKEND_URL,
+    "/users2/with-services",
+    paginationProps
+  );
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      // headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
 export async function getServices(
   paginationProps: IPaginationProps
 ): Promise<IPaginationResponse<IServiceList[]> | null> {
@@ -233,7 +312,7 @@ export async function createService(
 ): Promise<IService | null> {
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/service/with-users`,
+      `${process.env.BACKEND_URL}/services/with-users`,
       {
         method: "POST",
         body: JSON.stringify(service),
@@ -241,7 +320,6 @@ export async function createService(
         // headers: { Authorization: `Bearer ${token}` },
       }
     );
-
     return response.json();
   } catch (error) {
     console.log(error);
@@ -301,6 +379,7 @@ export async function createAppointment(
       // headers: { Authorization: `Bearer ${token}` },
     });
 
+    console.log(response.status);
     return response.json();
   } catch (error) {
     console.log(error);
@@ -329,6 +408,7 @@ export async function getProfessionalCalendar({
       }
     );
 
+    console.log(response.status);
     return response.json();
   } catch (error) {
     console.log(error);

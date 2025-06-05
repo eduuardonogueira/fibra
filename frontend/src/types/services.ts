@@ -17,5 +17,5 @@ export interface IServiceForm {
   name: string;
   description: string;
   duration: number;
-  usersId: string[];
+  userIds: string[];
 }

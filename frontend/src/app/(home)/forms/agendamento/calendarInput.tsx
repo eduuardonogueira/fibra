@@ -51,6 +51,8 @@ export function CalendarInput({
           serviceId: selectedService.id,
         });
 
+        console.log(response)
+
         if (!response) return;
 
         setProfessionalCalendar(response);

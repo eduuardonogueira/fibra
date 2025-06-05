@@ -74,7 +74,9 @@ export default function SelectInputs({
 
   function handleServiceTypeChange(value: string) {
     form.setValue("service", value);
-    const service = services?.find((service) => service.id === value);
+    const service = services?.find(
+      (service) => service.id.toString() === value
+    );
     console.log(value);
     setSelectedService(service);
   }
@@ -141,8 +143,8 @@ export default function SelectInputs({
                 <SelectContent>
                   {services?.map((type) => (
                     <SelectItem
-                      key={type.id}
-                      value={type.id}
+                      key={type.id.toString()}
+                      value={type.id.toString()}
                       className="hover:cursor-pointer"
                     >
                       {type.name}
@@ -172,8 +174,8 @@ export default function SelectInputs({
                   <SelectContent>
                     {selectedService.professionals?.map((professional) => (
                       <SelectItem
-                        key={professional.id}
-                        value={professional.id}
+                        key={professional.id.toString()}
+                        value={professional.id.toString()}
                         className="hover:cursor-pointer"
                       >
                         {professional.fullName}

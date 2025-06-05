@@ -36,13 +36,18 @@ export default function AddressInputs({ form }: IAddressInputs) {
 
         const data: IViaCepResponse = await response.json();
 
-        if (data.erro)
-          myToast("CEP Inválido!", "erro ao consultar CEP inserido");
-        console.log(data);
-        const { logradouro, bairro, localidade, uf, } = data;
+        if (data.erro) {
+          myToast("CEP Inválido!", "Digite o seu endereço completo");
+          form.setValue("address", "");
+          return;
+        }
+
+        const { logradouro, bairro, localidade, uf } = data;
+
         const fullAddress = `${logradouro}, ${bairro},  ${
           houseNumber ? `número ${houseNumber}` : ""
         }, ${localidade}, ${uf}.`;
+
         form.setValue("address", fullAddress);
         return;
       } catch (error) {

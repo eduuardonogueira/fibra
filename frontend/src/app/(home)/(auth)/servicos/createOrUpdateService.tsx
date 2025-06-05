@@ -60,9 +60,9 @@ export function CreateOrUpdateService({
         if (currentService) {
           setFormData((prev) => ({
             ...prev,
-            usersId: currentService.professionals
+            userIds: currentService.professionals
               ? currentService.professionals.map(
-                  (professional) => professional.id
+                  (professional) => professional.id.toString()
                 )
               : [],
           }));
@@ -86,7 +86,7 @@ export function CreateOrUpdateService({
 
   const handleSelectChange = (value: string[]) => {
     const filteredValues = value.filter(Boolean);
-    setFormData((prev) => ({ ...prev, usersId: filteredValues }));
+    setFormData((prev) => ({ ...prev, userIds: filteredValues }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -99,7 +99,7 @@ export function CreateOrUpdateService({
       if (
         !formData.name ||
         !formData.description ||
-        !formData.usersId ||
+        !formData.userIds ||
         !formData.duration
       ) {
         myToast("Erro", "Todos os campos são obrigatórios");
@@ -107,16 +107,12 @@ export function CreateOrUpdateService({
         return;
       }
 
-      // remove empty strings
-      setFormData((prev) => ({
-        ...prev,
-        usersId: prev.usersId.filter((n) => n),
-      }));
+      console.log(formData);
 
       const response = await createService(formData);
 
       const selectedUsers = professionals.filter((user) =>
-        formData.usersId.includes(user.id)
+        formData.userIds.includes(user.id)
       );
 
       if (currentService && response) {
@@ -144,10 +140,7 @@ export function CreateOrUpdateService({
           professionals: selectedUsers,
         };
         setServices([...(services ?? []), newService]);
-        myToast(
-          "Sucesso",
-          `Serviço ${newService.name} criado com sucesso`
-        );
+        myToast("Sucesso", `Serviço ${newService.name} criado com sucesso`);
       }
 
       setIsDialogOpen(false);
@@ -228,10 +221,10 @@ export function CreateOrUpdateService({
               ) : (
                 <MultiSelect
                   options={professionals.map((user) => ({
-                    value: user.id,
+                    value: user.id.toString(),
                     label: user.fullName,
                   }))}
-                  selected={formData.usersId}
+                  selected={formData.userIds}
                   onChange={handleSelectChange}
                   placeholder="Selecione os profissionais"
                 />

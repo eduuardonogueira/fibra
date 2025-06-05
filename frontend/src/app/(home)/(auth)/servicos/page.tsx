@@ -49,7 +49,7 @@ export default function ServicesPage() {
   const [formData, setFormData] = useState<IServiceForm>({
     name: "",
     description: "",
-    usersId: [],
+    userIds: [],
     duration: 0,
   });
 
@@ -87,7 +87,7 @@ export default function ServicesPage() {
     setFormData({
       name: "",
       description: "",
-      usersId: [""],
+      userIds: [""],
       duration: 0,
     });
     setIsDialogOpen(true);
@@ -98,7 +98,7 @@ export default function ServicesPage() {
     setFormData({
       name: service.name,
       description: service.description,
-      usersId: service.professionals?.map((professional) =>
+      userIds: service.professionals?.map((professional) =>
         professional.id.toString()
       ) ?? [""],
       duration: service.duration,
@@ -185,7 +185,8 @@ export default function ServicesPage() {
                             : service.description}
                         </TableCell>
                         <TableCell className="flex flex-col gap-2 h-full justify-center">
-                          {service.professionals ? (
+                          {service.professionals &&
+                          service.professionals.length > 0 ? (
                             service.professionals.map((professional) => (
                               <Badge
                                 key={`${service.name}${professional.fullName}`}

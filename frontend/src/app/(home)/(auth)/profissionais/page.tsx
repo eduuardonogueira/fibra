@@ -3,16 +3,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import {
-  Pencil,
-  Trash2,
-  Loader2,
-  Search,
-  X,
-  UserPlus,
-  User,
-} from "lucide-react";
+import { Pencil, Trash2, Loader2, Search, X, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -40,24 +31,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CustomerTypeBadge } from "@/components/customerTypeBadge";
-import { ICustomerAndAppointments } from "@/types/customers";
 import { Pagination } from "@/components/pagination";
 import {
-  CREATE_CUSTOMER_ROUTE,
-  UPDATE_CUSTOMER_ROUTE,
+  CREATE_PROFESSIONAL_ROUTE,
+  UPDATE_PROFESSIONAL_ROUTE,
 } from "@/constants/routes";
-import { deleteCustomer, getCustomersAndAppointments } from "@/hooks/useApi";
+import {
+  deleteProfessional,
+  getProfessionalsAndServices,
+} from "@/hooks/useApi";
 import { myToast } from "@/components/myToast";
+import { IUserWithServices } from "@/types/users";
+import { Badge } from "@/components/ui/badge";
+import { ProfessionalRoleBadge } from "@/components/professionalRoleBadge";
 
-export default function CustomerPage() {
+export default function ProfessionalPage() {
   const router = useRouter();
 
-  const [customers, setCustomers] = useState<ICustomerAndAppointments[] | null>(
-    []
-  );
-  const [currentCustomer, setCurrentCustomer] =
-    useState<ICustomerAndAppointments | null>(null);
+  const [professionals, setProfessionals] = useState<
+    IUserWithServices[] | null
+  >([]);
+  const [currentProfessional, setCurrentProfessional] =
+    useState<IUserWithServices | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -69,65 +64,65 @@ export default function CustomerPage() {
     totalPages: 0,
   });
 
-  const fetchCustomers = useCallback(async () => {
+  const fetchProfessionals = useCallback(async () => {
     try {
-      const response = await getCustomersAndAppointments(pagination);
+      const response = await getProfessionalsAndServices(pagination);
       if (!response) {
-        myToast("Erro", "Falha ao carregar clientes");
+        myToast("Erro", "Falha ao carregar profissionais");
         return;
       }
 
       const { data, totalPages } = response;
 
-      setCustomers(data);
+      setProfessionals(data);
       setPagination((prev) => ({ ...prev, totalPages }));
     } catch (error) {
-      myToast("Erro", "Falha ao carregar clientes");
+      myToast("Erro", "Falha ao carregar profissionais");
     } finally {
       setIsLoading(false);
     }
   }, [pagination.currentPage]);
 
   useEffect(() => {
-    fetchCustomers();
-  }, [fetchCustomers]);
+    fetchProfessionals();
+  }, [fetchProfessionals]);
 
-  const filteredCustomers = customers?.filter(
-    (customers) =>
-      customers.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      customers.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      customers.address.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredProfessional = professionals?.filter(
+    (professional) =>
+      professional.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      professional.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      professional.role.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const navigateToEditCustomer = (customerId: string) => {
-    router.push(`${UPDATE_CUSTOMER_ROUTE}/${customerId}`);
+  const navigateToEditProfessional = (professionalId: string) => {
+    router.push(`${UPDATE_PROFESSIONAL_ROUTE}/${professionalId}`);
   };
 
-  const openDeleteDialog = (customer: ICustomerAndAppointments) => {
-    setCurrentCustomer(customer);
+  const openDeleteDialog = (professional: IUserWithServices) => {
+    setCurrentProfessional(professional);
     setIsDeleteDialogOpen(true);
   };
 
   const handleDelete = async () => {
-    if (!currentCustomer) return;
+    if (!currentProfessional) return;
 
     try {
-      const response = await deleteCustomer(currentCustomer.id);
+      const response = await deleteProfessional(currentProfessional.id);
 
       if (!response || response.status !== 204) {
-        myToast("Erro", "Falha ao excluir cliente");
+        myToast("Erro", "Falha ao excluir profissional");
         return;
       }
 
-      const updatedCustomers = customers?.filter(
-        (customer) => customer.id !== currentCustomer.id
+      const updatedProfessionals = professionals?.filter(
+        (professional) => professional.id !== currentProfessional.id
       );
-      if (!updatedCustomers) return;
+      if (!updatedProfessionals) return;
 
-      setCustomers(updatedCustomers);
-      myToast("Sucesso", "Cliente excluído com sucesso");
+      setProfessionals(updatedProfessionals);
+      myToast("Sucesso", "Profissional excluído com sucesso");
     } catch (error) {
-      myToast("Erro", "Falha ao excluir cliente");
+      myToast("Erro", "Falha ao excluir profissional");
     } finally {
       setIsDeleteDialogOpen(false);
     }
@@ -142,17 +137,17 @@ export default function CustomerPage() {
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <CardTitle className="text-2xl">Pacientes</CardTitle>
+              <CardTitle className="text-2xl">Profissionais</CardTitle>
               <CardDescription>
-                Gerencie os pacientes cadastrados
+                Gerencie os profissionais cadastrados
               </CardDescription>
             </div>
             <Button
-              onClick={() => router.push(CREATE_CUSTOMER_ROUTE)}
+              onClick={() => router.push(CREATE_PROFESSIONAL_ROUTE)}
               className="hover:cursor-pointer"
             >
               <UserPlus className="mr-2 h-4 w-4" />
-              Novo Cliente
+              Novo Profissional
             </Button>
           </div>
         </CardHeader>
@@ -160,7 +155,7 @@ export default function CustomerPage() {
           <div className="relative mb-6">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Pesquisar clientes..."
+              placeholder="Pesquisar profissionais..."
               className="pl-8"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -187,64 +182,42 @@ export default function CustomerPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Cliente</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Idade
-                    </TableHead>
-                    <TableHead className="hidden sm:table-cell">
-                      Telefone
-                    </TableHead>
+                    <TableHead>Nome</TableHead>
                     <TableHead className="hidden lg:table-cell">
-                      Endereço
+                      Email
                     </TableHead>
-                    <TableHead>Tipo</TableHead>
+                    <TableHead>Função</TableHead>
                     <TableHead className="hidden sm:table-cell">
-                      Agendamentos
+                      Serviços
                     </TableHead>
                     <TableHead className="text-center">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredCustomers && filteredCustomers.length > 0 ? (
-                    filteredCustomers.map((customer) => (
-                      <TableRow key={customer.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <div className="relative h-10 w-10 rounded-full overflow-hidden">
-                              {customer.photoUrl ? (
-                                <Image
-                                  src={customer.photoUrl || "/placeholder.svg"}
-                                  alt={customer.fullName}
-                                  fill
-                                  className="object-cover"
-                                />
-                              ) : (
-                                <div className="h-full w-full bg-muted flex items-center justify-center">
-                                  <User className="h-5 w-5 text-muted-foreground" />
-                                </div>
-                              )}
-                            </div>
-                            <div className="font-medium">
-                              {customer.fullName}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {customer.age} anos
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          {customer.phone}
-                        </TableCell>
-                        <TableCell className="hidden lg:table-cell max-w-[300px] truncate">
-                          {customer.address}
+                  {filteredProfessional && filteredProfessional.length > 0 ? (
+                    filteredProfessional.map((professional) => (
+                      <TableRow key={professional.id}>
+                        <TableCell>{professional.fullName}</TableCell>
+                        <TableCell className="hidden lg:table-cell">
+                          {professional.email}
                         </TableCell>
                         <TableCell>
-                          <CustomerTypeBadge
-                            type={customer.customerType.name}
-                          />
+                          <ProfessionalRoleBadge type={professional.role} />
                         </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          {customer.appointmentsCount}
+                        <TableCell className="flex-col gap-2 h-full justify-center hidden sm:flex">
+                          {professional.services &&
+                          professional.services.length > 0 ? (
+                            professional.services.map((service) => (
+                              <Badge
+                                key={`${service.name}${professional.fullName}`}
+                                variant="outline"
+                              >
+                                {service.name}
+                              </Badge>
+                            ))
+                          ) : (
+                            <Badge variant="outline">Nenhum Serviço</Badge>
+                          )}
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
@@ -252,7 +225,7 @@ export default function CustomerPage() {
                               variant="ghost"
                               size="icon"
                               onClick={() =>
-                                navigateToEditCustomer(customer.id)
+                                navigateToEditProfessional(professional.id)
                               }
                               className="hover:cursor-pointer hover:bg-yellow-500"
                             >
@@ -262,14 +235,8 @@ export default function CustomerPage() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => openDeleteDialog(customer)}
+                              onClick={() => openDeleteDialog(professional)}
                               className="hover:cursor-pointer hover:bg-red-500"
-                              disabled={customer.appointmentsCount > 0}
-                              title={
-                                customer.appointmentsCount > 0
-                                  ? "Não é possível excluir clientes com agendamentos"
-                                  : "Excluir cliente"
-                              }
                             >
                               <Trash2 className="h-4 w-4" />
                               <span className="sr-only">Excluir</span>
@@ -282,8 +249,8 @@ export default function CustomerPage() {
                     <TableRow>
                       <TableCell colSpan={7} className="h-24 text-center">
                         {searchQuery
-                          ? "Nenhum cliente encontrado para esta pesquisa."
-                          : "Nenhum cliente cadastrado."}
+                          ? "Nenhum profissional encontrado para esta pesquisa."
+                          : "Nenhum profissional cadastrado."}
                       </TableCell>
                     </TableRow>
                   )}
@@ -308,8 +275,8 @@ export default function CustomerPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
             <AlertDialogDescription>
-              Tem certeza que deseja excluir o cliente (
-              {currentCustomer?.fullName})? Esta ação não pode ser desfeita.
+              Tem certeza que deseja excluir o profissional (
+              {currentProfessional?.fullName})? Esta ação não pode ser desfeita.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
