@@ -116,8 +116,9 @@ export default function CardForm() {
         <Button
           className="w-full md:col-start-1 md:col-end-3 md:max-w-[500px] hover:cursor-pointer md:justify-self-center"
           type="submit"
+          disabled={isSubmiting}
         >
-          {isSubmiting ? <Loader2 /> : "Enviar"}
+          {isSubmiting ? <Loader2 className="animate-spin" /> : "Enviar"}
         </Button>
       </form>
     </Form>

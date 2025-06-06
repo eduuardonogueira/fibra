@@ -6,7 +6,7 @@
   "initialize react component": {
     "prefix": "rc",
     "body": [
-      "export const ${TM_FILENAME_BASE} = () => {",
+      "export default function ${TM_FILENAME_BASE} () {",
       "  return (",
       "    <h1>",
       "      ${TM_FILENAME_BASE}",
@@ -14,7 +14,6 @@
       "  )",
       "}",
       "",
-      "export default ${TM_FILENAME_BASE}"
     ]
   },
   "useState": {

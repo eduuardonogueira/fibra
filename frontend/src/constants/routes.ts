@@ -9,3 +9,4 @@ export const UPDATE_PROFESSIONAL_ROUTE = `${PROFESSIONALS_ROUTE}/editar`;
 export const CREATE_PROFESSIONAL_ROUTE = `${PROFESSIONALS_ROUTE}/criar`;
 export const SERVICES_ROUTE = "/servicos";
 export const SERVICE_ROUTE = "/servico";
+export const EXPEDIENTS_ROUTE = `${PROFESSIONALS_ROUTE}/expedientes`;

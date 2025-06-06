@@ -25,6 +25,14 @@ export interface IUserWithServices extends IUser {
   }[];
 }
 
+export interface IUserWithServicesAndExpedients extends IUser {
+  services: {
+    id: string;
+    name: string;
+    expedients: IExpedient[];
+  }[];
+}
+
 export interface IProfessionalCalendar {
   id: string;
   fullName: string;

@@ -1,6 +1,7 @@
 import {
   APPOINTMENTS_ROUTE,
   CUSTOMERS_ROUTE,
+  EXPEDIENTS_ROUTE,
   HOME_ROUTE,
   PROFESSIONALS_ROUTE,
   SERVICES_ROUTE,
@@ -10,6 +11,7 @@ import {
   CalendarCheck,
   Hammer,
   Home,
+  Hourglass,
   LucideProps,
   UserRound,
 } from "lucide-react";
@@ -21,6 +23,7 @@ export interface ISidebarItem {
   icon: ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
+  subItems?: ISidebarItem[];
 }
 
 export const sidebarItems: ISidebarItem[] = [
@@ -48,5 +51,12 @@ export const sidebarItems: ISidebarItem[] = [
     title: "Profissionais",
     url: PROFESSIONALS_ROUTE,
     icon: BriefcaseBusiness,
+    subItems: [
+      {
+        title: "Expedientes",
+        url: EXPEDIENTS_ROUTE,
+        icon: Hourglass,
+      },
+    ],
   },
 ];

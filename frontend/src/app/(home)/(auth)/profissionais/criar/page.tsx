@@ -71,21 +71,23 @@ export default function CreateCustomer() {
             title="Criar Profissional"
             description="Adicione os dados cadastrais do profissional"
           />
-          <ProfessionalFormContent
-            handleRoleChange={handleRoleChange}
-            handleInputChange={handleInputChange}
-            editedProfessional={editedProfessional}
-            professionalRoles={userRoles}
-          />
-
-          {isEditing && (
-            <ProfessionalFormFooter
-              isSaving={isSaving}
-              professional={editedProfessional}
-              setIsEditing={setIsEditing}
-              setEditedProfessional={setEditedProfessional}
+          <div className='mt-4'>
+            <ProfessionalFormContent
+              handleRoleChange={handleRoleChange}
+              handleInputChange={handleInputChange}
+              editedProfessional={editedProfessional}
+              professionalRoles={userRoles}
             />
-          )}
+
+            {isEditing && (
+              <ProfessionalFormFooter
+                isSaving={isSaving}
+                professional={editedProfessional}
+                setIsEditing={setIsEditing}
+                setEditedProfessional={setEditedProfessional}
+              />
+            )}
+          </div>
         </form>
       </Card>
     </div>

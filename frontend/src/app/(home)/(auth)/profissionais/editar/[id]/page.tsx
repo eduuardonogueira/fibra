@@ -33,7 +33,9 @@ export default function EditCustomerPage({
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [professional, setProfessional] = useState<IUser | null>(null);
-  const [editedProfessional, setEditedProfessional] = useState<IUser | ICreateProfessional>({
+  const [editedProfessional, setEditedProfessional] = useState<
+    IUser | ICreateProfessional
+  >({
     id: "",
     fullName: "",
     email: "",
@@ -106,22 +108,23 @@ export default function EditCustomerPage({
             title="Editar Informações do Profissonal"
             description="Atualize os dados cadastrais do profissonal"
           />
-
-          <ProfessionalFormContent
-            handleInputChange={handleInputChange}
-            handleRoleChange={handleRoleChange}
-            editedProfessional={editedProfessional}
-            professionalRoles={userRoles}
-          />
-
-          {isEditing && (
-            <ProfessionalFormFooter
-              isSaving={isSaving}
-              professional={professional}
-              setIsEditing={setIsEditing}
-              setEditedProfessional={setEditedProfessional}
+          <div className="mt-4">
+            <ProfessionalFormContent
+              handleInputChange={handleInputChange}
+              handleRoleChange={handleRoleChange}
+              editedProfessional={editedProfessional}
+              professionalRoles={userRoles}
             />
-          )}
+
+            {isEditing && (
+              <ProfessionalFormFooter
+                isSaving={isSaving}
+                professional={professional}
+                setIsEditing={setIsEditing}
+                setEditedProfessional={setEditedProfessional}
+              />
+            )}
+          </div>
         </form>
       </Card>
     </div>
