@@ -27,7 +27,7 @@ export async function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup className="mt-2 pl-2">
-          <SidebarGroupLabel>Aplicação</SidebarGroupLabel>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <Collapsible defaultOpen className="group/collapsible">
