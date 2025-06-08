@@ -16,11 +16,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { myToast } from "@/components/myToast";
-import { IExpedient } from "@/types/expedient";
-import { initialProfessionals } from "./mock";
+import { ICreateExpedient, IExpedient } from "@/types/expedient";
 import { IUserWithServicesAndExpedients } from "@/types/users";
 import ProfessionalExpedientCard from "./professionalExpedientCard";
 import CreateDialog from "./createDialog";
+import {
+  createExpedient,
+  getProfessionalsWithServicesAndExpedients,
+} from "@/hooks/useApi";
 
 export default function PageContent({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +40,7 @@ export default function PageContent({ children }: { children: ReactNode }) {
     null
   );
   const [currentService, setCurrentService] = useState<{
-    professionalId: string;
+    userId: string;
     serviceId: string;
   } | null>(null);
   const [formData, setFormData] = useState({
@@ -45,13 +48,24 @@ export default function PageContent({ children }: { children: ReactNode }) {
     startTime: "",
     endTime: "",
   });
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    pageSize: 10,
+    totalPages: 0,
+  });
 
-  // Load professionals
   const fetchProfessionals = useCallback(async () => {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setProfessionals(initialProfessionals);
+      const response = await getProfessionalsWithServicesAndExpedients(
+        pagination
+      );
+
+      if (!response) return;
+
+      const { data, totalPages } = response;
+
+      setPagination((prev) => ({ ...prev, totalPages }));
+      setProfessionals(data);
     } catch (error) {
       myToast("Erro", "Falha ao carregar profissionais");
       console.log(error);
@@ -64,10 +78,9 @@ export default function PageContent({ children }: { children: ReactNode }) {
     fetchProfessionals();
   }, [fetchProfessionals]);
 
-  // Open dialog for creating a new expedient
-  const openCreateDialog = (professionalId: string, serviceId: string) => {
+  const openCreateDialog = (userId: string, serviceId: string) => {
     setCurrentExpedient(null);
-    setCurrentService({ professionalId, serviceId });
+    setCurrentService({ userId, serviceId });
     setFormData({
       weekday: "",
       startTime: "",
@@ -77,14 +90,13 @@ export default function PageContent({ children }: { children: ReactNode }) {
     setIsDialogOpen(true);
   };
 
-  // Open dialog for editing an expedient
   const openEditDialog = (
     expedient: IExpedient,
-    professionalId: string,
+    userId: string,
     serviceId: string
   ) => {
     setCurrentExpedient(expedient);
-    setCurrentService({ professionalId, serviceId });
+    setCurrentService({ userId, serviceId });
     setFormData({
       weekday: expedient.weekday.toString(),
       startTime: expedient.startTime,
@@ -97,35 +109,31 @@ export default function PageContent({ children }: { children: ReactNode }) {
   // Open dialog for deleting an expedient
   const openDeleteDialog = (
     expedient: IExpedient,
-    professionalId: string,
+    userId: string,
     serviceId: string
   ) => {
     setCurrentExpedient(expedient);
-    setCurrentService({ professionalId, serviceId });
+    setCurrentService({ userId, serviceId });
     setIsDeleteDialogOpen(true);
   };
 
-  // Validate time format and logic
   const validateTimes = (startTime: string, endTime: string): boolean => {
     const start = new Date(`2000-01-01T${startTime}:00`);
     const end = new Date(`2000-01-01T${endTime}:00`);
     return start < end;
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Validate form
       if (!formData.weekday || !formData.startTime || !formData.endTime) {
         myToast("Erro", "Todos os campos são obrigatórios");
         setIsSubmitting(false);
         return;
       }
 
-      // Validate time logic
       if (!validateTimes(formData.startTime, formData.endTime)) {
         myToast(
           "Erro",
@@ -135,13 +143,19 @@ export default function PageContent({ children }: { children: ReactNode }) {
         return;
       }
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
       if (!currentService) return;
 
+      const expedientData: ICreateExpedient = {
+        ...formData,
+        weekday: Number(formData.weekday),
+        ...currentService,
+      };
+      const response = await createExpedient(expedientData);
+
+      if (!response) return;
+
       const updatedProfessionals = professionals.map((professional) => {
-        if (professional.id === currentService.professionalId) {
+        if (professional.id === currentService.userId) {
           return {
             ...professional,
             services: professional.services.map((service) => {
@@ -213,7 +227,7 @@ export default function PageContent({ children }: { children: ReactNode }) {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const updatedProfessionals = professionals.map((professional) => {
-        if (professional.id === currentService.professionalId) {
+        if (professional.id === currentService.userId) {
           return {
             ...professional,
             services: professional.services.map((service) => {

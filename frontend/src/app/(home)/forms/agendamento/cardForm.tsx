@@ -15,6 +15,8 @@ import { createAppointment, createCustomer } from "@/hooks/useApi";
 import { ICreateCustomer } from "@/types/customers";
 import { Loader2 } from "lucide-react";
 import { myToast } from "@/components/myToast";
+import { useRouter } from "next/navigation";
+import { CONFIRMATION_APPOINTMENT } from "@/constants/routes";
 
 const formSchema = z.object({
   fullName: z.string().min(10).max(100),
@@ -29,6 +31,7 @@ const formSchema = z.object({
 });
 
 export default function CardForm() {
+  const router = useRouter();
   const [selectedService, setSelectedService] = useState<
     IServiceList | undefined
   >(undefined);
@@ -43,9 +46,7 @@ export default function CardForm() {
     setIsSubmiting(true);
 
     const formData = values;
-    console.log(formData);
 
-    // Criar paciente
     try {
       const {
         dateTime,
@@ -87,6 +88,7 @@ export default function CardForm() {
       }
 
       myToast("Sucesso", "Seu agendamento foi registrado com sucesso!");
+      router.push(`${CONFIRMATION_APPOINTMENT}/${appointmentResponse.id}`);
     } catch (error) {
       console.log(error);
     } finally {

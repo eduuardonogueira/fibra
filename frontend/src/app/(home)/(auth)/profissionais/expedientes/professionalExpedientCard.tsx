@@ -11,15 +11,15 @@ interface IProfessionalExpedientCardProps {
   professional: IUserWithServicesAndExpedients;
   openEditDialog: (
     expedient: IExpedient,
-    professionalId: string,
+    userId: string,
     serviceId: string
   ) => void;
   openDeleteDialog: (
     expedient: IExpedient,
-    professionalId: string,
+    userId: string,
     serviceId: string
   ) => void;
-  openCreateDialog: (professionalId: string, serviceId: string) => void;
+  openCreateDialog: (userId: string, serviceId: string) => void;
 }
 
 export default function ProfessionalExpedientCard({
@@ -29,17 +29,20 @@ export default function ProfessionalExpedientCard({
   openCreateDialog,
 }: IProfessionalExpedientCardProps) {
   return (
-    <Card className="border-l-4 border-l-primary">
-      <CardHeader className="pb-4">
+    <Card className="border-l-4 border-l-primary gap-2">
+      <CardHeader>
         <div className="flex items-center gap-2">
           <User className="h-5 w-5 text-primary" />
           <CardTitle className="text-lg">{professional.fullName}</CardTitle>
+          <Badge variant="outline">
+            Serviços: {professional.services.length}
+          </Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         {professional.services.map((service, serviceIndex) => (
           <div key={service.id}>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
               <div className="flex items-center gap-2">
                 <Briefcase className="h-4 w-4 text-muted-foreground" />
                 <h4 className="font-medium">{service.name}</h4>
@@ -50,7 +53,7 @@ export default function ProfessionalExpedientCard({
               <Button
                 size="sm"
                 onClick={() => openCreateDialog(professional.id, service.id)}
-                className="h-8"
+                className="h-8 hover:cursor-pointer"
               >
                 <PlusCircle className="h-3 w-3 mr-1" />
                 Adicionar Expediente

@@ -10,3 +10,5 @@ export const CREATE_PROFESSIONAL_ROUTE = `${PROFESSIONALS_ROUTE}/criar`;
 export const SERVICES_ROUTE = "/servicos";
 export const SERVICE_ROUTE = "/servico";
 export const EXPEDIENTS_ROUTE = `${PROFESSIONALS_ROUTE}/expedientes`;
+export const SCHEDULE_APPOINTMENT = "/forms/agendamento";
+export const CONFIRMATION_APPOINTMENT = `${SCHEDULE_APPOINTMENT}/confirmacao`;

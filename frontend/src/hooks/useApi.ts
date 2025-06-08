@@ -12,11 +12,17 @@ import {
   IProfessionalCalendar,
   IUser,
   IUserWithServices,
+  IUserWithServicesAndExpedients,
 } from "@/types/users";
 import { cookies } from "next/headers";
-import { ICreateAppointment, IFormatedAppointment } from "@/types/appointments";
+import {
+  IAppointment,
+  ICreateAppointment,
+  IFormatedAppointment,
+} from "@/types/appointments";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
 import { getUrlApiPagination } from "./useApiPagination";
+import { ICreateExpedient } from "@/types/expedient";
 
 export async function login(
   username: string,
@@ -286,6 +292,28 @@ export async function getProfessionalsAndServices(
   }
 }
 
+export async function getProfessionalsWithServicesAndExpedients(
+  paginationProps: IPaginationProps
+): Promise<IPaginationResponse<IUserWithServicesAndExpedients[]> | null> {
+  const url = getUrlApiPagination(
+    process.env.BACKEND_URL,
+    "/users2/professionals-services-expedients",
+    paginationProps
+  );
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      // headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
 export async function getServices(
   paginationProps: IPaginationProps
 ): Promise<IPaginationResponse<IServiceList[]> | null> {
@@ -368,9 +396,29 @@ export async function getAppointments(
   }
 }
 
+export async function getAppointmentById(
+  id: string
+): Promise<IFormatedAppointment | null> {
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/appointments2/${id}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        // headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
 export async function createAppointment(
   Appointment: ICreateAppointment
-): Promise<Response | null> {
+): Promise<IAppointment | null> {
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/appointments2`, {
       method: "POST",
@@ -379,7 +427,6 @@ export async function createAppointment(
       // headers: { Authorization: `Bearer ${token}` },
     });
 
-    console.log(response.status);
     return response.json();
   } catch (error) {
     console.log(error);
@@ -410,6 +457,45 @@ export async function getProfessionalCalendar({
 
     console.log(response.status);
     return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function createExpedient(
+  expedient: ICreateExpedient
+): Promise<ICreateExpedient | null> {
+  try {
+    const response = await fetch(`${process.env.BACKEND_URL}/expedients`, {
+      method: "POST",
+      body: JSON.stringify(expedient),
+      headers: { "Content-Type": "application/json" },
+      // headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function deleteExpedient(
+  id: string
+): Promise<{ status: number } | null> {
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/expedients/${id}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        // headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    return {
+      status: response.status,
+    };
   } catch (error) {
     console.log(error);
     return null;

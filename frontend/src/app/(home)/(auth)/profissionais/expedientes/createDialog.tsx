@@ -122,10 +122,15 @@ export default function CreateDialog({
               type="button"
               variant="outline"
               onClick={() => setIsDialogOpen(false)}
+              className="hover:cursor-pointer"
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="hover:cursor-pointer"
+            >
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

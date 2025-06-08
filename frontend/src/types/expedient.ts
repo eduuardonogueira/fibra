@@ -4,3 +4,11 @@ export interface IExpedient {
   startTime: string;
   endTime: string;
 }
+
+export interface ICreateExpedient {
+  weekday: number;
+  startTime: string;
+  endTime: string;
+  userId: string;
+  serviceId: string;
+}

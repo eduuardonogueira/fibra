@@ -41,7 +41,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import DetailsModal from "./detailsModal";
-import { StatusBadge } from "./statusBadge";
 import { CustomerTypeBadge } from "@/components/customerTypeBadge";
 import {
   IAppointmentsDetails,
@@ -50,6 +49,7 @@ import {
 import { Pagination } from "@/components/pagination";
 import { getAppointments } from "@/hooks/useApi";
 import { myToast } from "@/components/myToast";
+import StatusBadge from "@/components/statusBadge";
 
 export default function AppointmentsPage() {
   const [searchQuery, setSearchQuery] = useState("");

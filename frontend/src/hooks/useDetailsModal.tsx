@@ -1,5 +1,5 @@
-import { StatusBadge } from "@/app/(home)/(auth)/agendamentos/statusBadge";
 import { CustomerTypeBadge } from "@/components/customerTypeBadge";
+import StatusBadge from "@/components/statusBadge";
 import { IAppointmentsDetails } from "@/types/appointments";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";

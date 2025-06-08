@@ -51,8 +51,6 @@ export function CalendarInput({
           serviceId: selectedService.id,
         });
 
-        console.log(response)
-
         if (!response) return;
 
         setProfessionalCalendar(response);
@@ -64,7 +62,7 @@ export function CalendarInput({
 
     resetDateAndHour();
     fetchScheduleDates();
-  }, [selectedProfessional]);
+  }, [selectedProfessional, selectedService]);
 
   function handleHourChange(selectedHour: string) {
     if (selectedDate) {
@@ -84,9 +82,6 @@ export function CalendarInput({
 
   const daysOff = professionalCalendar?.dayOffs?.map(
     (day) => new Date(day.dayOff)
-  );
-  const workDays = professionalCalendar?.expedient?.map(
-    (workday) => workday.weekday
   );
   const journey = professionalCalendar?.expedient?.filter(
     (workSchedule) => workSchedule.weekday === selectedDate?.getDay()
@@ -212,16 +207,6 @@ export function CalendarInput({
     selectedService?.duration
   );
 
-  console.log("\n\n------------------------------");
-  console.log("- Dias de trabalho na semana: ", workDays);
-  console.log("- Duração do serviço: ", selectedService?.duration);
-  console.log("- Horas de trabalho no dia: ", journey);
-  console.log("- Horas disponíveis: ", availableTimeSlots);
-  console.log("- Agendamentos: ", appointments);
-  console.log("- Folgas: ", daysOff);
-  console.log("- Pausas: ", breaks);
-  console.log("------------------------------\n\n");
-
   return (
     <div className="flex flex-col gap-4">
       <h3 className="text-lg font-bold">Agendamento</h3>
@@ -256,7 +241,9 @@ export function CalendarInput({
       </Label>
       <Label className="flex flex-col gap-2 items-start">
         Horário:
-        {selectedDate ? (
+        {!selectedDate ? (
+          <SelectDisabled text="Selecione uma data" />
+        ) : availableTimeSlots && availableTimeSlots.length > 0 ? (
           <Select onValueChange={(value) => handleHourChange(value)} required>
             <SelectTrigger className="w-full hover:cursor-pointer">
               <SelectValue placeholder="Escolha um horário" />
@@ -274,7 +261,7 @@ export function CalendarInput({
             </SelectContent>
           </Select>
         ) : (
-          <SelectDisabled text="Selecione uma data" />
+          <SelectDisabled text="Essa data não possui horários disponíveis" />
         )}
       </Label>
     </div>
