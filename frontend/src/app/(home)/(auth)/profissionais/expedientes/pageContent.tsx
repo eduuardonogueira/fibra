@@ -22,6 +22,7 @@ import ProfessionalExpedientCard from "./professionalExpedientCard";
 import CreateDialog from "./createDialog";
 import {
   createExpedient,
+  deleteExpedient,
   getProfessionalsWithServicesAndExpedients,
 } from "@/hooks/useApi";
 
@@ -223,8 +224,12 @@ export default function PageContent({ children }: { children: ReactNode }) {
     if (!currentExpedient || !currentService) return;
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const response = await deleteExpedient(currentExpedient.id);
+
+      if (!response || response.status !== 204) {
+        myToast("Erro", "Falha ao excluir expediente");
+        return;
+      }
 
       const updatedProfessionals = professionals.map((professional) => {
         if (professional.id === currentService.userId) {
@@ -261,7 +266,7 @@ export default function PageContent({ children }: { children: ReactNode }) {
       <div className="container mx-auto py-8 px-4 flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center gap-2">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Carregando profissionais...</p>
+          <p className="text-muted-foreground">Carregando Informações...</p>
         </div>
       </div>
     );

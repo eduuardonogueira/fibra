@@ -30,9 +30,9 @@ export async function AppSidebar() {
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <Collapsible defaultOpen className="group/collapsible">
-                {sidebarItems.map((item: ISidebarItem) => (
-                  <SidebarMenuItem key={item.title}>
+              {sidebarItems.map((item: ISidebarItem) => (
+                <Collapsible defaultOpen className="group/collapsible" key={item.title}>
+                  <SidebarMenuItem >
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton asChild>
                         <Link
@@ -70,8 +70,8 @@ export async function AppSidebar() {
                         : ""}
                     </CollapsibleContent>
                   </SidebarMenuItem>
-                ))}
-              </Collapsible>
+                </Collapsible>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

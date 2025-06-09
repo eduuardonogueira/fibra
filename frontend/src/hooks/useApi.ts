@@ -455,7 +455,6 @@ export async function getProfessionalCalendar({
       }
     );
 
-    console.log(response.status);
     return response.json();
   } catch (error) {
     console.log(error);
@@ -492,6 +491,8 @@ export async function deleteExpedient(
         // headers: { Authorization: `Bearer ${token}` },
       }
     );
+
+    console.log(response.status);
 
     return {
       status: response.status,

@@ -11,9 +11,9 @@ import {
   CalendarCheck,
   Hammer,
   Home,
-  Hourglass,
   LucideProps,
-  UserRound,
+  Timer,
+  Users,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -45,7 +45,7 @@ export const sidebarItems: ISidebarItem[] = [
   {
     title: "Pacientes",
     url: CUSTOMERS_ROUTE,
-    icon: UserRound,
+    icon: Users,
   },
   {
     title: "Profissionais",
@@ -55,7 +55,7 @@ export const sidebarItems: ISidebarItem[] = [
       {
         title: "Expedientes",
         url: EXPEDIENTS_ROUTE,
-        icon: Hourglass,
+        icon: Timer,
       },
     ],
   },
