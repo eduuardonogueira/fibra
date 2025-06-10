@@ -14,7 +14,7 @@ import { myToast } from "@/components/myToast";
 import { NotFoundCustomer } from "./notFoundCustomer";
 import Loading from "./loading";
 
-import { ICustomerAndAppointments } from "@/types/customers";
+import { ICustomer } from "@/types/customers";
 import { ICustomerType } from "@/types/customerTypes";
 
 import { CUSTOMERS_ROUTE } from "@/constants/routes";
@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import {
   getCustomerAndAppointmentsById,
   getCustomerTypes,
+  updateCustomer,
 } from "@/hooks/useApi";
 
 export default function EditCustomerPage({
@@ -39,23 +40,19 @@ export default function EditCustomerPage({
   const [customerTypes, setCustomerTypes] = useState<ICustomerType[] | null>(
     null
   );
-  const [customer, setCustumer] = useState<ICustomerAndAppointments | null>(
-    null
-  );
-  const [editedCustomer, setEditedCustomer] =
-    useState<ICustomerAndAppointments>({
+  const [customer, setCustumer] = useState<ICustomer | null>(null);
+  const [editedCustomer, setEditedCustomer] = useState<ICustomer>({
+    id: "",
+    fullName: "",
+    age: 0,
+    address: "",
+    photoUrl: "",
+    phone: "",
+    customerType: {
       id: "",
-      fullName: "",
-      age: 0,
-      address: "",
-      photoUrl: "",
-      phone: "",
-      customerType: {
-        id: "",
-        name: "adulto",
-      },
-      appointmentsCount: 0,
-    });
+      name: "adulto",
+    },
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,8 +84,18 @@ export default function EditCustomerPage({
     e.preventDefault();
     setIsSaving(true);
 
+    if (!editedCustomer) {
+      myToast("Error", "Falha ao atualizar informações do usuário");
+      return;
+    }
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await updateCustomer(customerId, editedCustomer);
+
+      if (!response) {
+        myToast("Error", "Falha ao atualizar informações do usuário");
+        return;
+      }
 
       myToast("Sucesso", "Usuário atualizado com sucesso!");
       router.push(CUSTOMERS_ROUTE);
@@ -135,15 +142,15 @@ export default function EditCustomerPage({
           <CustomerFormContent
             handleInputChange={handleInputChange}
             handleCustomerTypeChange={handleCustomerTypeChange}
-            customer={customer}
-            editedCustomer={editedCustomer}
+            customer={{ ...customer, appointmentsCount: 0 }}
+            editedCustomer={{ ...editedCustomer, appointmentsCount: 0 }}
             customerTypes={customerTypes}
           />
 
           {isEditing && (
             <CustomerFormFooter
               isSaving={isSaving}
-              customer={customer}
+              customer={{ ...customer, appointmentsCount: 0 }}
               setIsEditing={setIsEditing}
               setEditedCustomer={setEditedCustomer}
             />

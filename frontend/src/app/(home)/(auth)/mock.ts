@@ -7,10 +7,10 @@ export const mockStats = {
   totalServices: 9,
   totalProfessionals: 4,
   appointmentsByStatus: {
-    confirmado: 248,
-    pendente: 248,
-    completo: 876,
-    cancelado: 124,
+    SCHEDULED: 248,
+    DELAYED: 248,
+    COMPLETED: 876,
+    CANCELED: 124,
   },
   appointmentsByService: {
     "Consulta Regular": 450,
@@ -74,7 +74,7 @@ export const mockStats = {
       dateTime: new Date(Date.now() + 1000 * 60 * 30), // 30 minutes from now
       professional: "Dr. Carlos Mendes",
       serviceType: "Consulta Regular",
-      status: "confirmado",
+      status: "COMPLETED",
     },
     {
       id: 2,
@@ -82,7 +82,7 @@ export const mockStats = {
       dateTime: new Date(Date.now() + 1000 * 60 * 90), // 1.5 hours from now
       professional: "Dra. Ana Silva",
       serviceType: "Consulta de Retorno",
-      status: "confirmado",
+      status: "COMPLETED",
     },
     {
       id: 3,
@@ -90,7 +90,7 @@ export const mockStats = {
       dateTime: new Date(Date.now() + 1000 * 60 * 150), // 2.5 hours from now
       professional: "Dra. Mariana Costa",
       serviceType: "Primeira Consulta",
-      status: "pendente",
+      status: "DELAYED",
     },
     {
       id: 4,
@@ -98,7 +98,7 @@ export const mockStats = {
       dateTime: new Date(Date.now() + 1000 * 60 * 210), // 3.5 hours from now
       professional: "Dr. Paulo Ribeiro",
       serviceType: "Consulta Especializada",
-      status: "confirmado",
+      status: "COMPLETED",
     },
   ],
   monthlyAppointments: [
@@ -132,31 +132,5 @@ export const mockStats = {
     { date: new Date(2025, 5, 28), count: 13 },
     { date: new Date(2025, 5, 29), count: 11 },
     { date: new Date(2025, 5, 30), count: 9 },
-  ],
-  announcements: [
-    {
-      id: 1,
-      title: "Novo Profissional",
-      content:
-        "Temos o prazer de anunciar que a Dra. Juliana Martins se juntará à nossa equipe a partir do próximo mês.",
-      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 days ago
-      priority: "medium",
-    },
-    {
-      id: 2,
-      title: "Manutenção do Sistema",
-      content:
-        "O sistema estará indisponível para manutenção no próximo domingo, das 02:00 às 04:00.",
-      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1), // 1 day ago
-      priority: "high",
-    },
-    {
-      id: 3,
-      title: "Novo Serviço Disponível",
-      content:
-        "Agora oferecemos consultas online para maior comodidade dos nossos clientes.",
-      date: new Date(Date.now() - 1000 * 60 * 60 * 36), // 36 hours ago
-      priority: "medium",
-    },
   ],
 };

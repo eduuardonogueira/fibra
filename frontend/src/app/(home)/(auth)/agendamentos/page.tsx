@@ -50,6 +50,8 @@ import { Pagination } from "@/components/pagination";
 import { getAppointments } from "@/hooks/useApi";
 import { myToast } from "@/components/myToast";
 import StatusBadge from "@/components/statusBadge";
+import { ptBR } from "date-fns/locale";
+import { DeleteAppointment } from "./deleteAppointment";
 
 export default function AppointmentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,6 +62,7 @@ export default function AppointmentsPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const [selectedAppointment, setSelectedAppointment] =
     useState<IAppointmentsDetails | null>(null);
@@ -431,7 +434,9 @@ export default function AppointmentsPage() {
                           <TableCell>
                             {format(appointment.dateTime, "dd/MM/yyyy")}
                             <div className="text-sm text-muted-foreground">
-                              {format(appointment.dateTime, "HH:mm")}
+                              {format(appointment.dateTime, "HH:mm", {
+                                locale: ptBR,
+                              })}
                             </div>
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
@@ -469,10 +474,21 @@ export default function AppointmentsPage() {
           )}
         </CardContent>
       </Card>
+
       <DetailsModal
         selectedAppointment={selectedAppointment}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
+        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+      />
+
+      <DeleteAppointment
+        isDeleteDialogOpen={isDeleteDialogOpen}
+        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+        setIsModalOpen={setIsModalOpen}
+        selectedAppointment={selectedAppointment}
+        appointments={appointments}
+        setAppointments={setAppointments}
       />
     </div>
   );

@@ -69,7 +69,12 @@ export function CalendarInput({
       const [hour, minutes] = selectedHour.split(":").map(Number);
 
       const dateAndHour = new Date(selectedDate);
+
       dateAndHour.setHours(hour, minutes, 0, 0);
+
+      dateAndHour.toLocaleString("pt-BR", {
+        timeZone: "America/Sao_Paulo",
+      });
 
       form.setValue("dateTime", dateAndHour);
     }
@@ -183,7 +188,6 @@ export function CalendarInput({
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const isWeekend = [0, 6].includes(date.getDay());
     const isBeforeToday = date < today;
 
     const isDayOff = Array.isArray(daysOff)
@@ -197,7 +201,13 @@ export function CalendarInput({
         })
       : false;
 
-    return isBeforeToday || isWeekend || isDayOff;
+    const isNotJorneyDay = Array.isArray(professionalCalendar?.expedient)
+      ? !professionalCalendar?.expedient.some(
+          (expedient) => expedient.weekday === date.getDay()
+        )
+      : true;
+
+    return isBeforeToday || isNotJorneyDay || isDayOff;
   }
 
   const availableTimeSlots = getAvailableTimeSlots(
@@ -212,32 +222,36 @@ export function CalendarInput({
       <h3 className="text-lg font-bold">Agendamento</h3>
       <Label className="flex flex-col gap-2 items-start">
         Data:
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="w-full justify-start text-left font-normal hover:cursor-pointer"
-              disabled={!selectedProfessional}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {selectedDate ? (
-                format(selectedDate, "PPP", { locale: ptBR })
-              ) : (
-                <span>Escolha uma data</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              required
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              initialFocus
-              disabled={(date) => getAllDatesDisabled(date)}
-            />
-          </PopoverContent>
-        </Popover>
+        {!selectedProfessional || professionalCalendar ? (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-left font-normal hover:cursor-pointer"
+                disabled={!selectedProfessional || !professionalCalendar}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {selectedDate ? (
+                  format(selectedDate, "PPP", { locale: ptBR })
+                ) : (
+                  <span>Escolha uma data</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                required
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                initialFocus
+                disabled={(date) => getAllDatesDisabled(date)}
+              />
+            </PopoverContent>
+          </Popover>
+        ) : (
+          <SelectDisabled text="Carregando datas disponíveis" />
+        )}
       </Label>
       <Label className="flex flex-col gap-2 items-start">
         Horário:

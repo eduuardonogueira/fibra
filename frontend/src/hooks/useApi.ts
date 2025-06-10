@@ -163,6 +163,28 @@ export async function createCustomer(
   }
 }
 
+export async function updateCustomer(
+  id: string,
+  customer: ICreateCustomer
+): Promise<ICustomer | null> {
+  console.log(customer);
+  try {
+    const response = await fetch(`${process.env.BACKEND_URL}/customers/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(customer),
+      headers: { "Content-Type": "application/json" },
+      // headers: { Authorization: `Bearer ${token}` },
+    });
+
+    console.log(response.status);
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
 export async function deleteCustomer(
   id: string
 ): Promise<{ status: number } | null> {
@@ -473,6 +495,28 @@ export async function createExpedient(
       // headers: { Authorization: `Bearer ${token}` },
     });
     return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function deleteAppointment(
+  id: string
+): Promise<{ status: number } | null> {
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/appointments2/${id}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        // headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    return {
+      status: response.status,
+    };
   } catch (error) {
     console.log(error);
     return null;

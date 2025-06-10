@@ -35,7 +35,7 @@
 
   "Cursor Pointer": {
     "prefix": "csp",
-    "body": ["className='hover:cursor-pointer ${1:}'"],
+    "body": ["className='hover:cursor-pointer${1:}'"],
     "description": "use for add pointer"
   },
   "Image": {

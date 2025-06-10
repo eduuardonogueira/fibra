@@ -5,17 +5,21 @@ import { ForwardRefExoticComponent, RefAttributes } from "react";
 
 interface IStatisticsProgressProps {
   title: string;
-  statistics: number;
+  statistics: string;
   Icon: ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
-  progressValue: number;
+  iconClassName?: string | undefined;
+  iconBackgroundClassName?: string | undefined;
+  progressValue?: number;
 }
 
 export default function StatisticsProgress({
   title,
   statistics,
   Icon,
+  iconClassName,
+  iconBackgroundClassName,
   progressValue,
 }: IStatisticsProgressProps) {
   return (
@@ -26,13 +30,17 @@ export default function StatisticsProgress({
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
             <p className="text-3xl font-bold">{statistics}</p>
           </div>
-          <div className="p-2 bg-primary/10 rounded-full">
-            <Icon className="h-6 w-6 text-primary" />
+          <div className={`p-2 ${iconBackgroundClassName} rounded-full`}>
+            <Icon className={`h-6 w-6 ${iconClassName}`} />
           </div>
         </div>
-        <div className="mt-4">
-          <Progress value={progressValue} className="h-1" />
-        </div>
+        {progressValue ? (
+          <div className="mt-4">
+            <Progress value={progressValue} className="h-1" />
+          </div>
+        ) : (
+          ""
+        )}
       </CardContent>
     </Card>
   );

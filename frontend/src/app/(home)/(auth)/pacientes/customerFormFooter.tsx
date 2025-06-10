@@ -3,7 +3,7 @@
 import { CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, Save } from "lucide-react";
-import { ICustomerAndAppointments } from "@/types/customers";
+import { ICustomer, ICustomerAndAppointments } from "@/types/customers";
 import { Dispatch, SetStateAction } from "react";
 
 interface ICustomerFormFooter {
@@ -11,7 +11,8 @@ interface ICustomerFormFooter {
   isSaving: boolean;
   setEditedCustomer:
     | Dispatch<SetStateAction<ICustomerAndAppointments>>
-    | Dispatch<SetStateAction<ICustomerAndAppointments | null>>;
+    | Dispatch<SetStateAction<ICustomerAndAppointments | null>>
+    | Dispatch<SetStateAction<ICustomer>>;
   customer: ICustomerAndAppointments;
 }
 

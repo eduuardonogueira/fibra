@@ -33,10 +33,9 @@ export const detailsModal: IDetailsModal[] = [
     label: "Data",
     field: "dateTime",
     format: (date) =>
-      `${format(date, "PPP", { locale: ptBR })} às ${format(
-        date,
-        "HH:mm"
-      )} horas`,
+      `${format(date, "PPP", { locale: ptBR })} às ${format(date, "HH:mm", {
+        locale: ptBR,
+      })} horas`,
   },
   {
     label: "Tipo de Atendimento",
@@ -62,5 +61,6 @@ export const detailsModal: IDetailsModal[] = [
   {
     label: "Observações",
     field: "observations",
+    format: (string) => (string ? `${string}` : "Sem observações"),
   },
 ];

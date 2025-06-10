@@ -10,7 +10,7 @@ import { Dispatch, SetStateAction } from "react";
 import { detailsModal, IDetailsModal } from "@/hooks/useDetailsModal";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { IAppointmentsDetails } from "@/types/appointments";
 import { UPDATE_CUSTOMER_ROUTE } from "@/constants/routes";
 
@@ -18,6 +18,7 @@ interface IModalProps {
   selectedAppointment: IAppointmentsDetails | null;
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  setIsDeleteDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const renderValue = (details: IDetailsModal, value: string | number | Date) => {
@@ -31,6 +32,7 @@ export default function DetailsModal({
   selectedAppointment,
   isModalOpen,
   setIsModalOpen,
+  setIsDeleteDialogOpen,
 }: IModalProps) {
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -60,6 +62,15 @@ export default function DetailsModal({
             );
           })}
         <DialogFooter className="mt-2 ">
+          <Button
+            variant="secondary"
+            onClick={() => setIsDeleteDialogOpen(true)}
+            className="hover:cursor-pointer hover:bg-red-500"
+          >
+            <Trash2 className="h-4 w-4" />
+            Deletar agendamento
+            <span className="sr-only">Deletar Agendamento</span>
+          </Button>
           <Link
             href={`${UPDATE_CUSTOMER_ROUTE}/${selectedAppointment?.customerId}`}
           >

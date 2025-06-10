@@ -235,7 +235,7 @@ export default function CustomerPage() {
                         <TableCell className="hidden sm:table-cell">
                           {customer.phone}
                         </TableCell>
-                        <TableCell className="hidden lg:table-cell max-w-[300px] truncate">
+                        <TableCell className="hidden lg:table-cell max-w-[150px] truncate">
                           {customer.address}
                         </TableCell>
                         <TableCell>

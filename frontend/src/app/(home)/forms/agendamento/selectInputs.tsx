@@ -77,7 +77,6 @@ export default function SelectInputs({
     const service = services?.find(
       (service) => service.id.toString() === value
     );
-    console.log(value);
     setSelectedService(service);
   }
 
