@@ -14,10 +14,10 @@ export default function QuickLinks() {
           <Link key={item.title} href={item.url}>
             <Button
               variant="outline"
-              className="w-full justify-start hover:cursor-pointer"
+              className="flex w-full justify-start gap-2 hover:cursor-pointer"
             >
-              <item.icon className="mr-2 h-4 w-4" />
-              {item.title}
+              <item.icon className="h-4 w-4" />
+              <p className="truncate">{item.title}</p>
             </Button>
           </Link>
         ))}

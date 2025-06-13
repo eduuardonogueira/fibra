@@ -61,7 +61,7 @@ export default function DetailsModal({
               </div>
             );
           })}
-        <DialogFooter className="mt-2 ">
+        <DialogFooter className="mt-2 flex justify-between!">
           <Button
             variant="secondary"
             onClick={() => setIsDeleteDialogOpen(true)}
@@ -74,9 +74,9 @@ export default function DetailsModal({
           <Link
             href={`${UPDATE_CUSTOMER_ROUTE}/${selectedAppointment?.customerId}`}
           >
-            <Button className="hover:cursor-pointer">
+            <Button className="hover:cursor-pointer w-full">
               <Edit className="mr-2 h-4 w-4" />
-              Editar Informações do Cliente
+              Editar Informações do Clente
             </Button>
           </Link>
         </DialogFooter>

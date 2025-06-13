@@ -14,8 +14,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Card, CardTitle } from "@/components/ui/card";
 import { login } from "@/hooks/useApi";
-import { HOME_ROUTE } from "@/constants/routes";
+import { DASHBOARD_ROUTER } from "@/constants/routes";
 import { useRouter } from "next/navigation";
+import { myToast } from "@/components/myToast";
 
 const formSchema = z.object({
   username: z.string().email({ message: "O email deve ser um email válido" }),
@@ -34,14 +35,19 @@ export default function Login() {
     },
   });
 
-  async function handleSubmit({ username, password }: z.infer<typeof formSchema>) {
+  async function handleSubmit({
+    username,
+    password,
+  }: z.infer<typeof formSchema>) {
     const isLogged = await login(username, password);
 
     if (isLogged) {
-      router.push(HOME_ROUTE);
+      myToast("Sucesso", "Login realizado com sucesso!");
+      router.push(DASHBOARD_ROUTER);
+      return;
     }
 
-    // exibe mensagem de erro
+    myToast("Erro ao fazer login", "Usuário ou senha inválidos!");
   }
 
   return (

@@ -1,8 +1,8 @@
 import {
   APPOINTMENTS_ROUTE,
   CUSTOMERS_ROUTE,
+  DASHBOARD_ROUTER,
   EXPEDIENTS_ROUTE,
-  HOME_ROUTE,
   PROFESSIONALS_ROUTE,
   SERVICES_ROUTE,
 } from "@/constants/routes";
@@ -29,7 +29,7 @@ export interface ISidebarItem {
 export const sidebarItems: ISidebarItem[] = [
   {
     title: "Home",
-    url: HOME_ROUTE,
+    url: DASHBOARD_ROUTER,
     icon: Home,
   },
   {

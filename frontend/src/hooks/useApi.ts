@@ -29,11 +29,16 @@ export async function login(
   password: string
 ): Promise<boolean> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/login`, {
+    const response = await fetch("http://localhost:3000/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
+    // const response = await fetch(`${process.env.BACKEND_URL}/login`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ username, password }),
+    // });
 
     if (!response.ok) return false;
 
@@ -43,7 +48,7 @@ export async function login(
 
     if (token) {
       const cookieStore = await cookies();
-      cookieStore.set("authToken", JSON.stringify(token));
+      cookieStore.set("session", token);
       return true;
     }
   } catch (error) {
@@ -52,19 +57,22 @@ export async function login(
   return false;
 }
 
-export async function validate(): Promise<IUser | null> {
+export async function getProfile(): Promise<IUser | null> {
   const cookieStore = await cookies();
-  const token = cookieStore.get("authToken");
+  const token = cookieStore.get("session");
 
   if (!token) {
     return null;
   }
 
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/validate`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await fetch(
+      "https://de-olho-no-foco.onrender.com/auth/profile",
+      {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token.value}` },
+      }
+    );
 
     return response.json();
   } catch (error) {

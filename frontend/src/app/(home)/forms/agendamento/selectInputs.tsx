@@ -78,6 +78,7 @@ export default function SelectInputs({
       (service) => service.id.toString() === value
     );
     setSelectedService(service);
+    setSelectedProfessional("");
   }
 
   function handleProfessionalChange(value: string) {
