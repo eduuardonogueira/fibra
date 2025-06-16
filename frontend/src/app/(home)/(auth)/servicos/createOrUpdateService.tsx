@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
 import { myToast } from "@/components/myToast";
-import { createService, getProfessionals } from "@/hooks/useApi";
 import { IUser } from "@/types/users";
 import { useEffect, useState } from "react";
+import { createService, updateService } from "@/hooks/useServices";
+import { getProfessionals } from "@/hooks/useProfessionals";
 
 interface ICreateOrUpdateServiceProps {
   isDialogOpen: boolean;
@@ -61,8 +62,8 @@ export function CreateOrUpdateService({
           setFormData((prev) => ({
             ...prev,
             userIds: currentService.professionals
-              ? currentService.professionals.map(
-                  (professional) => professional.id.toString()
+              ? currentService.professionals.map((professional) =>
+                  professional.id.toString()
                 )
               : [],
           }));
@@ -109,7 +110,9 @@ export function CreateOrUpdateService({
 
       console.log(formData);
 
-      const response = await createService(formData);
+      const response = currentService?.id
+        ? await updateService(formData)
+        : await createService(formData);
 
       const selectedUsers = professionals.filter((user) =>
         formData.userIds.includes(user.id)
