@@ -235,7 +235,7 @@ export async function getCustomerTypes(): Promise<ICustomerType[] | null> {
 
 export async function getProfessionals(): Promise<IUser[] | null> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users2`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/users`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       // headers: { Authorization: `Bearer ${token}` },
@@ -250,7 +250,7 @@ export async function getProfessionals(): Promise<IUser[] | null> {
 
 export async function getProfessionalById(id: string): Promise<IUser | null> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users2/${id}`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       // headers: { Authorization: `Bearer ${token}` },
@@ -267,7 +267,7 @@ export async function deleteProfessional(
   id: string
 ): Promise<{ status: number } | null> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users2/${id}`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       // headers: { Authorization: `Bearer ${token}` },
@@ -286,7 +286,7 @@ export async function createProfessional(
   customer: ICreateProfessional
 ): Promise<IUser | null> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users2`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/users`, {
       method: "POST",
       body: JSON.stringify(customer),
       headers: { "Content-Type": "application/json" },
@@ -305,7 +305,7 @@ export async function getProfessionalsAndServices(
 ): Promise<IPaginationResponse<IUserWithServices[]> | null> {
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
-    "/users2/with-services",
+    "/users/with-services",
     paginationProps
   );
   try {
@@ -327,7 +327,7 @@ export async function getProfessionalsWithServicesAndExpedients(
 ): Promise<IPaginationResponse<IUserWithServicesAndExpedients[]> | null> {
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
-    "/users2/professionals-services-expedients",
+    "/users/professionals-services-expedients",
     paginationProps
   );
   try {
@@ -409,7 +409,7 @@ export async function getAppointments(
 ): Promise<IPaginationResponse<IFormatedAppointment[]> | null> {
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
-    "/appointments2",
+    "/appointments",
     paginationProps
   );
 
@@ -431,7 +431,7 @@ export async function getAppointmentById(
 ): Promise<IFormatedAppointment | null> {
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/appointments2/${id}`,
+      `${process.env.BACKEND_URL}/appointments/${id}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -450,7 +450,7 @@ export async function createAppointment(
   Appointment: ICreateAppointment
 ): Promise<IAppointment | null> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/appointments2`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/appointments`, {
       method: "POST",
       body: JSON.stringify(Appointment),
       headers: { "Content-Type": "application/json" },
@@ -514,7 +514,7 @@ export async function deleteAppointment(
 ): Promise<{ status: number } | null> {
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/appointments2/${id}`,
+      `${process.env.BACKEND_URL}/appointments/${id}`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
