@@ -1,3 +1,5 @@
+"use server";
+
 import { IUser } from "@/types/users";
 import { cookies } from "next/headers";
 
@@ -42,6 +44,30 @@ export async function validate(): Promise<IUser | null> {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function getProfile(): Promise<IUser | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session");
+
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      "https://de-olho-no-foco.onrender.com/auth/profile",
+      {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token.value}` },
+      }
+    );
 
     return response.json();
   } catch (error) {

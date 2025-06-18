@@ -27,7 +27,7 @@ import { Badge } from "@/components/ui/badge";
 import { CreateOrUpdateService } from "./createOrUpdateService";
 import { DeleteService } from "./deleteService";
 import { myToast } from "@/components/myToast";
-import { getServices } from "@/hooks/useApi";
+import { getServices } from "@/hooks/useServices";
 import { Pagination } from "@/components/pagination";
 
 export default function ServicesPage() {

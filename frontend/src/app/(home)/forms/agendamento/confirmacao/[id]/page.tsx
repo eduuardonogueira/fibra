@@ -39,7 +39,7 @@ import {
 } from "@/constants/routes";
 import { CustomerTypeBadge } from "@/components/customerTypeBadge";
 import { IFormatedAppointment } from "@/types/appointments";
-import { getAppointmentById } from "@/hooks/useApi";
+import { getAppointmentById } from "@/hooks/useAppointments";
 import {
   address,
   email,

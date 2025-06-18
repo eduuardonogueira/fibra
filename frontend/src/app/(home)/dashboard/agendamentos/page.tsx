@@ -47,7 +47,7 @@ import {
   IFormatedAppointment,
 } from "@/types/appointments";
 import { Pagination } from "@/components/pagination";
-import { getAppointments } from "@/hooks/useApi";
+import { getAppointments } from "@/hooks/useAppointments";
 import { myToast } from "@/components/myToast";
 import StatusBadge from "@/components/statusBadge";
 import { ptBR } from "date-fns/locale";

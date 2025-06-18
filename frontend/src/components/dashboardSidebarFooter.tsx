@@ -12,13 +12,12 @@ import {
   SidebarMenuItem,
 } from "./ui/sidebar";
 import { Suspense, use } from "react";
-import { getProfile } from "@/hooks/useApi";
 import { Button } from "./ui/button";
 import { logout } from "@/app/actions";
+import { getProfile } from "@/hooks/useAuth";
 
 export default function DashboardSidebarFooter() {
   const user = use(getProfile());
-  console.log(user);
   return (
     <SidebarFooter>
       <Suspense fallback={<div>Carregando...</div>}>

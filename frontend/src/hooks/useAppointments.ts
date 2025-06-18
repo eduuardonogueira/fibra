@@ -1,3 +1,5 @@
+"use server";
+
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
 import {
   IAppointment,
@@ -11,7 +13,7 @@ export async function getAppointments(
 ): Promise<IPaginationResponse<IFormatedAppointment[]> | null> {
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
-    "/appointments2",
+    "/appointments",
     paginationProps
   );
 
@@ -33,7 +35,7 @@ export async function getAppointmentById(
 ): Promise<IFormatedAppointment | null> {
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/appointments2/${id}`,
+      `${process.env.BACKEND_URL}/appointments/${id}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -52,7 +54,7 @@ export async function createAppointment(
   Appointment: ICreateAppointment
 ): Promise<IAppointment | null> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/appointments2`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/appointments`, {
       method: "POST",
       body: JSON.stringify(Appointment),
       headers: { "Content-Type": "application/json" },
@@ -72,7 +74,7 @@ export async function deleteAppointment(
 ): Promise<{ status: number } | null> {
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/appointments2/${id}`,
+      `${process.env.BACKEND_URL}/appointments/${id}`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },

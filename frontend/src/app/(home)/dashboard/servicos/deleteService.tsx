@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { deleteService } from "@/hooks/useApi";
+import { deleteService } from "@/hooks/useServices";
 import { IServiceList } from "@/types/services";
 
 interface IDeleteServiceProps {

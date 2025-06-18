@@ -19,11 +19,8 @@ import { ICustomerType } from "@/types/customerTypes";
 
 import { CUSTOMERS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-import {
-  getCustomerAndAppointmentsById,
-  getCustomerTypes,
-  updateCustomer,
-} from "@/hooks/useApi";
+import { getCustomerAndAppointmentsById, updateCustomer } from "@/hooks/useCustomers";
+import { getCustomerTypes } from "@/hooks/useCustomerTypes";
 
 export default function EditCustomerPage({
   params,

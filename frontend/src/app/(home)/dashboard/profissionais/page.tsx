@@ -36,14 +36,14 @@ import {
   CREATE_PROFESSIONAL_ROUTE,
   UPDATE_PROFESSIONAL_ROUTE,
 } from "@/constants/routes";
-import {
-  deleteProfessional,
-  getProfessionalsAndServices,
-} from "@/hooks/useApi";
 import { myToast } from "@/components/myToast";
 import { IUserWithServices } from "@/types/users";
 import { Badge } from "@/components/ui/badge";
 import { ProfessionalRoleBadge } from "@/components/professionalRoleBadge";
+import {
+  deleteProfessional,
+  getProfessionalsAndServices,
+} from "@/hooks/useProfessionals";
 
 export default function ProfessionalPage() {
   const router = useRouter();

@@ -1,3 +1,5 @@
+"use server";
+
 import { ICustomerType } from "@/types/customerTypes";
 
 export async function getCustomerTypes(): Promise<ICustomerType[] | null> {

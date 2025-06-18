@@ -14,11 +14,11 @@ import Loading from "./loading";
 
 import { PROFESSIONALS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-import { getProfessionalById } from "@/hooks/useApi";
 import { ProfessionalFormFooter } from "../../professionalFormFooter";
 import { ProfessionalFormContent } from "../../professionalFormContent";
 import { userRoles } from "@/constants/roles";
 import { ICreateProfessional, IUser, UserRoles } from "@/types/users";
+import { getProfessionalById } from "@/hooks/useProfessionals";
 
 export default function EditCustomerPage({
   params,

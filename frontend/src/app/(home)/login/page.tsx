@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Card, CardTitle } from "@/components/ui/card";
-import { login } from "@/hooks/useApi";
+import { login } from "@/hooks/useAuth";
 import { DASHBOARD_ROUTER } from "@/constants/routes";
 import { useRouter } from "next/navigation";
 import { myToast } from "@/components/myToast";

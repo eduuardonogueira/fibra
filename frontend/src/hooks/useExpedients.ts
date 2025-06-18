@@ -1,3 +1,5 @@
+"use server";
+
 import { ICreateExpedient } from "@/types/expedient";
 
 export async function createExpedient(

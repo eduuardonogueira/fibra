@@ -16,9 +16,10 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IServiceList } from "@/types/services";
 import { ICustomerType } from "@/types/customerTypes";
 import SelectDisabled from "@/components/selectDisabled";
-import { getCustomerTypes, getServices } from "@/hooks/useApi";
 import { myToast } from "@/components/myToast";
 import { Loader2 } from "lucide-react";
+import { getCustomerTypes } from "@/hooks/useCustomerTypes";
+import { getServices } from "@/hooks/useServices";
 
 interface ISelectInput extends IRegisterCustomerForm {
   selectedService: IServiceList | undefined;

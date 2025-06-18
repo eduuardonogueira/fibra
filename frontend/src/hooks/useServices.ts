@@ -1,3 +1,5 @@
+"use server";
+
 import { IService, IServiceForm, IServiceList } from "@/types/services";
 import { getUrlApiPagination } from "./useApi";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";

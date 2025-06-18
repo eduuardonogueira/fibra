@@ -10,8 +10,9 @@ import { ICustomerType } from "@/types/customerTypes";
 import { myToast } from "@/components/myToast";
 import { CUSTOMERS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-import { createCustomer, getCustomerTypes } from "@/hooks/useApi";
 import { Loader2 } from "lucide-react";
+import { getCustomerTypes } from "@/hooks/useCustomerTypes";
+import { createCustomer } from "@/hooks/useCustomers";
 
 export default function CreateCustomer() {
   const router = useRouter();

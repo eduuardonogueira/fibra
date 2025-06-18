@@ -20,11 +20,8 @@ import { ICreateExpedient, IExpedient } from "@/types/expedient";
 import { IUserWithServicesAndExpedients } from "@/types/users";
 import ProfessionalExpedientCard from "./professionalExpedientCard";
 import CreateDialog from "./createDialog";
-import {
-  createExpedient,
-  deleteExpedient,
-  getProfessionalsWithServicesAndExpedients,
-} from "@/hooks/useApi";
+import { getProfessionalsWithServicesAndExpedients } from "@/hooks/useProfessionals";
+import { createExpedient, deleteExpedient } from "@/hooks/useExpedients";
 
 export default function PageContent({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -289,7 +286,6 @@ export default function PageContent({ children }: { children: ReactNode }) {
         </CardContent>
       </Card>
 
-      {/* Create/Edit Expedient Dialog */}
       <CreateDialog
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
@@ -300,7 +296,6 @@ export default function PageContent({ children }: { children: ReactNode }) {
         isSubmitting={isSubmitting}
       />
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
@@ -314,10 +309,12 @@ export default function PageContent({ children }: { children: ReactNode }) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel className="hover:cursor-pointer">
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-red-600 hover:bg-red-700 hover:cursor-pointer"
             >
               Excluir
             </AlertDialogAction>

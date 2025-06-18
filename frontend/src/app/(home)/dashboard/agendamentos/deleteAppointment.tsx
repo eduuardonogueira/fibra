@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { deleteAppointment } from "@/hooks/useApi";
+import { deleteAppointment } from "@/hooks/useAppointments";
 import {
   IAppointmentsDetails,
   IFormatedAppointment,

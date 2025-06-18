@@ -47,8 +47,11 @@ import {
   CREATE_CUSTOMER_ROUTE,
   UPDATE_CUSTOMER_ROUTE,
 } from "@/constants/routes";
-import { deleteCustomer, getCustomersAndAppointments } from "@/hooks/useApi";
 import { myToast } from "@/components/myToast";
+import {
+  deleteCustomer,
+  getCustomersAndAppointments,
+} from "@/hooks/useCustomers";
 
 export default function CustomerPage() {
   const router = useRouter();

@@ -21,10 +21,10 @@ import {
 } from "@/components/ui/select";
 import { IProfessionalCalendar } from "@/types/users";
 import { IServiceList } from "@/types/services";
-import { getProfessionalCalendar } from "@/hooks/useApi";
 import { myToast } from "@/components/myToast";
 import { useGetAvailableTimeSlots } from "@/hooks/useGetAvailableTimeSlots";
 import { getAllDatesDisabled } from "@/hooks/useGetAllDatesDisabled";
+import { getProfessionalCalendar } from "@/hooks/useProfessionals";
 
 interface ICalendarInput extends IRegisterCustomerForm {
   selectedService: IServiceList | undefined;

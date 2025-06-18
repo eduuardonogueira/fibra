@@ -11,12 +11,13 @@ import { CalendarInput } from "./calendarInput";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { IServiceList } from "@/types/services";
-import { createAppointment, createCustomer } from "@/hooks/useApi";
 import { ICreateCustomer } from "@/types/customers";
 import { Loader2 } from "lucide-react";
 import { myToast } from "@/components/myToast";
 import { useRouter } from "next/navigation";
 import { CONFIRMATION_APPOINTMENT } from "@/constants/routes";
+import { createCustomer } from "@/hooks/useCustomers";
+import { createAppointment } from "@/hooks/useAppointments";
 
 const formSchema = z.object({
   fullName: z.string().min(10).max(100),

@@ -1,5 +1,3 @@
-"use server";
-
 export function getUrlApiPagination(
   baseUrl: string | undefined,
   router: string,

@@ -1,3 +1,5 @@
+"use server";
+
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
 import {
   ICreateProfessional,
@@ -10,7 +12,7 @@ import { getUrlApiPagination } from "./useApi";
 
 export async function getProfessionalById(id: string): Promise<IUser | null> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users2/${id}`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       // headers: { Authorization: `Bearer ${token}` },
@@ -25,7 +27,7 @@ export async function getProfessionalById(id: string): Promise<IUser | null> {
 
 export async function getProfessionals(): Promise<IUser[] | null> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users2`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/users`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       // headers: { Authorization: `Bearer ${token}` },
@@ -43,7 +45,7 @@ export async function getProfessionalsAndServices(
 ): Promise<IPaginationResponse<IUserWithServices[]> | null> {
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
-    "/users2/with-services",
+    "/users/with-services",
     paginationProps
   );
   try {
@@ -65,7 +67,7 @@ export async function getProfessionalsWithServicesAndExpedients(
 ): Promise<IPaginationResponse<IUserWithServicesAndExpedients[]> | null> {
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
-    "/users2/professionals-services-expedients",
+    "/users/professionals-services-expedients",
     paginationProps
   );
   try {
@@ -86,7 +88,7 @@ export async function createProfessional(
   customer: ICreateProfessional
 ): Promise<IUser | null> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users2`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/users`, {
       method: "POST",
       body: JSON.stringify(customer),
       headers: { "Content-Type": "application/json" },
@@ -104,7 +106,7 @@ export async function deleteProfessional(
   id: string
 ): Promise<{ status: number } | null> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users2/${id}`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       // headers: { Authorization: `Bearer ${token}` },
