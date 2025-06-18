@@ -5,7 +5,7 @@ import { useState } from "react";
 import { myToast } from "@/components/myToast";
 import { PROFESSIONALS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-import { createProfessional } from "@/hooks/useApi";
+import { createProfessional } from "@/hooks/useProfessionals";
 import { ICreateProfessional, UserRoles } from "@/types/users";
 import { ProfessionalFormContent } from "../professionalFormContent";
 import { CustomerFormHeader } from "@/components/customerFormHeader";

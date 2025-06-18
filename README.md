@@ -8,9 +8,11 @@
 
 **Fibra** é um sistema de agendamento simples e eficiente, onde clientes podem escolher um profissional, selecionar a data e o horário, e realizar seu agendamento de forma prática e rápida.
 
-🔗 **Acesse o projeto:** [fibra-flame.vercel.app](https://fibra-flame.vercel.app/)
-
+### 🔗 **Acesse o projeto:** [fibra-flame.vercel.app](https://fibra-flame.vercel.app/) 
 ---
+Usuário: teste@teste.com <br/>
+Senha: teste1234
+
 
 ## ✨ Funcionalidades
 

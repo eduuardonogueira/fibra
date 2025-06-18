@@ -8,11 +8,16 @@ export async function login(
   password: string
 ): Promise<boolean> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/login`, {
+    const response = await fetch("http://localhost:3000/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
+    // const response = await fetch(`${process.env.BACKEND_URL}/login`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ username, password }),
+    // });
 
     if (!response.ok) return false;
 
@@ -22,7 +27,7 @@ export async function login(
 
     if (token) {
       const cookieStore = await cookies();
-      cookieStore.set("authToken", JSON.stringify(token));
+      cookieStore.set("session", token);
       return true;
     }
   } catch (error) {
