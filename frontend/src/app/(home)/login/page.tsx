@@ -14,8 +14,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Card, CardTitle } from "@/components/ui/card";
 import { login } from "@/hooks/useApi";
-import { HOME_ROUTE } from "@/constants/routes";
+import { DASHBOARD_ROUTER } from "@/constants/routes";
 import { useRouter } from "next/navigation";
+import { myToast } from "@/components/myToast";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   username: z.string().email({ message: "O email deve ser um email válido" }),
@@ -26,6 +29,7 @@ const formSchema = z.object({
 
 export default function Login() {
   const router = useRouter();
+  const [isSubmiting, setIsSubmiting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,14 +38,22 @@ export default function Login() {
     },
   });
 
-  async function handleSubmit({ username, password }: z.infer<typeof formSchema>) {
+  async function handleSubmit({
+    username,
+    password,
+  }: z.infer<typeof formSchema>) {
+    setIsSubmiting(true);
+
     const isLogged = await login(username, password);
 
     if (isLogged) {
-      router.push(HOME_ROUTE);
+      myToast("Sucesso", "Login realizado com sucesso!");
+      router.push(DASHBOARD_ROUTER);
+      return;
     }
 
-    // exibe mensagem de erro
+    myToast("Erro ao fazer login", "Usuário ou senha inválidos!");
+    setIsSubmiting(false);
   }
 
   return (
@@ -80,8 +92,13 @@ export default function Login() {
             <Button
               type="submit"
               className="bg-yellow-400 text-black w-full hover:cursor-pointer hover:bg-yellow-500"
+              disabled={isSubmiting}
             >
-              Login
+              {isSubmiting ? (
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              ) : (
+                "login"
+              )}
             </Button>
           </form>
         </Form>

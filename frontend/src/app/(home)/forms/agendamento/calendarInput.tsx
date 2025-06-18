@@ -21,10 +21,10 @@ import {
 } from "@/components/ui/select";
 import { IProfessionalCalendar } from "@/types/users";
 import { IServiceList } from "@/types/services";
-import { IExpedient } from "@/types/expedient";
-import { ITimeOff } from "@/types/timeOff";
 import { getProfessionalCalendar } from "@/hooks/useApi";
 import { myToast } from "@/components/myToast";
+import { useGetAvailableTimeSlots } from "@/hooks/useGetAvailableTimeSlots";
+import { getAllDatesDisabled } from "@/hooks/useGetAllDatesDisabled";
 
 interface ICalendarInput extends IRegisterCustomerForm {
   selectedService: IServiceList | undefined;
@@ -100,117 +100,7 @@ export function CalendarInput({
       new Date(timeOff.startDateTime).getDate() === selectedDate?.getDate()
   );
 
-  function getAvailableTimeSlots(
-    journey: IExpedient[] | undefined,
-    appointments: { id: string; dateTime: string }[] | undefined,
-    breaks: ITimeOff[] | undefined,
-    durationMinutes: number | undefined
-  ): string[] | undefined {
-    if (!journey || !durationMinutes) return undefined;
-
-    const availableTime: string[] = journey.reduce((array: string[], time) => {
-      const { startTime, endTime } = time;
-      const [startHour, startMinute] = startTime.split(":").map(Number);
-      const [endHour, endMinute] = endTime.split(":").map(Number);
-
-      const start = new Date();
-      start.setHours(startHour, startMinute, 0, 0);
-
-      const end = new Date();
-      end.setHours(endHour, endMinute, 0, 0);
-
-      while (start.getTime() + durationMinutes * 60000 <= end.getTime()) {
-        const hh = String(start.getHours()).padStart(2, "0");
-        const mm = String(start.getMinutes()).padStart(2, "0");
-        array.push(`${hh}:${mm}`);
-        start.setMinutes(start.getMinutes() + durationMinutes);
-      }
-
-      return array;
-    }, []);
-
-    const appointmentsHours = appointments?.map((appointment) => {
-      const dateTime = new Date(appointment.dateTime);
-      const hour = dateTime.getHours();
-      const minutes = dateTime.getMinutes();
-      return `${String(hour).padStart(2, "0")}:${String(minutes).padStart(
-        2,
-        "0"
-      )}`;
-    });
-
-    const breaksHours = breaks?.map((time) => {
-      const startDateTime = new Date(time.startDateTime);
-      const endDateTime = new Date(time.endDateTime);
-
-      const startHour = startDateTime.getHours();
-      const startMinutes = startDateTime.getMinutes();
-
-      const endHour = endDateTime.getHours();
-      const endMinutes = endDateTime.getMinutes();
-
-      return {
-        startBreak: `${String(startHour).padStart(2, "0")}:${String(
-          startMinutes
-        ).padStart(2, "0")}`,
-        endbreak: `${String(endHour).padStart(2, "0")}:${String(
-          endMinutes
-        ).padStart(2, "0")}`,
-      };
-    });
-
-    const availableTimeWithAppointments = appointmentsHours
-      ? availableTime.filter((time) => !appointmentsHours.includes(time))
-      : availableTime;
-
-    const availableTimeWithBreaks = breaksHours
-      ? availableTimeWithAppointments.filter((time) => {
-          const [hour, minute] = time.split(":").map(Number);
-          const current = hour * 60 + minute;
-
-          const isInPause = breaksHours.some(({ startBreak, endbreak }) => {
-            const [startH, startM] = startBreak.split(":").map(Number);
-            const [endH, endM] = endbreak.split(":").map(Number);
-            const start = startH * 60 + startM;
-            const end = endH * 60 + endM;
-
-            return current >= start && current < end;
-          });
-
-          return !isInPause;
-        })
-      : availableTimeWithAppointments;
-
-    return availableTimeWithBreaks;
-  }
-
-  function getAllDatesDisabled(date: Date) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const isBeforeToday = date < today;
-
-    const isDayOff = Array.isArray(daysOff)
-      ? daysOff.some((d) => {
-          const off = new Date(d);
-          return (
-            off.getFullYear() === date.getFullYear() &&
-            off.getMonth() === date.getMonth() &&
-            off.getDate() === date.getDate()
-          );
-        })
-      : false;
-
-    const isNotJorneyDay = Array.isArray(professionalCalendar?.expedient)
-      ? !professionalCalendar?.expedient.some(
-          (expedient) => expedient.weekday === date.getDay()
-        )
-      : true;
-
-    return isBeforeToday || isNotJorneyDay || isDayOff;
-  }
-
-  const availableTimeSlots = getAvailableTimeSlots(
+  const availableTimeSlots = useGetAvailableTimeSlots(
     journey,
     appointments,
     breaks,
@@ -245,7 +135,13 @@ export function CalendarInput({
                 selected={selectedDate}
                 onSelect={setSelectedDate}
                 initialFocus
-                disabled={(date) => getAllDatesDisabled(date)}
+                disabled={(date) =>
+                  getAllDatesDisabled(
+                    date,
+                    daysOff,
+                    professionalCalendar?.expedient
+                  )
+                }
               />
             </PopoverContent>
           </Popover>

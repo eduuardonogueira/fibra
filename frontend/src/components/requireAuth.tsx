@@ -1,14 +1,15 @@
-"use client";
+"use server";
 
+import { cookies } from "next/headers";
 import { LOGIN_ROUTE } from "@/constants/routes";
-import { AuthContext } from "@/contexts/auth/authContext";
 import { redirect } from "next/navigation";
-import { useContext} from "react";
+import { ReactNode } from "react";
 
-export function RequireAuth({ children }: { children: React.ReactNode }) {
-  const { isLogged } = useContext(AuthContext)
-  
-  if(!isLogged) return redirect(LOGIN_ROUTE)
+export async function RequireAuth({ children }: { children: ReactNode }) {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session")?.value;
+
+  if (!sessionCookie) redirect(LOGIN_ROUTE);
 
   return children;
 }
