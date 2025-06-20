@@ -10,7 +10,7 @@ export default function CalendarHeader({ weekDays }: ICalendarHeaderProps) {
     <div className="grid grid-cols-8 border-b">
       <div className="p-4 font-medium text-center bg-muted">Horário</div>
       {weekDays.map((day) => (
-        <div key={day.toString()} className="p-4 text-center border-l bg-blue-200">
+        <div key={day.toString()} className="p-4 text-center border-l bg-red-200">
           <div className="font-medium">
             {format(day, "EEEE", { locale: ptBR })}
           </div>

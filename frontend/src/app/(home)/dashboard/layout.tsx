@@ -2,6 +2,7 @@ import { DashboardSidebar } from "@/components/dashboardSidebar";
 import { HeaderBreadcrumb } from "@/components/headerBreadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { RequireAuth } from "@/components/requireAuth";
+import AppFooter from "@/components/appFooter";
 
 export default async function AuthLayout({
   children,
@@ -17,6 +18,7 @@ export default async function AuthLayout({
             <HeaderBreadcrumb />
           </div>
           {children}
+          <AppFooter />
         </main>
       </DashboardSidebar>
     </RequireAuth>
