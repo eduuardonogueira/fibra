@@ -66,7 +66,7 @@ export default function CardForm() {
       };
       const customerResponse = await createCustomer(createdCustomer);
 
-      if (!customerResponse) {
+      if (!customerResponse || !customerResponse.id) {
         myToast("Erro", "Erro ao criar paciente, tente novamente mais tarde!");
         return;
       }
@@ -80,7 +80,7 @@ export default function CardForm() {
         userId: professionalId,
       });
 
-      if (!appointmentResponse) {
+      if (!appointmentResponse || !appointmentResponse.id) {
         myToast(
           "Erro",
           "Erro ao registrar seu agendamento, tente novamente mais tarde!"

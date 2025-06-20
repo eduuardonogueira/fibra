@@ -1,8 +1,9 @@
 import {
   APPOINTMENTS_ROUTE,
   CUSTOMERS_ROUTE,
-  DASHBOARD_ROUTER,
+  DASHBOARD_ROUTE,
   EXPEDIENTS_ROUTE,
+  OVERVIEW_ROUTE,
   PROFESSIONALS_ROUTE,
   SERVICES_ROUTE,
 } from "@/constants/routes";
@@ -10,10 +11,11 @@ import {
   BriefcaseBusiness,
   CalendarCheck,
   Hammer,
-  Home,
+  LayoutDashboard,
   LucideProps,
   Timer,
   Users,
+  View,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -28,9 +30,16 @@ export interface ISidebarItem {
 
 export const sidebarItems: ISidebarItem[] = [
   {
-    title: "Home",
-    url: DASHBOARD_ROUTER,
-    icon: Home,
+    title: "Dashboard",
+    url: DASHBOARD_ROUTE,
+    icon: LayoutDashboard,
+    subItems: [
+      {
+        title: "Visão Geral",
+        url: OVERVIEW_ROUTE,
+        icon: View,
+      },
+    ],
   },
   {
     title: "Agendamentos",

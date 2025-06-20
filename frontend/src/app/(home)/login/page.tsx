@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Card, CardTitle } from "@/components/ui/card";
 import { login } from "@/hooks/useAuth";
-import { DASHBOARD_ROUTER } from "@/constants/routes";
+import { DASHBOARD_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
 import { myToast } from "@/components/myToast";
 import { useState } from "react";
@@ -48,7 +48,7 @@ export default function Login() {
 
     if (isLogged) {
       myToast("Sucesso", "Login realizado com sucesso!");
-      router.push(DASHBOARD_ROUTER);
+      router.push(DASHBOARD_ROUTE);
       return;
     }
 

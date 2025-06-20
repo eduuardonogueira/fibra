@@ -148,6 +148,8 @@ export default function PageContent({ children }: { children: ReactNode }) {
         weekday: Number(formData.weekday),
         ...currentService,
       };
+      console.log("chamous");
+      console.log(JSON.stringify(expedientData));
       const response = await createExpedient(expedientData);
 
       if (!response) return;

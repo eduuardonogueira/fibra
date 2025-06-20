@@ -55,8 +55,10 @@ export default function AddressInputs({ form }: IAddressInputs) {
       }
     }
 
-    fetchCEP();
-  }, [cep.length >= 8, houseNumber]);
+    if (cep.length >= 8 && houseNumber) {
+      fetchCEP();
+    }
+  }, [cep, houseNumber]);
 
   function handleCEPChange(value: string) {
     setCep(value);

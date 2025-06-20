@@ -116,7 +116,7 @@ export default function ServicesPage() {
 
   return (
     <div className="container mx-auto">
-      <Card>
+      <Card className="box-border w-full">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>

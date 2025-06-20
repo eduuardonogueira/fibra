@@ -1,9 +1,11 @@
+"use server";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { quickLinksItems } from "@/hooks/useQuickLinks";
 import Link from "next/link";
 
-export default function QuickLinks() {
+export default async function QuickLinks() {
   return (
     <Card>
       <CardHeader>

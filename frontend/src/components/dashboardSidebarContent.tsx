@@ -46,7 +46,7 @@ export default async function DashboardSidebarContent() {
                       </Link>
                       <CollapsibleTrigger asChild>
                         {item.subItems ? (
-                          <ChevronRight className="transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                          <ChevronRight className="transition-transform group-data-[state=open]/collapsible:rotate-90 hover:cursor-pointer hover:bg-gray-300 rounded-sm" />
                         ) : null}
                       </CollapsibleTrigger>
                     </div>
@@ -55,7 +55,10 @@ export default async function DashboardSidebarContent() {
                     {item.subItems
                       ? item.subItems.map((subItem: ISidebarItem) => (
                           <SidebarMenuSub key={item.title + subItem.title}>
-                            <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubItem
+                              key={item.title}
+                              className="hover:bg-gray-100 p-2 rounded-sm"
+                            >
                               <SidebarMenuSubButton asChild />
                               <Link
                                 href={subItem.url}
