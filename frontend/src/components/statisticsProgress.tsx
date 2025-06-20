@@ -5,7 +5,7 @@ import { ForwardRefExoticComponent, RefAttributes } from "react";
 
 interface IStatisticsProgressProps {
   title: string;
-  statistics: string;
+  statistics: number | string;
   Icon: ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;

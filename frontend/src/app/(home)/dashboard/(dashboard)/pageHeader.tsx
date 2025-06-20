@@ -14,6 +14,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getProfessionalsAndServices } from "@/hooks/useProfessionals";
 import { myToast } from "@/components/myToast";
 import { IUserWithServices } from "@/types/users";
+import { CardDescription, CardTitle } from "@/components/ui/card";
 
 interface IPageHeaderProps {
   weekStart: Date;
@@ -61,11 +62,11 @@ export default function PageHeader({
   return (
     <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
       <div>
-        <h1 className="text-3xl font-bold">Calendário Semanal</h1>
-        <p className="text-muted-foreground">
+        <CardTitle className="text-2xl">Calendário Semanal</CardTitle>
+        <CardDescription>
           {format(weekStart, "dd 'de' MMMM", { locale: ptBR })} -{" "}
           {format(weekEnd, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
-        </p>
+        </CardDescription>
       </div>
       <div className="flex items-center gap-3">
         <Select

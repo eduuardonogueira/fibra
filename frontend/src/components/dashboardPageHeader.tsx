@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { APPOINTMENTS_ROUTE, CREATE_CUSTOMER_ROUTE } from "@/constants/routes";
 import { Calendar, UserPlus2Icon } from "lucide-react";
+import { CardDescription, CardTitle } from "./ui/card";
 import Link from "next/link";
 
 interface IDashboardPageHeaderProps {
@@ -17,8 +18,8 @@ export default async function DashboardPageHeader({
   return (
     <div className="flex flex-col w-full md:flex-row md:items-center md:justify-between mb-8 gap-4">
       <div>
-        <h1 className="text-3xl font-bold">{title}</h1>
-        <p className="text-muted-foreground">{text}</p>
+        <CardTitle className="text-2xl">{title}</CardTitle>
+        <CardDescription>{text}</CardDescription>
       </div>
       <div className="flex gap-3 flex-wrap">
         <Link href={APPOINTMENTS_ROUTE} className="w-full sm:w-fit">
