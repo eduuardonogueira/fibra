@@ -5,6 +5,7 @@ import {
   IAppointment,
   ICreateAppointment,
   IFormatedAppointment,
+  UpdateAppointment,
 } from "@/types/appointments";
 import { getUrlApiPagination } from "./useApi";
 
@@ -85,6 +86,29 @@ export async function deleteAppointment(
     return {
       status: response.status,
     };
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function updateAppointment(
+  id: string,
+  Appointment: UpdateAppointment
+): Promise<IFormatedAppointment | null> {
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/appointments/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(Appointment),
+        headers: { "Content-Type": "application/json" },
+        // headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    console.log(response.status);
+    return response.json();
   } catch (error) {
     console.log(error);
     return null;

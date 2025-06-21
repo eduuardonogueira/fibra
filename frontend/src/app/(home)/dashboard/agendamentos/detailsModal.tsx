@@ -36,7 +36,7 @@ export default function DetailsModal({
 }: IModalProps) {
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] flex flex-col w-full">
         <DialogHeader>
           <DialogTitle>Detalhes do Agendamento</DialogTitle>
           <DialogDescription>
@@ -54,10 +54,12 @@ export default function DetailsModal({
             return (
               <div
                 key={details.label}
-                className="grid grid-cols-[100px_1fr] md:grid-cols-[160px_1fr] items-start gap-4"
+                className="grid grid-cols-[100px_1fr] md:grid-cols-[160px_1fr] items-start gap-4 w-full"
               >
                 <div className="font-medium col-span-1">{details.label}:</div>
-                <div className="col-span-1">{renderedValue}</div>
+                <div className="col-span-1 break-words whitespace-pre-line max-w-full truncate">
+                  {renderedValue}
+                </div>
               </div>
             );
           })}

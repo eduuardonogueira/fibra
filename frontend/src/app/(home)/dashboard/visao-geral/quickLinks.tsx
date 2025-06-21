@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default async function QuickLinks() {
   return (
-    <Card>
+    <Card className="mt-6">
       <CardHeader>
         <CardTitle>Acesso Rápido</CardTitle>
       </CardHeader>

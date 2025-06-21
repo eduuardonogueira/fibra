@@ -8,23 +8,42 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
+import { memo, useCallback } from "react";
 
-export function HeaderBreadcrumb() {
+export const HeaderBreadcrumb = memo(function HeaderBreadcrumb() {
   const path = usePathname();
-  const allPages = path === "/" ? [""] : path.split("/");
+  const allPages = path.split("/").filter(Boolean);
+
+  const getAbsolutePath = useCallback(
+    (pageIndex: number) => {
+      const segments = allPages.slice(0, pageIndex + 1);
+      return "/" + segments.join("/");
+    },
+    [allPages]
+  );
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {Array.from(allPages).map((link: string, index) => (
-          <BreadcrumbItem key={link}>
-            <BreadcrumbLink className="capitalize" href={`/${link}`}>
-              {link === "" ? "home" : link}
+        <BreadcrumbItem>
+          <BreadcrumbLink className="capitalize" href="/">
+            home
+          </BreadcrumbLink>
+          {allPages.length > 0 && <BreadcrumbSeparator />}
+        </BreadcrumbItem>
+
+        {allPages.map((segment, index) => (
+          <BreadcrumbItem key={index}>
+            <BreadcrumbLink
+              className="capitalize"
+              href={getAbsolutePath(index)}
+            >
+              {segment.replace(/-/g, " ")}{" "}
             </BreadcrumbLink>
-            {index < allPages.length - 1 ? <BreadcrumbSeparator /> : ""}
+            {index < allPages.length - 1 && <BreadcrumbSeparator />}
           </BreadcrumbItem>
         ))}
       </BreadcrumbList>
     </Breadcrumb>
   );
-}
+});
