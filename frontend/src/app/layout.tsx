@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fibra",
-  description: "",
+  title: "Diretoria de Saúde da Guarda",
+  description: "Sistema de Agendamento da Guarda",
 };
 
 export default function RootLayout({
@@ -35,4 +35,3 @@ export default function RootLayout({
     </html>
   );
 }
-
