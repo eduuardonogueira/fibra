@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IRegisterCustomerForm } from "../../../../types/registerCustomerForm";
+import { IRegisterCustomerForm } from "../../../../../types/registerCustomerForm";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IServiceList } from "@/types/services";
 import { ICustomerType } from "@/types/customerTypes";

@@ -66,8 +66,17 @@ export interface ICreateAppointment {
   userId: string;
 }
 
+export type UpdateAppointment = ICreateAppointment;
+
 export type AppointmentStatus =
   | "SCHEDULED"
   | "COMPLETED"
   | "CANCELED"
   | "DELAYED";
+
+export const EnumAppointmentStatusMap: Record<string, string> = {
+  SCHEDULED: "Agendado",
+  COMPLETED: "Completo",
+  CANCELED: "Cancelado",
+  DELAYED: "Atrasado",
+};

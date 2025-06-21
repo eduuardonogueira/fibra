@@ -9,12 +9,12 @@ import { getUrlApiPagination } from "./useApi";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
 
 export async function getCustomers(
-  paginationProps: IPaginationProps
+  paginationProps?: IPaginationProps
 ): Promise<IPaginationResponse<ICustomer[]> | null> {
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
     "/customers",
-    paginationProps
+    paginationProps ? paginationProps : { currentPage: 1, pageSize: 50 }
   );
   try {
     const response = await fetch(url, {

@@ -3,7 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import AddressInputs from "./addressInputs";
 import PersonalInputs from "./personalInputs";
 import SelectInputs from "./selectInputs";
@@ -18,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { CONFIRMATION_APPOINTMENT } from "@/constants/routes";
 import { createCustomer } from "@/hooks/useCustomers";
 import { createAppointment } from "@/hooks/useAppointments";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   fullName: z.string().min(10).max(100),
@@ -116,6 +123,23 @@ export default function CardForm() {
           selectedService={selectedService}
           selectedProfessional={selectedProfessional}
         />
+
+        <FormField
+          control={form.control}
+          name="observations"
+          render={({ field }) => (
+            <FormItem className="w-full md:col-span-2">
+              <FormLabel>Observações:</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Informações adicionais sobre o agendamento..."
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
         <Button
           className="w-full md:col-start-1 md:col-end-3 md:max-w-[500px] hover:cursor-pointer md:justify-self-center"
           type="submit"

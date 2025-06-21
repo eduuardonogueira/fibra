@@ -2,7 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2, Search, X } from "lucide-react";
+import {
+  CalendarIcon,
+  Eye,
+  Loader2,
+  Pencil,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
 
 import {
   Select,
@@ -43,6 +51,7 @@ import {
 import DetailsModal from "./detailsModal";
 import { CustomerTypeBadge } from "@/components/customerTypeBadge";
 import {
+  EnumAppointmentStatusMap,
   IAppointmentsDetails,
   IFormatedAppointment,
 } from "@/types/appointments";
@@ -52,6 +61,7 @@ import { myToast } from "@/components/myToast";
 import StatusBadge from "@/components/statusBadge";
 import { ptBR } from "date-fns/locale";
 import { DeleteAppointment } from "./deleteAppointment";
+import EditModal from "./editModal";
 
 export default function AppointmentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -63,12 +73,21 @@ export default function AppointmentsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const [selectedAppointment, setSelectedAppointment] =
     useState<IAppointmentsDetails | null>(null);
   const [appointments, setAppointments] = useState<
     IFormatedAppointment[] | null
   >(null);
+  const [formData, setFormData] = useState({
+    serviceId: "",
+    customerId: "",
+    userId: "",
+    dateTime: "",
+    status: "",
+    observations: "",
+  });
 
   const defaultPageSize = 10;
   const [pagination, setPagination] = useState({
@@ -187,25 +206,51 @@ export default function AppointmentsPage() {
     );
   };
 
-  const openAppointmentDetails = (appointment: IFormatedAppointment) => {
+  const appointmentsIntoFormatedAppointment = (
+    appointment: IFormatedAppointment
+  ) => {
+    const { customer, service, professional, ...appointmentFields } =
+      appointment;
+    const { id, fullName, customerType, ...customerFields } = customer;
+
     const formatedData = {
-      id: appointment.id,
-      status: appointment.status,
-      dateTime: appointment.dateTime,
-      observations: appointment.observations,
-      customerId: appointment.customer.id,
-      customerFullName: appointment.customer.fullName,
-      phone: appointment.customer.phone,
-      age: appointment.customer.age,
-      address: appointment.customer.address,
-      photoUrl: appointment.customer.photoUrl,
-      customerType: appointment.customer.customerType.name,
-      serviceType: appointment.service.name,
-      duration: appointment.service.duration,
-      professional: appointment.professional.fullName,
+      ...appointmentFields,
+      ...customerFields,
+      customerId: id,
+      customerFullName: fullName,
+      customerType: customerType.name,
+      serviceType: service.name,
+      duration: service.duration,
+      professional: professional.fullName,
     };
+
+    return formatedData;
+  };
+
+  const openAppointmentDetails = (appointment: IFormatedAppointment) => {
+    const formatedData = appointmentsIntoFormatedAppointment(appointment);
     setSelectedAppointment(formatedData);
     setIsModalOpen(true);
+  };
+
+  const openDeleteDialog = (appointment: IFormatedAppointment) => {
+    const formatedData = appointmentsIntoFormatedAppointment(appointment);
+    setSelectedAppointment(formatedData);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const openEditDialog = (appointment: IFormatedAppointment) => {
+    const formatedData = appointmentsIntoFormatedAppointment(appointment);
+    setSelectedAppointment(formatedData);
+
+    const { service, customer, professional, ...fields } = appointment;
+    setFormData({
+      serviceId: service.id,
+      customerId: customer.id,
+      userId: professional.id,
+      ...fields,
+    });
+    setIsEditDialogOpen(true);
   };
 
   return (
@@ -224,7 +269,6 @@ export default function AppointmentsPage() {
             </div>
           ) : (
             <>
-              {/* Filters */}
               <div className="flex flex-col md:flex-row gap-4 mb-6 flex-wrap">
                 <div className="relative flex-1 min-w-[250px]">
                   <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -342,7 +386,7 @@ export default function AppointmentsPage() {
                         checked={statusFilter.includes(status)}
                         onCheckedChange={() => toggleStatusFilter(status)}
                       >
-                        {status}
+                        {EnumAppointmentStatusMap[status.toLocaleUpperCase()]}
                       </DropdownMenuCheckboxItem>
                     ))}
                   </DropdownMenuContent>
@@ -395,43 +439,40 @@ export default function AppointmentsPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Nome</TableHead>
-                      <TableHead className="hidden md:table-cell">
+                      <TableHead className="hidden lg:table-cell">
                         Idade
                       </TableHead>
                       <TableHead className="hidden lg:table-cell">
                         Telefone
                       </TableHead>
                       <TableHead>Data Agendamento</TableHead>
-                      <TableHead className="hidden md:table-cell">
+                      <TableHead className="hidden lg:table-cell">
                         Tipo de Atendimento
                       </TableHead>
                       <TableHead className="hidden sm:table-cell">
                         Duração
                       </TableHead>
-                      <TableHead className="hidden sm:table-cell">
+                      <TableHead className="hidden md:table-cell">
                         Tipo
                       </TableHead>
                       <TableHead>Status</TableHead>
+                      <TableHead className="text-center">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredAppointments && filteredAppointments.length > 0 ? (
                       filteredAppointments.map((appointment) => (
-                        <TableRow
-                          key={appointment.id}
-                          className="cursor-pointer hover:bg-muted/50"
-                          onClick={() => openAppointmentDetails(appointment)}
-                        >
+                        <TableRow key={appointment.id}>
                           <TableCell className="font-medium">
                             {appointment.customer.fullName}
                           </TableCell>
-                          <TableCell className="hidden md:table-cell">
+                          <TableCell className="hidden lg:table-cell">
                             {appointment.customer.age}
                           </TableCell>
                           <TableCell className="hidden lg:table-cell">
                             {appointment.customer.phone}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="text-center">
                             {format(appointment.dateTime, "dd/MM/yyyy")}
                             <div className="text-sm text-muted-foreground">
                               {format(appointment.dateTime, "HH:mm", {
@@ -439,19 +480,52 @@ export default function AppointmentsPage() {
                               })}
                             </div>
                           </TableCell>
-                          <TableCell className="hidden md:table-cell">
+                          <TableCell className="hidden lg:table-cell truncate">
                             {appointment.service.name}
                           </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {appointment.service.duration}
-                          </TableCell>
                           <TableCell className="hidden sm:table-cell">
+                            {appointment.service.duration}min
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
                             <CustomerTypeBadge
                               type={appointment.customer.customerType.name}
                             />
                           </TableCell>
                           <TableCell>
                             <StatusBadge status={appointment.status} />
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex justify-end">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() =>
+                                  openAppointmentDetails(appointment)
+                                }
+                                className="hover:cursor-pointer hover:bg-blue-500 z-10"
+                              >
+                                <Eye className="h-4 w-4" />
+                                <span className="sr-only">Visualizar</span>
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => openEditDialog(appointment)}
+                                className="hover:cursor-pointer hover:bg-yellow-500 z-10"
+                              >
+                                <Pencil className="h-4 w-4" />
+                                <span className="sr-only">Editar</span>
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => openDeleteDialog(appointment)}
+                                className="hover:cursor-pointer hover:bg-red-500 z-10"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                <span className="sr-only">Excluir</span>
+                              </Button>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))
@@ -475,21 +549,36 @@ export default function AppointmentsPage() {
         </CardContent>
       </Card>
 
-      <DetailsModal
-        selectedAppointment={selectedAppointment}
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
-      />
+      {isEditDialogOpen && (
+        <EditModal
+          isEditDialogOpen={isEditDialogOpen}
+          selectedAppointment={selectedAppointment}
+          formData={formData}
+          setIsEditDialogOpen={setIsEditDialogOpen}
+          setFormData={setFormData}
+          setAppointments={setAppointments}
+        />
+      )}
 
-      <DeleteAppointment
-        isDeleteDialogOpen={isDeleteDialogOpen}
-        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
-        setIsModalOpen={setIsModalOpen}
-        selectedAppointment={selectedAppointment}
-        appointments={appointments}
-        setAppointments={setAppointments}
-      />
+      {isModalOpen && (
+        <DetailsModal
+          selectedAppointment={selectedAppointment}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+        />
+      )}
+
+      {isDeleteDialogOpen && (
+        <DeleteAppointment
+          isDeleteDialogOpen={isDeleteDialogOpen}
+          appointments={appointments}
+          selectedAppointment={selectedAppointment}
+          setIsModalOpen={setIsModalOpen}
+          setAppointments={setAppointments}
+          setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+        />
+      )}
     </div>
   );
 }

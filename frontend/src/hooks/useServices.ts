@@ -5,12 +5,12 @@ import { getUrlApiPagination } from "./useApi";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
 
 export async function getServices(
-  paginationProps: IPaginationProps
+  paginationProps?: IPaginationProps
 ): Promise<IPaginationResponse<IServiceList[]> | null> {
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
     "/services",
-    paginationProps
+    paginationProps ? paginationProps : { currentPage: 1, pageSize: 50 }
   );
 
   try {
