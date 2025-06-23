@@ -1,11 +1,11 @@
 export default function UseCalendarLegend() {
   const legends = [
     {
-      label: "Confirmado",
+      label: "Agendado",
       color: "green",
     },
     {
-      label: "Pendente",
+      label: "Atrasado",
       color: "yellow",
     },
     {

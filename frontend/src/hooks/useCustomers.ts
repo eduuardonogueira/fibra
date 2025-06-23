@@ -111,8 +111,6 @@ export async function updateCustomer(
       // headers: { Authorization: `Bearer ${token}` },
     });
 
-    console.log(response.status);
-
     return response.json();
   } catch (error) {
     console.log(error);

@@ -33,7 +33,7 @@ export default function CreateCustomer() {
       phone: "",
       customerType: {
         id: "",
-        name: "adulto",
+        name: "",
       },
       appointmentsCount: 0,
     });
@@ -67,14 +67,11 @@ export default function CreateCustomer() {
 
       if (!response) return;
 
-      myToast("Sucesso", "Usuário criado com sucesso");
-
-      setTimeout(() => {
-        router.push(CUSTOMERS_ROUTE);
-      }, 1000);
+      myToast("Sucesso", "Paciente criado com sucesso");
+      router.push(CUSTOMERS_ROUTE);
     } catch (error) {
       console.log(error);
-      myToast("Error", "Falha ao criar usuário");
+      myToast("Error", "Falha ao criar paciente");
     } finally {
       setIsSaving(false);
     }

@@ -20,6 +20,7 @@ export function CustomerFormHeader({
       <div className="flex items-center gap-2">
         <Button
           className="hover:cursor-pointer"
+          type="button"
           variant={"outline"}
           size={"icon"}
           onClick={() => router.back()}

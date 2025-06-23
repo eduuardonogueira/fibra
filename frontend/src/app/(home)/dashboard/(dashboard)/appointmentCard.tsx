@@ -1,4 +1,7 @@
-import { IFormatedAppointment } from "@/types/appointments";
+import {
+  EnumAppointmentStatusMap,
+  IFormatedAppointment,
+} from "@/types/appointments";
 import { format } from "date-fns";
 import { Clock } from "lucide-react";
 
@@ -12,10 +15,12 @@ export default function AppointmentCard({
   onClick,
 }: IAppointmentCardProps) {
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case "confirmado":
+    console.log(status);
+    const statusTranslated = EnumAppointmentStatusMap[status].toLowerCase();
+    switch (statusTranslated) {
+      case "agendado":
         return "border-l-green-500 bg-green-50";
-      case "pendente":
+      case "atrasado":
         return "border-l-yellow-500 bg-yellow-50";
       case "completo":
         return "border-l-blue-500 bg-blue-50";
@@ -37,7 +42,7 @@ export default function AppointmentCard({
   return (
     <div
       className={`p-2 rounded-md border-l-4 cursor-pointer hover:shadow-sm transition-shadow text-xs ${getStatusColor(
-        appointment.status
+        appointment.status.toUpperCase()
       )}`}
       onClick={onClick}
     >
