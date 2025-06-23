@@ -26,7 +26,7 @@ export default function DashboardSidebarFooter() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton className="hover:cursor-pointer">
-                  <User2 /> {user?.email}
+                  <User2 /> {user?.fullName}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
