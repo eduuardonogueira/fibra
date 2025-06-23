@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { myToast } from "@/components/myToast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 const formSchema = z.object({
   username: z.string().email({ message: "O email deve ser um email válido" }),
@@ -60,6 +61,13 @@ export default function Login() {
     <div className="container mx-auto flex w-full h-screen max-w-[800px] items-center px-4">
       <Card className="flex flex-col items-center w-full py-20">
         <div className="flex flex-col items-center justify-around gap-4">
+          <Image
+            src="/logo.png"
+            alt="logo"
+            width={50}
+            height={50}
+            className="h-20 w-20"
+          />
           <CardTitle className="text-3xl font-bold">Login</CardTitle>
         </div>
         <Form {...form}>
