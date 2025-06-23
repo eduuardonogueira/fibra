@@ -8,6 +8,7 @@ import {
   UpdateAppointment,
 } from "@/types/appointments";
 import { getUrlApiPagination } from "./useApi";
+import { cookies } from "next/headers";
 
 export async function getAppointments(
   paginationProps: IPaginationProps
@@ -18,10 +19,13 @@ export async function getAppointments(
     paginationProps
   );
 
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("session");
+
   try {
     const response = await fetch(url, {
       method: "GET",
-      // headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${authToken}` },
     });
 
     return response.json();
@@ -34,13 +38,17 @@ export async function getAppointments(
 export async function getAppointmentById(
   id: string
 ): Promise<IFormatedAppointment | null> {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("session");
   try {
     const response = await fetch(
       `${process.env.BACKEND_URL}/appointments/${id}`,
       {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
-        // headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
       }
     );
 
@@ -54,12 +62,16 @@ export async function getAppointmentById(
 export async function createAppointment(
   Appointment: ICreateAppointment
 ): Promise<IAppointment | null> {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("session");
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/appointments`, {
       method: "POST",
       body: JSON.stringify(Appointment),
-      headers: { "Content-Type": "application/json" },
-      // headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
     });
 
     console.log(response.status);
@@ -73,13 +85,17 @@ export async function createAppointment(
 export async function deleteAppointment(
   id: string
 ): Promise<{ status: number } | null> {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("session");
   try {
     const response = await fetch(
       `${process.env.BACKEND_URL}/appointments/${id}`,
       {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        // headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
       }
     );
 
@@ -96,14 +112,18 @@ export async function updateAppointment(
   id: string,
   Appointment: UpdateAppointment
 ): Promise<IFormatedAppointment | null> {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("session");
   try {
     const response = await fetch(
       `${process.env.BACKEND_URL}/appointments/${id}`,
       {
         method: "PUT",
         body: JSON.stringify(Appointment),
-        headers: { "Content-Type": "application/json" },
-        // headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
       }
     );
 
