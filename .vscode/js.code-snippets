@@ -1,0 +1,45 @@
+{
+  "styles for current component import": {
+    "prefix": "ss",
+    "body": ["import styles from './${TM_FILENAME_BASE}.module.scss'"]
+  },
+  "initialize react component": {
+    "prefix": "rc",
+    "body": [
+      "export default function ${1:}${TM_FILENAME_BASE} () {",
+      "  return (",
+      "    <h1>",
+      "      ${TM_FILENAME_BASE}",
+      "    </h1>",
+      "  )",
+      "}",
+      "",
+    ]
+  },
+  "useState": {
+    "prefix": "st",
+    "body": "const [${1}, set${1/(^[a-zA-Z])(.*)/${1:/upcase}${2}/}] = useState(${0})",
+    "description": "use state but it camel cases"
+  },
+  "Svg": {
+    "prefix": "svg",
+    "body": [
+      "import {ReactComponent as ${1:Foo}}  from '@assets/icons/${2:foo}.svg'"
+    ]
+  },
+  "ClassNames": {
+    "prefix": "cls",
+    "body": ["className='${1:flex}'"],
+    "description": "use for scss classnames"
+  },
+
+  "Cursor Pointer": {
+    "prefix": "csp",
+    "body": ["className='hover:cursor-pointer${1:}'"],
+    "description": "use for add pointer"
+  },
+  "Image": {
+    "prefix": "img",
+    "body": ["export { default as ${1:Foo} } from './${2:foo}'"]
+  }
+}
