@@ -108,10 +108,8 @@ export function CreateOrUpdateService({
         return;
       }
 
-      console.log(formData);
-
       const response = currentService?.id
-        ? await updateService(formData)
+        ? await updateService(currentService.id, formData)
         : await createService(formData);
 
       const selectedUsers = professionals.filter((user) =>

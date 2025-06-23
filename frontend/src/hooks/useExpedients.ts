@@ -19,6 +19,29 @@ export async function createExpedient(
   }
 }
 
+export async function updateExpedient(
+  id: string,
+  expedient: ICreateExpedient
+): Promise<ICreateExpedient | null> {
+  console.log(id);
+  console.log(expedient);
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/expedients/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(expedient),
+        headers: { "Content-Type": "application/json" },
+        // headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
 export async function deleteExpedient(
   id: string
 ): Promise<{ status: number } | null> {

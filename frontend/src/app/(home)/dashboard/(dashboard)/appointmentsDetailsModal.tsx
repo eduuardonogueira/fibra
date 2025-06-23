@@ -10,10 +10,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { location } from "@/constants/localInformations";
+import { APPOINTMENTS_ROUTE, UPDATE_CUSTOMER_ROUTE } from "@/constants/routes";
 import { IFormatedAppointment } from "@/types/appointments";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Edit, Eye, MapPin, Phone } from "lucide-react";
+import { Calendar, MapPin, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
 
@@ -118,34 +119,55 @@ export default function AppointmentsDetailsModal({
                 </div>
               </div>
 
-              <div>
-                <p className="font-medium text-sm text-muted-foreground">
-                  Tipo de Serviço
-                </p>
-                <p className="text-sm">{selectedAppointment.service.name}</p>
-              </div>
-
-              {selectedAppointment.observations && (
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="font-medium text-sm text-muted-foreground">
-                    Observações
+                    Tipo de Serviço
                   </p>
-                  <p className="text-sm">{selectedAppointment.observations}</p>
+                  <p className="text-sm">{selectedAppointment.service.name}</p>
                 </div>
-              )}
+
+                <div>
+                  <p className="font-medium text-sm text-muted-foreground">
+                    Duração
+                  </p>
+                  <p className="text-sm">
+                    {selectedAppointment.service.duration} minutos
+                  </p>
+                </div>
+
+                {selectedAppointment.observations && (
+                  <div>
+                    <p className="font-medium text-sm text-muted-foreground">
+                      Observações
+                    </p>
+                    <p className="text-sm">
+                      {selectedAppointment.observations}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
 
-            <div className="flex gap-2 pt-4">
-              <Link href={`/editar-usuario/${selectedAppointment.customer.id}`}>
-                <Button variant="outline" size="sm">
-                  <Edit className="mr-2 h-4 w-4" />
-                  Editar Cliente
+            <div className="flex flex-col w-full md:flex-row md:w-auto gap-2 pt-4 justify-end">
+              <Link
+                href={`${UPDATE_CUSTOMER_ROUTE}/${selectedAppointment.customer.id}`}
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hover:cursor-pointer w-full"
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  Editar Paciente
                 </Button>
               </Link>
-              <Link href={`/confirmacao/${selectedAppointment.id}`}>
-                <Button size="sm">
-                  <Eye className="mr-2 h-4 w-4" />
-                  Ver Detalhes
+              <Link
+                href={`${APPOINTMENTS_ROUTE}?editDialog=${selectedAppointment.id}`}
+              >
+                <Button size="sm" className="hover:cursor-pointer w-full">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Editar Agendamento
                 </Button>
               </Link>
             </div>

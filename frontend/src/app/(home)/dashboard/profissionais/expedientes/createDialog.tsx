@@ -53,7 +53,6 @@ export default function CreateDialog({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle select change
   const handleSelectChange = (value: string) => {
     setFormData((prev) => ({ ...prev, weekday: value }));
   };

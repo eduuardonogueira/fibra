@@ -119,9 +119,6 @@ export default function EditModal({
         appointmentBody
       );
 
-      console.log(appointmentBody);
-      console.log(response);
-
       if (!response || !response.id) {
         myToast("Erro", "Erro ao atualizar dados do agendamento.");
         setIsSubmitting(false);
@@ -156,15 +153,15 @@ export default function EditModal({
 
   return (
     <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="flex flex-col sm:max-w-[600px] max-h-[90vh] overflow-y-auto w-full box-border">
+        <DialogHeader className="w-full box-border">
           <DialogTitle>Editar Agendamento</DialogTitle>
           <DialogDescription>
             Atualize as informações do agendamento nos campos abaixo.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-6 py-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 md:grid md:gap-6 py-4 box-border w-full">
             <div className="space-y-2">
               <Label htmlFor="customerId">Cliente *</Label>
               {!customers ? (
@@ -175,8 +172,8 @@ export default function EditModal({
                   onValueChange={handleSelectChange("customerId")}
                   required
                 >
-                  <SelectTrigger className="hover:cursor-pointer">
-                    <User className="mr-2 h-4 w-4" />
+                  <SelectTrigger className="hover:cursor-pointer w-full md:w-auto">
+                    <User className="h-4 w-4" />
                     <SelectValue placeholder="Selecione o cliente" />
                   </SelectTrigger>
                   <SelectContent>
@@ -187,7 +184,7 @@ export default function EditModal({
                         className="hover:cursor-pointer"
                       >
                         <div className="flex items-center gap-2">
-                          <span>{customer.fullName}</span>
+                          <span className="truncate">{customer.fullName}</span>
                           <Badge variant="outline" className="text-xs">
                             {customer.customerType?.name
                               ? customer.customerType.name
@@ -212,8 +209,8 @@ export default function EditModal({
                     onValueChange={handleSelectChange("serviceId")}
                     required
                   >
-                    <SelectTrigger className="w-full hover:cursor-pointer">
-                      <Briefcase className="mr-2 h-4 w-4" />
+                    <SelectTrigger className="hover:cursor-pointer">
+                      <Briefcase className="h-4 w-4" />
                       <SelectValue placeholder="Selecione o serviço" />
                     </SelectTrigger>
                     <SelectContent>
@@ -223,7 +220,7 @@ export default function EditModal({
                           value={service.id}
                           className="hover:cursor-pointer"
                         >
-                          <div className="flex items-center gap-2 w-full">
+                          <div className="flex items-center gap-2">
                             <span className="truncate">{service.name}</span>
                             <Badge variant="outline" className="text-xs">
                               {service.duration}min
@@ -247,7 +244,7 @@ export default function EditModal({
                     required
                   >
                     <SelectTrigger className="hover:cursor-pointer">
-                      <UserCheck className="mr-2 h-4 w-4" />
+                      <UserCheck className="h-4 w-4" />
                       <SelectValue placeholder="Selecione o profissional" />
                     </SelectTrigger>
                     <SelectContent>
@@ -347,12 +344,12 @@ export default function EditModal({
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   Salvando...
                 </>
               ) : (
                 <>
-                  <Save className="mr-2 h-4 w-4" />
+                  <Save className="h-4 w-4" />
                   Salvar Alterações
                 </>
               )}

@@ -14,7 +14,6 @@ import {
   Briefcase,
   UserCheck,
   ArrowLeft,
-  Edit,
   Printer,
   Mail,
   Loader2,
@@ -30,13 +29,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
 import { myToast } from "@/components/myToast";
 import StatusBadge from "@/components/statusBadge";
-import {
-  SCHEDULE_APPOINTMENT,
-  UPDATE_CUSTOMER_ROUTE,
-} from "@/constants/routes";
+import { SCHEDULE_APPOINTMENT } from "@/constants/routes";
 import { CustomerTypeBadge } from "@/components/customerTypeBadge";
 import { IFormatedAppointment } from "@/types/appointments";
 import { getAppointmentById } from "@/hooks/useAppointments";
@@ -331,13 +326,6 @@ export default function ConfirmationPage({
           <ArrowLeft className="mr-2 h-4 w-4" />
           Realizar outro agendamento
         </Button>
-
-        <Link href={`${UPDATE_CUSTOMER_ROUTE}/${appointment.customer.id}`}>
-          <Button variant="outline" className="hover:cursor-pointer">
-            <Edit className="mr-2 h-4 w-4" />
-            Editar Informações
-          </Button>
-        </Link>
 
         <Button
           variant="outline"

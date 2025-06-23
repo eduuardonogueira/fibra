@@ -18,10 +18,12 @@ import WeekNavigation from "./weekNavigation";
 import PageHeader from "./pageHeader";
 import { getAppointments } from "@/hooks/useAppointments";
 import { IFormatedAppointment } from "@/types/appointments";
+import { myToast } from "@/components/myToast";
+import Loader from "@/components/loader";
 
 export default function Overview() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedProfessional, setSelectedProfessional] = useState("all");
 
@@ -40,7 +42,6 @@ export default function Overview() {
   const weekEnd = endOfWeek(currentWeek, { weekStartsOn: 0 });
   const weekDays = eachDayOfInterval({ start: weekStart, end: weekEnd });
 
-  // Load appointments
   useEffect(() => {
     const fetchAppointments = async () => {
       setIsLoading(true);
@@ -52,6 +53,7 @@ export default function Overview() {
         setAppointments(data);
         setPagination((prev) => ({ ...prev, totalPages }));
       } catch (error) {
+        myToast("Erro", "Erro ao buscar agendamentos");
         console.error("Failed to fetch appointments", error);
       } finally {
         setIsLoading(false);
@@ -116,20 +118,24 @@ export default function Overview() {
         filteredAppointments={filteredAppointments}
       />
 
-      <Card className="p-0">
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <div className="min-w-[800px]">
-              <CalendarHeader weekDays={weekDays} />
-              <CalendarTimeSlots
-                weekDays={weekDays}
-                openAppointmentDetails={openAppointmentDetails}
-                getAppointmentsForSlot={getAppointmentsForSlot}
-              />
+      {isLoading ? (
+        <Loader text="Carregando calendário..." />
+      ) : (
+        <Card className="p-0">
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <div className="min-w-[800px]">
+                <CalendarHeader weekDays={weekDays} />
+                <CalendarTimeSlots
+                  weekDays={weekDays}
+                  openAppointmentDetails={openAppointmentDetails}
+                  getAppointmentsForSlot={getAppointmentsForSlot}
+                />
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
       {selectedAppointment ? (
         <AppointmentsDetailsModal

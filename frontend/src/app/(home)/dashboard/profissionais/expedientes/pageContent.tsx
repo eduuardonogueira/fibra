@@ -21,7 +21,11 @@ import { IUserWithServicesAndExpedients } from "@/types/users";
 import ProfessionalExpedientCard from "./professionalExpedientCard";
 import CreateDialog from "./createDialog";
 import { getProfessionalsWithServicesAndExpedients } from "@/hooks/useProfessionals";
-import { createExpedient, deleteExpedient } from "@/hooks/useExpedients";
+import {
+  createExpedient,
+  deleteExpedient,
+  updateExpedient,
+} from "@/hooks/useExpedients";
 
 export default function PageContent({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -104,7 +108,6 @@ export default function PageContent({ children }: { children: ReactNode }) {
     setIsDialogOpen(true);
   };
 
-  // Open dialog for deleting an expedient
   const openDeleteDialog = (
     expedient: IExpedient,
     userId: string,
@@ -148,12 +151,12 @@ export default function PageContent({ children }: { children: ReactNode }) {
         weekday: Number(formData.weekday),
         ...currentService,
       };
-      console.log("chamous");
-      console.log(JSON.stringify(expedientData));
-      const response = await createExpedient(expedientData);
+
+      const response = currentExpedient
+        ? await updateExpedient(currentExpedient.id, expedientData)
+        : await createExpedient(expedientData);
 
       if (!response) return;
-
       const updatedProfessionals = professionals.map((professional) => {
         if (professional.id === currentService.userId) {
           return {
@@ -161,7 +164,6 @@ export default function PageContent({ children }: { children: ReactNode }) {
             services: professional.services.map((service) => {
               if (service.id === currentService.serviceId) {
                 if (currentExpedient) {
-                  // Update existing expedient
                   return {
                     ...service,
                     expedients: service.expedients.map((exp) =>
@@ -176,7 +178,6 @@ export default function PageContent({ children }: { children: ReactNode }) {
                     ),
                   };
                 } else {
-                  // Create new expedient
                   const newExpedient: IExpedient = {
                     id: `${Date.now()}`,
                     weekday: Number.parseInt(formData.weekday),

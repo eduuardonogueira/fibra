@@ -62,8 +62,12 @@ import StatusBadge from "@/components/statusBadge";
 import { ptBR } from "date-fns/locale";
 import { DeleteAppointment } from "./deleteAppointment";
 import EditModal from "./editModal";
+import { useSearchParams } from "next/navigation";
 
 export default function AppointmentsPage() {
+  const searchParams = useSearchParams();
+  const editDialog = searchParams.get("editDialog");
+
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
   const [customerTypeFilter, setCustomerTypeFilter] = useState<string[]>([]);
@@ -115,6 +119,25 @@ export default function AppointmentsPage() {
     setIsLoading(true);
     fetchAppointments();
   }, [pagination.currentPage, pagination.pageSize]);
+
+  useEffect(() => {
+    function isShouldBeOpenEditDialog() {
+      if (editDialog && appointments && !selectedAppointment) {
+        const selectedAppointment = appointments.find(
+          (appointment) => appointment.id === editDialog
+        );
+
+        if (selectedAppointment) {
+          openEditDialog(selectedAppointment);
+          return;
+        }
+
+        myToast("Erro", "Erro ao abrir agendamento selecionado");
+      }
+    }
+
+    isShouldBeOpenEditDialog();
+  }, [appointments]);
 
   const statusTypes = Array.from(
     new Set(

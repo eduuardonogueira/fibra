@@ -19,7 +19,10 @@ import { ICustomerType } from "@/types/customerTypes";
 
 import { CUSTOMERS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-import { getCustomerAndAppointmentsById, updateCustomer } from "@/hooks/useCustomers";
+import {
+  getCustomerAndAppointmentsById,
+  updateCustomer,
+} from "@/hooks/useCustomers";
 import { getCustomerTypes } from "@/hooks/useCustomerTypes";
 
 export default function EditCustomerPage({
@@ -47,7 +50,7 @@ export default function EditCustomerPage({
     phone: "",
     customerType: {
       id: "",
-      name: "adulto",
+      name: "",
     },
   });
 
@@ -65,10 +68,10 @@ export default function EditCustomerPage({
           setCustumer(foundCustomerData);
           setCustomerTypes(customerTypesData);
         } else {
-          myToast("Erro", "Usuário não encontrado");
+          myToast("Erro", "Paciente não encontrado");
         }
       } catch (error) {
-        myToast("Erro", "Falha ao carregar dados do usuário");
+        myToast("Erro", "Falha ao carregar dados do paciente");
       } finally {
         setIsLoading(false);
       }
@@ -82,7 +85,7 @@ export default function EditCustomerPage({
     setIsSaving(true);
 
     if (!editedCustomer) {
-      myToast("Error", "Falha ao atualizar informações do usuário");
+      myToast("Error", "Falha ao atualizar informações do paciente");
       return;
     }
 
@@ -90,14 +93,14 @@ export default function EditCustomerPage({
       const response = await updateCustomer(customerId, editedCustomer);
 
       if (!response) {
-        myToast("Error", "Falha ao atualizar informações do usuário");
+        myToast("Error", "Falha ao atualizar informações do paciente");
         return;
       }
 
-      myToast("Sucesso", "Usuário atualizado com sucesso!");
+      myToast("Sucesso", "Paciente atualizado com sucesso!");
       router.push(CUSTOMERS_ROUTE);
     } catch (error) {
-      myToast("Error", "Falha ao atualizar informações do usuário");
+      myToast("Error", "Falha ao atualizar informações do paciente");
     } finally {
       setIsSaving(false);
     }

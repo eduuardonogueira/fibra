@@ -46,18 +46,16 @@ export async function createService(
 }
 
 export async function updateService(
+  id: string,
   service: IServiceForm
 ): Promise<IService | null> {
   try {
-    const response = await fetch(
-      `${process.env.BACKEND_URL}/services/with-users`,
-      {
-        method: "PATCH",
-        body: JSON.stringify(service),
-        headers: { "Content-Type": "application/json" },
-        // headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const response = await fetch(`${process.env.BACKEND_URL}/services/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(service),
+      headers: { "Content-Type": "application/json" },
+      // headers: { Authorization: `Bearer ${token}` },
+    });
     return response.json();
   } catch (error) {
     console.log(error);
