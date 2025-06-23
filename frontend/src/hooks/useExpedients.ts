@@ -23,8 +23,6 @@ export async function updateExpedient(
   id: string,
   expedient: ICreateExpedient
 ): Promise<ICreateExpedient | null> {
-  console.log(id);
-  console.log(expedient);
   try {
     const response = await fetch(
       `${process.env.BACKEND_URL}/expedients/${id}`,
@@ -54,8 +52,6 @@ export async function deleteExpedient(
         // headers: { Authorization: `Bearer ${token}` },
       }
     );
-
-    console.log(response.status);
 
     return {
       status: response.status,
