@@ -15,49 +15,10 @@ import UpcomingAppointments from "./upcomingAppointments";
 import ClientDistribution from "./clientDistribution";
 import { use, useEffect } from "react";
 import { myToast } from "@/components/myToast";
+import { IStatistics } from "@/types/dashboard";
 
 interface IPageContentProps {
-  statsPromise: Promise<{
-    totalAppointments: number;
-    completedAppointments: number;
-    canceledAppointments: number;
-    pendingAppointments: number;
-    totalClients: number;
-    totalServices: number;
-    totalProfessionals: number;
-    appointmentsByStatus: {
-      SCHEDULED: number;
-      DELAYED: number;
-      COMPLETED: number;
-      CANCELED: number;
-    };
-    appointmentsByService: {
-      "Consulta Regular": number;
-      "Primeira Consulta": number;
-      "Consulta de Retorno": number;
-      "Consulta Especializada": number;
-      "Consulta Familiar": number;
-    };
-    appointmentsByProfessional: {
-      "Dra. Ana Silva": number;
-      "Dr. Carlos Mendes": number;
-      "Dra. Mariana Costa": number;
-      "Dr. Paulo Ribeiro": number;
-    };
-    monthlyAppointments: {
-      date: Date;
-      count: number;
-    }[];
-    upcomingAppointments: {
-      id: number;
-      customerName: string;
-      dateTime: Date;
-      professional: string;
-      serviceType: string;
-      status: string;
-    }[];
-    clientsByType: Record<string, number>;
-  }>;
+  statsPromise: Promise<IStatistics | null>;
 }
 
 export default function PageContent({ statsPromise }: IPageContentProps) {
@@ -70,6 +31,10 @@ export default function PageContent({ statsPromise }: IPageContentProps) {
       { icon: <OctagonAlert color="red" />, position: "top-center" }
     );
   }, []);
+
+  if (!stats) {
+    return <div>Erro ao carregar o Dashboard</div>;
+  }
 
   return (
     <>

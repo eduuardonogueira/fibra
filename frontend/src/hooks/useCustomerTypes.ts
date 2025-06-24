@@ -7,7 +7,6 @@ export async function getCustomerTypes(): Promise<ICustomerType[] | null> {
     const response = await fetch(`${process.env.BACKEND_URL}/customer-types`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      // headers: { Authorization: `Bearer ${token}` },
     });
 
     const data = await response.json();

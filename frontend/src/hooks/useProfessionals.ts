@@ -1,5 +1,7 @@
 "use server";
 
+import { cookies } from "next/headers";
+
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
 import {
   ICreateProfessional,
@@ -15,7 +17,6 @@ export async function getProfessionalById(id: string): Promise<IUser | null> {
     const response = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      // headers: { Authorization: `Bearer ${token}` },
     });
 
     return response.json();
@@ -26,11 +27,16 @@ export async function getProfessionalById(id: string): Promise<IUser | null> {
 }
 
 export async function getProfessionals(): Promise<IUser[] | null> {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("authToken")?.value;
+
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/users`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
-      // headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
     });
 
     return response.json();
@@ -48,11 +54,17 @@ export async function getProfessionalsAndServices(
     "/users/with-services",
     paginationProps
   );
+
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("authToken")?.value;
+
   try {
     const response = await fetch(url, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
-      // headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
     });
 
     return response.json();
@@ -65,6 +77,9 @@ export async function getProfessionalsAndServices(
 export async function getProfessionalsWithServicesAndExpedients(
   paginationProps: IPaginationProps
 ): Promise<IPaginationResponse<IUserWithServicesAndExpedients[]> | null> {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("authToken")?.value;
+
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
     "/users/professionals-services-expedients",
@@ -73,8 +88,10 @@ export async function getProfessionalsWithServicesAndExpedients(
   try {
     const response = await fetch(url, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
-      // headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
     });
 
     return response.json();
@@ -87,12 +104,17 @@ export async function getProfessionalsWithServicesAndExpedients(
 export async function createProfessional(
   customer: ICreateProfessional
 ): Promise<IUser | null> {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("authToken")?.value;
+
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/users`, {
       method: "POST",
       body: JSON.stringify(customer),
-      headers: { "Content-Type": "application/json" },
-      // headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
     });
 
     return response.json();
@@ -105,11 +127,16 @@ export async function createProfessional(
 export async function deleteProfessional(
   id: string
 ): Promise<{ status: number } | null> {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("authToken")?.value;
+
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      // headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
     });
 
     return {
@@ -138,7 +165,6 @@ export async function getProfessionalCalendar({
       `${process.env.BACKEND_URL}/user-services/schedule?${searchParams}`,
       {
         method: "GET",
-        // headers: { Authorization: `Bearer ${token}` },
       }
     );
 

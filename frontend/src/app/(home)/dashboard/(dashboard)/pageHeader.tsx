@@ -60,7 +60,7 @@ export default function PageHeader({
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2 md:mb-8 gap-4">
       <div>
         <CardTitle className="text-2xl">Calendário Semanal</CardTitle>
         <CardDescription>

@@ -58,10 +58,9 @@ export default function Login() {
   }
 
   return (
-    <div className="container mx-auto flex w-full h-screen max-w-[800px] items-center ">
+    <div className="container mx-auto flex w-full h-screen max-w-[800px] items-center px-4">
       <Card className="flex flex-col items-center w-full py-20">
-        <div className="flex items-center justify-around gap-4">
-          <CardTitle className="text-3xl font-bold">Login</CardTitle>
+        <div className="flex flex-col items-center justify-around gap-4">
           <Image
             src="/logo.png"
             alt="logo"
@@ -69,6 +68,7 @@ export default function Login() {
             height={50}
             className="h-20 w-20"
           />
+          <CardTitle className="text-3xl font-bold">Login</CardTitle>
         </div>
         <Form {...form}>
           <form

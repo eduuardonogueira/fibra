@@ -198,7 +198,7 @@ export default function EditModal({
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="serviceId">Serviço *</Label>
                 {!services ? (
@@ -263,7 +263,7 @@ export default function EditModal({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="dateTime">Data *</Label>
                 <Input

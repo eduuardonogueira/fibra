@@ -16,7 +16,7 @@ export default function WeekNavigation({
   filteredAppointments,
 }: IWeekNavigationProps) {
   return (
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
