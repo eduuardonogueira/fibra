@@ -21,7 +21,7 @@ export async function login(
 
     if (token) {
       const cookieStore = await cookies();
-      cookieStore.set("session", token);
+      cookieStore.set("authToken", token);
       return true;
     }
   } catch (error) {
@@ -32,16 +32,16 @@ export async function login(
 
 export async function validate(): Promise<boolean | null> {
   const cookieStore = await cookies();
-  const token = cookieStore.get("authToken");
+  const authToken = cookieStore.get("authToken")?.value;
 
-  if (!token) {
+  if (!authToken) {
     return null;
   }
 
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/auth/validate`, {
       method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${authToken}` },
     });
 
     if (!response || response.status === 401) return false;
@@ -55,16 +55,16 @@ export async function validate(): Promise<boolean | null> {
 
 export async function getProfile(): Promise<IUser | null> {
   const cookieStore = await cookies();
-  const token = cookieStore.get("session");
+  const authToken = cookieStore.get("authToken")?.value;
 
-  if (!token) {
+  if (!authToken) {
     return null;
   }
 
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/auth/profile`, {
       method: "GET",
-      headers: { Authorization: `Bearer ${token.value}` },
+      headers: { Authorization: `Bearer ${authToken}` },
     });
 
     if (!response || response.status === 401) return null;

@@ -20,7 +20,7 @@ export async function getAppointments(
   );
 
   const cookieStore = await cookies();
-  const authToken = cookieStore.get("session");
+  const authToken = cookieStore.get("authToken")?.value;
 
   try {
     const response = await fetch(url, {
@@ -38,8 +38,6 @@ export async function getAppointments(
 export async function getAppointmentById(
   id: string
 ): Promise<IFormatedAppointment | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("session");
   try {
     const response = await fetch(
       `${process.env.BACKEND_URL}/appointments/${id}`,
@@ -47,7 +45,6 @@ export async function getAppointmentById(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
         },
       }
     );
@@ -63,7 +60,8 @@ export async function createAppointment(
   Appointment: ICreateAppointment
 ): Promise<IAppointment | null> {
   const cookieStore = await cookies();
-  const authToken = cookieStore.get("session");
+  const authToken = cookieStore.get("authToken")?.value;
+
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/appointments`, {
       method: "POST",
@@ -86,7 +84,8 @@ export async function deleteAppointment(
   id: string
 ): Promise<{ status: number } | null> {
   const cookieStore = await cookies();
-  const authToken = cookieStore.get("session");
+  const authToken = cookieStore.get("authToken")?.value;
+
   try {
     const response = await fetch(
       `${process.env.BACKEND_URL}/appointments/${id}`,
@@ -113,7 +112,8 @@ export async function updateAppointment(
   Appointment: UpdateAppointment
 ): Promise<IFormatedAppointment | null> {
   const cookieStore = await cookies();
-  const authToken = cookieStore.get("session");
+  const authToken = cookieStore.get("authToken")?.value;
+
   try {
     const response = await fetch(
       `${process.env.BACKEND_URL}/appointments/${id}`,
@@ -127,7 +127,6 @@ export async function updateAppointment(
       }
     );
 
-    console.log(response.status);
     return response.json();
   } catch (error) {
     console.log(error);
