@@ -1,9 +1,8 @@
 "use server";
 
 import { IService, IServiceForm, IServiceList } from "@/types/services";
-import { getUrlApiPagination } from "./useApi";
+import { authFetch, getUrlApiPagination } from "./useApi";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
-import { cookies } from "next/headers";
 
 export async function getServices(
   paginationProps?: IPaginationProps
@@ -28,18 +27,14 @@ export async function getServices(
 export async function createService(
   service: IServiceForm
 ): Promise<IService | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(
+    const response = await authFetch(
       `${process.env.BACKEND_URL}/services/with-users`,
       {
         method: "POST",
         body: JSON.stringify(service),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
         },
       }
     );
@@ -54,18 +49,17 @@ export async function updateService(
   id: string,
   service: IServiceForm
 ): Promise<IService | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/services/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(service),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
+    const response = await authFetch(
+      `${process.env.BACKEND_URL}/services/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(service),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.json();
   } catch (error) {
     console.log(error);
@@ -76,17 +70,16 @@ export async function updateService(
 export async function deleteService(
   id: string
 ): Promise<{ status: number } | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/services/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
+    const response = await authFetch(
+      `${process.env.BACKEND_URL}/services/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     return {
       status: response.status,

@@ -6,16 +6,9 @@ export async function getCustomerTypes(): Promise<ICustomerType[] | null> {
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/customer-types`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
     });
 
-    const data = await response.json();
-    const formatedData = data.map((type: ICustomerType) => ({
-      ...type,
-      id: type.id.toString(),
-    }));
-
-    return formatedData;
+    return await response.json();
   } catch (error) {
     console.log(error);
     return null;

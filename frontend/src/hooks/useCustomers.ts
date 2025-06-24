@@ -5,9 +5,8 @@ import {
   ICustomer,
   ICustomerAndAppointments,
 } from "@/types/customers";
-import { getUrlApiPagination } from "./useApi";
+import { authFetch, getUrlApiPagination } from "./useApi";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
-import { cookies } from "next/headers";
 
 export async function getCustomers(
   paginationProps?: IPaginationProps
@@ -18,15 +17,11 @@ export async function getCustomers(
     paginationProps ? paginationProps : { currentPage: 1, pageSize: 50 }
   );
 
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(url, {
+    const response = await authFetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
       },
     });
 
@@ -40,17 +35,16 @@ export async function getCustomers(
 export async function getCustomerAndAppointmentsById(
   id: string
 ): Promise<ICustomerAndAppointments | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/customers/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
+    const response = await authFetch(
+      `${process.env.BACKEND_URL}/customers/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const foundCustomer: ICustomerAndAppointments = await response.json();
 
@@ -79,15 +73,11 @@ export async function getCustomersAndAppointments(
     paginationProps
   );
 
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(url, {
+    const response = await authFetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
       },
     });
 
@@ -101,16 +91,12 @@ export async function getCustomersAndAppointments(
 export async function createCustomer(
   customer: ICreateCustomer
 ): Promise<ICustomer | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/customers`, {
       method: "POST",
       body: JSON.stringify(customer),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
       },
     });
 
@@ -125,18 +111,17 @@ export async function updateCustomer(
   id: string,
   customer: ICreateCustomer
 ): Promise<ICustomer | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/customers/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(customer),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
+    const response = await authFetch(
+      `${process.env.BACKEND_URL}/customers/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(customer),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     return response.json();
   } catch (error) {
@@ -148,17 +133,16 @@ export async function updateCustomer(
 export async function deleteCustomer(
   id: string
 ): Promise<{ status: number } | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/customers/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
+    const response = await authFetch(
+      `${process.env.BACKEND_URL}/customers/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     return {
       status: response.status,

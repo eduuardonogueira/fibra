@@ -2,6 +2,7 @@
 
 import { IUser } from "@/types/users";
 import { cookies } from "next/headers";
+import { authFetch } from "./useApi";
 
 export async function login(
   username: string,
@@ -30,42 +31,32 @@ export async function login(
   return false;
 }
 
-export async function validate(): Promise<boolean | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
-  if (!authToken) {
-    return null;
-  }
-
+export async function validate(): Promise<boolean> {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/auth/validate`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
+    const response = await authFetch(
+      `${process.env.BACKEND_URL}/auth/validate`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response || response.status === 401) return false;
 
     return response.json();
   } catch (error) {
     console.log(error);
-    return null;
+    return false;
   }
 }
 
 export async function getProfile(): Promise<IUser | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
-  if (!authToken) {
-    return null;
-  }
-
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/auth/profile`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
+    const response = await authFetch(
+      `${process.env.BACKEND_URL}/auth/profile`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response || response.status === 401) return null;
 

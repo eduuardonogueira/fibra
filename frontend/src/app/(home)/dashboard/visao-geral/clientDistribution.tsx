@@ -24,12 +24,12 @@ export default function ClientDistribution({
             ([type, count]: [string, number]) => {
               const percentage = Math.round((count / totalClients) * 100);
               const typeLabels = {
-                adulto: "Adulto",
+                guarda: "Guarda",
                 mirim: "Mirim",
                 familiar: "Familiar",
               };
               const typeColors = {
-                adulto: "bg-gray-500",
+                guarda: "bg-gray-500",
                 mirim: "bg-purple-500",
                 familiar: "bg-amber-500",
               };

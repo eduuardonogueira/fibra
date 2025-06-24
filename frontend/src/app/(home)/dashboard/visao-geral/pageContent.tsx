@@ -1,20 +1,13 @@
 "use client";
 
-import {
-  Calendar,
-  Users,
-  CheckCircle,
-  XCircle,
-  OctagonAlert,
-} from "lucide-react";
+import { Calendar, Users, CheckCircle, XCircle } from "lucide-react";
 
 import StatisticsProgress from "@/components/statisticsProgress";
 import HeatmapCalendar from "./heatmapCalendar";
 import AppointmentsStatistics from "./appointmentsStatistics";
 import UpcomingAppointments from "./upcomingAppointments";
 import ClientDistribution from "./clientDistribution";
-import { use, useEffect } from "react";
-import { myToast } from "@/components/myToast";
+import { use } from "react";
 import { IStatistics } from "@/types/dashboard";
 
 interface IPageContentProps {
@@ -23,14 +16,6 @@ interface IPageContentProps {
 
 export default function PageContent({ statsPromise }: IPageContentProps) {
   const stats = use(statsPromise);
-
-  useEffect(() => {
-    myToast(
-      "Atenção",
-      "Estes dados não são reais, somente valores simbólicos",
-      { icon: <OctagonAlert color="red" />, position: "top-center" }
-    );
-  }, []);
 
   if (!stats) {
     return <div>Erro ao carregar o Dashboard</div>;
