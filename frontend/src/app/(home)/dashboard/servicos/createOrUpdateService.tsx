@@ -70,6 +70,7 @@ export function CreateOrUpdateService({
         }
       } catch (error) {
         myToast("Erro", "Falha ao conectar com o servidor");
+        console.log(error);
       } finally {
         setIsLoading(false);
       }

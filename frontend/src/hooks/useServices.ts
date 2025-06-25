@@ -1,8 +1,9 @@
 "use server";
 
 import { IService, IServiceForm, IServiceList } from "@/types/services";
-import { authFetch, getUrlApiPagination } from "./useApi";
+import { getUrlApiPagination } from "./useApi";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
+import { authFetch } from "./useAuthFetch";
 
 export async function getServices(
   paginationProps?: IPaginationProps
@@ -38,6 +39,7 @@ export async function createService(
         },
       }
     );
+
     return response.json();
   } catch (error) {
     console.log(error);
@@ -75,9 +77,6 @@ export async function deleteService(
       `${process.env.BACKEND_URL}/services/${id}`,
       {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
       }
     );
 

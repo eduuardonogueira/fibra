@@ -7,7 +7,8 @@ import {
   IFormatedAppointment,
   UpdateAppointment,
 } from "@/types/appointments";
-import { authFetch, getUrlApiPagination } from "./useApi";
+import { getUrlApiPagination } from "./useApi";
+import { authFetch } from "./useAuthFetch";
 
 export async function getAppointments(
   paginationProps: IPaginationProps

@@ -5,8 +5,9 @@ import {
   ICustomer,
   ICustomerAndAppointments,
 } from "@/types/customers";
-import { authFetch, getUrlApiPagination } from "./useApi";
+import { getUrlApiPagination } from "./useApi";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
+import { authFetch } from "./useAuthFetch";
 
 export async function getCustomers(
   paginationProps?: IPaginationProps
@@ -69,7 +70,7 @@ export async function getCustomersAndAppointments(
 ): Promise<IPaginationResponse<ICustomerAndAppointments[]> | null> {
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
-    "/customers/customers-with-appointments",
+    "/customers",
     paginationProps
   );
 

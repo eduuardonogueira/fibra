@@ -1,7 +1,7 @@
 "use server";
 
 import { ICreateExpedient } from "@/types/expedient";
-import { authFetch } from "./useApi";
+import { authFetch } from "./useAuthFetch";
 
 export async function createExpedient(
   expedient: ICreateExpedient
@@ -14,6 +14,8 @@ export async function createExpedient(
         "Content-Type": "application/json",
       },
     });
+    console.log(response.status);
+
     return response.json();
   } catch (error) {
     console.log(error);

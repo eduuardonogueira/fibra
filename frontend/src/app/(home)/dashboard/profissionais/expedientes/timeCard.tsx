@@ -47,8 +47,6 @@ export default function TimeCard({
     {}
   );
 
-  console.log(joinByWeekday);
-
   return (
     <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
       {Object.entries(joinByWeekday).map(([weekday, expedients], index) => (

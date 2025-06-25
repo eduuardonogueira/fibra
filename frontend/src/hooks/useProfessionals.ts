@@ -1,7 +1,5 @@
 "use server";
 
-import { cookies } from "next/headers";
-
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
 import {
   ICreateProfessional,
@@ -11,6 +9,7 @@ import {
   IUserWithServicesAndExpedients,
 } from "@/types/users";
 import { getUrlApiPagination } from "./useApi";
+import { authFetch } from "./useAuthFetch";
 
 export async function getProfessionalById(id: string): Promise<IUser | null> {
   try {
@@ -27,15 +26,11 @@ export async function getProfessionalById(id: string): Promise<IUser | null> {
 }
 
 export async function getProfessionals(): Promise<IUser[] | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users`, {
+    const response = await authFetch(`${process.env.BACKEND_URL}/users`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
       },
     });
 
@@ -55,16 +50,9 @@ export async function getProfessionalsAndServices(
     paginationProps
   );
 
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(url, {
+    const response = await authFetch(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
     });
 
     return response.json();
@@ -77,21 +65,14 @@ export async function getProfessionalsAndServices(
 export async function getProfessionalsWithServicesAndExpedients(
   paginationProps: IPaginationProps
 ): Promise<IPaginationResponse<IUserWithServicesAndExpedients[]> | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   const url = getUrlApiPagination(
     process.env.BACKEND_URL,
     "/users/professionals-services-expedients",
     paginationProps
   );
   try {
-    const response = await fetch(url, {
+    const response = await authFetch(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
     });
 
     return response.json();
@@ -104,16 +85,12 @@ export async function getProfessionalsWithServicesAndExpedients(
 export async function createProfessional(
   customer: ICreateProfessional
 ): Promise<IUser | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users`, {
+    const response = await authFetch(`${process.env.BACKEND_URL}/users`, {
       method: "POST",
       body: JSON.stringify(customer),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
       },
     });
 
@@ -127,16 +104,9 @@ export async function createProfessional(
 export async function deleteProfessional(
   id: string
 ): Promise<{ status: number } | null> {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
-
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
+    const response = await authFetch(`${process.env.BACKEND_URL}/users/${id}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
     });
 
     return {

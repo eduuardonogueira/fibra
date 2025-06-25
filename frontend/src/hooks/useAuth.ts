@@ -2,7 +2,7 @@
 
 import { IUser } from "@/types/users";
 import { cookies } from "next/headers";
-import { authFetch } from "./useApi";
+import { authFetch } from "./useAuthFetch";
 
 export async function login(
   username: string,
@@ -15,7 +15,7 @@ export async function login(
       body: JSON.stringify({ email: username, password }),
     });
 
-    if (!response || response.status === 401) return false;
+    if (!response || response.status === 403) return false;
 
     const data = await response.json();
     const { token } = data;
@@ -40,7 +40,7 @@ export async function validate(): Promise<boolean> {
       }
     );
 
-    if (!response || response.status === 401) return false;
+    if (!response || response.status === 403) return false;
 
     return response.json();
   } catch (error) {
@@ -58,7 +58,7 @@ export async function getProfile(): Promise<IUser | null> {
       }
     );
 
-    if (!response || response.status === 401) return null;
+    if (!response || response.status === 403) return null;
 
     return response.json();
   } catch (error) {

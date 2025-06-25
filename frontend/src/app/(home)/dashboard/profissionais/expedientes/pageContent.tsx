@@ -152,6 +152,9 @@ export default function PageContent({ children }: { children: ReactNode }) {
         ...currentService,
       };
 
+      console.log(formData);
+      console.log(expedientData);
+
       const response = currentExpedient
         ? await updateExpedient(currentExpedient.id, expedientData)
         : await createExpedient(expedientData);

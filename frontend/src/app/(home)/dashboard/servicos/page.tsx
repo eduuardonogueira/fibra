@@ -244,17 +244,21 @@ export default function ServicesPage() {
         </CardContent>
       </Card>
 
-      <CreateOrUpdateService
-        isDialogOpen={isDialogOpen}
-        setIsDialogOpen={setIsDialogOpen}
-        services={services}
-        setServices={setServices}
-        currentService={currentService}
-        formData={formData}
-        setFormData={setFormData}
-        isSubmitting={isSubmitting}
-        setIsSubmitting={setIsSubmitting}
-      />
+      {isDialogOpen ? (
+        <CreateOrUpdateService
+          isDialogOpen={isDialogOpen}
+          setIsDialogOpen={setIsDialogOpen}
+          services={services}
+          setServices={setServices}
+          currentService={currentService}
+          formData={formData}
+          setFormData={setFormData}
+          isSubmitting={isSubmitting}
+          setIsSubmitting={setIsSubmitting}
+        />
+      ) : (
+        ""
+      )}
 
       <DeleteService
         isDeleteDialogOpen={isDeleteDialogOpen}
