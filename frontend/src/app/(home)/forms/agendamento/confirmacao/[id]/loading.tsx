@@ -1,5 +1,5 @@
 import Loader from "@/components/loader";
 
 export default function Loading() {
-  return <Loader text="Carregando informações do usuário" />;
+  return <Loader text="Carregando informações do agendamento" />;
 }

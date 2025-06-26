@@ -42,6 +42,8 @@ export async function getAppointmentById(
       }
     );
 
+    if (response.status === 404) return null;
+
     return response.json();
   } catch (error) {
     console.log(error);
