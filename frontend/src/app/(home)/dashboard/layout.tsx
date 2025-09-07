@@ -1,8 +1,10 @@
-import { DashboardSidebar } from "@/components/dashboardSidebar";
-import { HeaderBreadcrumb } from "@/components/headerBreadcrumb";
+import {
+  AppFooter,
+  RequireAuth,
+  DashboardSidebar,
+  HeaderBreadcrumb,
+} from "@/components/index";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { RequireAuth } from "@/components/requireAuth";
-import AppFooter from "@/components/appFooter";
 
 export default async function AuthLayout({
   children,
@@ -24,3 +26,4 @@ export default async function AuthLayout({
     </RequireAuth>
   );
 }
+

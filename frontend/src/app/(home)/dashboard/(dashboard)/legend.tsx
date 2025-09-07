@@ -1,7 +1,7 @@
 "use server";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import UseCalendarLegend from "@/hooks/useCalendarLegend";
+import { UseCalendarLegend } from "@/hooks/index";
 
 export default async function Legend() {
   const { legends } = UseCalendarLegend();
@@ -25,3 +25,4 @@ export default async function Legend() {
     </Card>
   );
 }
+

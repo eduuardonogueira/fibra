@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-export default async function AppFooter() {
+export async function AppFooter() {
   return (
     <footer className="flex w-full justify-center items-center px-4 pt-4 gap-2 box-border">
       <Image

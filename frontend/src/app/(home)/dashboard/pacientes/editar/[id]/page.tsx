@@ -5,25 +5,22 @@ import type React from "react";
 import { useState, useEffect, use } from "react";
 
 import { Card } from "@/components/ui/card";
-
-import { CustomerFormHeader } from "@/components/customerFormHeader";
-import { CustomerFormFooter } from "@/app/(home)/dashboard/pacientes/customerFormFooter";
-import { CustomerFormContent } from "@/app/(home)/dashboard/pacientes/customerFormContent";
-import { myToast } from "@/components/myToast";
+import { CustomerFormFooter } from "../../customerFormFooter";
+import { CustomerFormContent } from "../../customerFormContent";
+import { myToast, CustomerFormHeader,  } from "@/components/index";
 
 import { NotFoundCustomer } from "./notFoundCustomer";
 import Loading from "./loading";
 
-import { ICustomer } from "@/types/customers";
-import { ICustomerType } from "@/types/customerTypes";
+import { ICustomer, ICustomerType } from "@/types/index";
 
 import { CUSTOMERS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
 import {
+  getCustomerTypes,
   getCustomerAndAppointmentsById,
   updateCustomer,
-} from "@/hooks/useCustomers";
-import { getCustomerTypes } from "@/hooks/useCustomerTypes";
+} from "@/api/index";
 
 export default function EditCustomerPage({
   params,
@@ -160,3 +157,4 @@ export default function EditCustomerPage({
     </div>
   );
 }
+

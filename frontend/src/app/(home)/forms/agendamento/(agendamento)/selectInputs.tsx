@@ -11,15 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IRegisterCustomerForm } from "../../../../../types/registerCustomerForm";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { IServiceList } from "@/types/services";
-import { ICustomerType } from "@/types/customerTypes";
-import SelectDisabled from "@/components/selectDisabled";
-import { myToast } from "@/components/myToast";
 import { Loader2 } from "lucide-react";
-import { getCustomerTypes } from "@/hooks/useCustomerTypes";
-import { getServices } from "@/hooks/useServices";
+import {
+  IRegisterCustomerForm,
+  IServiceList,
+  ICustomerType,
+} from "@/types/index";
+import { SelectDisabled, myToast } from "@/components/index";
+import { getCustomerTypes, getServices } from "@/api/index";
 
 interface ISelectInput extends IRegisterCustomerForm {
   selectedService: IServiceList | undefined;
@@ -194,3 +194,4 @@ export default function SelectInputs({
     </div>
   );
 }
+

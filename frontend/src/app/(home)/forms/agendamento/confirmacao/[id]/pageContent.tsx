@@ -23,10 +23,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { myToast } from "@/components/myToast";
-import StatusBadge from "@/components/statusBadge";
+import { myToast, StatusBadge, CustomerTypeBadge } from "@/components/index";
 import { DASHBOARD_ROUTE, SCHEDULE_APPOINTMENT } from "@/constants/routes";
-import { CustomerTypeBadge } from "@/components/customerTypeBadge";
 import { IFormatedAppointment } from "@/types/appointments";
 import {
   address,
@@ -296,7 +294,7 @@ export default function PageContent({
           Imprimir
         </Button>
 
-        <Button onClick={handleSendEmail} className="hover:cursor-pointer" >
+        <Button onClick={handleSendEmail} className="hover:cursor-pointer">
           <Mail className="mr-2 h-4 w-4" />
           Enviar por Email
         </Button>
@@ -333,3 +331,4 @@ export default function PageContent({
     </div>
   );
 }
+

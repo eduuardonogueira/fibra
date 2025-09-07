@@ -5,9 +5,9 @@ import {
   ICustomer,
   ICustomerAndAppointments,
 } from "@/types/customers";
-import { getUrlApiPagination } from "./useApi";
+import { getUrlApiPagination } from "./api";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
-import { authFetch } from "./useAuthFetch";
+import { authFetch } from "./authFetch";
 
 export async function getCustomers(
   paginationProps?: IPaginationProps
@@ -153,3 +153,4 @@ export async function deleteCustomer(
     return null;
   }
 }
+

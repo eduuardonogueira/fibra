@@ -1,6 +1,6 @@
 import { Badge } from "./ui/badge";
 
-export default function StatusBadge({ status }: { status: string }) {
+export function StatusBadge({ status }: { status: string }) {
   const statusStyles = {
     SCHEDULED: "bg-green-100 text-green-800 hover:bg-green-100",
     DELAYED: "bg-yellow-100 text-yellow-800 hover:bg-yellow-100",

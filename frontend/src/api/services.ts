@@ -1,9 +1,9 @@
 "use server";
 
 import { IService, IServiceForm, IServiceList } from "@/types/services";
-import { getUrlApiPagination } from "./useApi";
+import { getUrlApiPagination } from "./api";
 import { IPaginationProps, IPaginationResponse } from "@/types/api";
-import { authFetch } from "./useAuthFetch";
+import { authFetch } from "./authFetch";
 
 export async function getServices(
   paginationProps?: IPaginationProps
@@ -88,3 +88,4 @@ export async function deleteService(
     return null;
   }
 }
+

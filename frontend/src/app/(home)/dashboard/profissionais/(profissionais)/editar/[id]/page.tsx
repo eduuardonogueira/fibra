@@ -7,7 +7,7 @@ import { useState, useEffect, use } from "react";
 import { Card } from "@/components/ui/card";
 
 import { CustomerFormHeader } from "@/components/customerFormHeader";
-import { myToast } from "@/components/myToast";
+import { myToast } from "@/components/index";
 
 import { NotFoundProfessional } from "./notFoundProfessional";
 import Loading from "./loading";
@@ -18,7 +18,7 @@ import { ProfessionalFormFooter } from "../../professionalFormFooter";
 import { ProfessionalFormContent } from "../../professionalFormContent";
 import { userRoles } from "@/constants/roles";
 import { ICreateProfessional, IUser, UserRoles } from "@/types/users";
-import { getProfessionalById } from "@/hooks/useProfessionals";
+import { getProfessionalById } from "@/api/index";
 
 export default function EditCustomerPage({
   params,
@@ -130,3 +130,4 @@ export default function EditCustomerPage({
     </div>
   );
 }
+

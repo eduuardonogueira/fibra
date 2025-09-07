@@ -2,7 +2,7 @@
 
 import { IUser } from "@/types/users";
 import { cookies } from "next/headers";
-import { authFetch } from "./useAuthFetch";
+import { authFetch } from "./authFetch";
 
 export async function login(
   username: string,
@@ -66,3 +66,4 @@ export async function getProfile(): Promise<IUser | null> {
     return null;
   }
 }
+

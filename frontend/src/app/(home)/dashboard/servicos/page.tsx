@@ -26,9 +26,8 @@ import { IServiceForm, IServiceList } from "@/types/services";
 import { Badge } from "@/components/ui/badge";
 import { CreateOrUpdateService } from "./createOrUpdateService";
 import { DeleteService } from "./deleteService";
-import { myToast } from "@/components/myToast";
-import { getServices } from "@/hooks/useServices";
-import { Pagination } from "@/components/pagination";
+import { myToast, Pagination } from "@/components/index";
+import { getServices } from "@/api/index";
 
 export default function ServicesPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -270,3 +269,4 @@ export default function ServicesPage() {
     </div>
   );
 }
+

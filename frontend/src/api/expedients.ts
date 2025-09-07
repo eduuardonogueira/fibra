@@ -1,7 +1,7 @@
 "use server";
 
 import { ICreateExpedient } from "@/types/expedient";
-import { authFetch } from "./useAuthFetch";
+import { authFetch } from "./authFetch";
 
 export async function createExpedient(
   expedient: ICreateExpedient
@@ -64,3 +64,4 @@ export async function deleteExpedient(
     return null;
   }
 }
+

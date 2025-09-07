@@ -10,21 +10,20 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import AddressInputs from "./addressInputs";
 import PersonalInputs from "./personalInputs";
 import SelectInputs from "./selectInputs";
 import { CalendarInput } from "./calendarInput";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { IServiceList } from "@/types/services";
 import { ICreateCustomer } from "@/types/customers";
 import { Loader2 } from "lucide-react";
-import { myToast } from "@/components/myToast";
 import { useRouter } from "next/navigation";
+import { myToast } from "@/components/index";
 import { CONFIRMATION_APPOINTMENT } from "@/constants/routes";
-import { createCustomer } from "@/hooks/useCustomers";
-import { createAppointment } from "@/hooks/useAppointments";
-import { Textarea } from "@/components/ui/textarea";
+import { createCustomer, createAppointment } from "@/api/index";
 
 const formSchema = z.object({
   fullName: z.string().min(10).max(100),
@@ -151,3 +150,4 @@ export default function CardForm() {
     </Form>
   );
 }
+

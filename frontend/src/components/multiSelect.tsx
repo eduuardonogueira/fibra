@@ -63,6 +63,7 @@ export function MultiSelect({
       <PopoverTrigger asChild>
         <div
           role="combobox"
+          aria-controls=""
           aria-expanded={open}
           className={cn(
             "flex min-h-10 w-full flex-wrap items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:cursor-pointer",
@@ -145,3 +146,4 @@ export function MultiSelect({
     </Popover>
   );
 }
+

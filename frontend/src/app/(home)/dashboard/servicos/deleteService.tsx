@@ -1,4 +1,4 @@
-import { myToast } from "@/components/myToast";
+import { myToast } from "@/components/index";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { deleteService } from "@/hooks/useServices";
+import { deleteService } from "@/api/index";
 import { IServiceList } from "@/types/services";
 
 interface IDeleteServiceProps {
@@ -76,3 +76,4 @@ export function DeleteService({
     </AlertDialog>
   );
 }
+

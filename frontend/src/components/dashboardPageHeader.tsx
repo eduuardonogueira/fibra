@@ -11,7 +11,7 @@ interface IDashboardPageHeaderProps {
   text: string;
 }
 
-export default async function DashboardPageHeader({
+export async function DashboardPageHeader({
   title,
   text,
 }: IDashboardPageHeaderProps) {

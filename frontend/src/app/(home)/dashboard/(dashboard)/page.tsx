@@ -11,15 +11,14 @@ import {
   isSameDay,
 } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
+import { myToast, Loader } from "@/components/index";
 import AppointmentsDetailsModal from "./appointmentsDetailsModal";
 import CalendarTimeSlots from "./calendarTimeSlots";
 import CalendarHeader from "./calendarHeader";
 import WeekNavigation from "./weekNavigation";
 import PageHeader from "./pageHeader";
-import { getAppointments } from "@/hooks/useAppointments";
-import { IFormatedAppointment } from "@/types/appointments";
-import { myToast } from "@/components/myToast";
-import Loader from "@/components/loader";
+import { getAppointments } from "@/api/index";
+import { IFormatedAppointment } from "@/types/index";
 
 export default function Overview() {
   const [isModalOpen, setIsModalOpen] = useState(false);

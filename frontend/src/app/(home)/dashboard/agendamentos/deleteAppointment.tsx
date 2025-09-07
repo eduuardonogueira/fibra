@@ -1,4 +1,4 @@
-import { myToast } from "@/components/myToast";
+import { myToast } from "@/components/index";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,11 +9,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { deleteAppointment } from "@/hooks/useAppointments";
-import {
-  IAppointmentsDetails,
-  IFormatedAppointment,
-} from "@/types/appointments";
+import { deleteAppointment } from "@/api/index";
+import { IAppointmentsDetails, IFormatedAppointment } from "@/types/index";
 
 interface IDeleteServiceProps {
   isDeleteDialogOpen: boolean;
@@ -86,3 +83,4 @@ export function DeleteAppointment({
     </AlertDialog>
   );
 }
+

@@ -13,11 +13,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
-import { myToast } from "@/components/myToast";
-import { IUser } from "@/types/users";
+import { myToast } from "@/components/index";
+import { IUser } from "@/types/index";
 import { useEffect, useState } from "react";
-import { createService, updateService } from "@/hooks/useServices";
-import { getProfessionals } from "@/hooks/useProfessionals";
+import { createService, updateService, getProfessionals } from "@/api/index";
 
 interface ICreateOrUpdateServiceProps {
   isDialogOpen: boolean;
@@ -264,3 +263,4 @@ export function CreateOrUpdateService({
     </Dialog>
   );
 }
+

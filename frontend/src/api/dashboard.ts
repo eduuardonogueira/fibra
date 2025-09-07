@@ -1,5 +1,5 @@
 import { IStatistics } from "@/types/dashboard";
-import { authFetch } from "./useAuthFetch";
+import { authFetch } from "./authFetch";
 
 export async function getStatistics(): Promise<IStatistics | null> {
   try {
@@ -16,3 +16,4 @@ export async function getStatistics(): Promise<IStatistics | null> {
     return null;
   }
 }
+

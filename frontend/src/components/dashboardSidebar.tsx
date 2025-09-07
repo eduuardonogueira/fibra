@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { ReactNode, Suspense } from "react";
 import DashboardSidebarContent from "./dashboardSidebarContent";
 import DashboardSidebarFooter from "./dashboardSidebarFooter";
-import { getProfile } from "@/hooks/useAuth";
+import { getProfile } from "@/api/index";
 
 export async function DashboardSidebar({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();

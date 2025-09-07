@@ -40,18 +40,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CustomerTypeBadge } from "@/components/customerTypeBadge";
-import { ICustomerAndAppointments } from "@/types/customers";
-import { Pagination } from "@/components/pagination";
+import { ICustomerAndAppointments } from "@/types/index";
 import {
   CREATE_CUSTOMER_ROUTE,
   UPDATE_CUSTOMER_ROUTE,
 } from "@/constants/routes";
-import { myToast } from "@/components/myToast";
-import {
-  deleteCustomer,
-  getCustomersAndAppointments,
-} from "@/hooks/useCustomers";
+import { myToast, Pagination, CustomerTypeBadge } from "@/components/index";
+import { deleteCustomer, getCustomersAndAppointments } from "@/api/index";
 
 export default function CustomerPage() {
   const router = useRouter();
@@ -331,3 +326,4 @@ export default function CustomerPage() {
     </div>
   );
 }
+

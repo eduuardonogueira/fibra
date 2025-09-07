@@ -8,8 +8,8 @@ import {
   IUserWithServices,
   IUserWithServicesAndExpedients,
 } from "@/types/users";
-import { getUrlApiPagination } from "./useApi";
-import { authFetch } from "./useAuthFetch";
+import { getUrlApiPagination } from "./api";
+import { authFetch } from "./authFetch";
 
 export async function getProfessionalById(id: string): Promise<IUser | null> {
   try {
@@ -144,3 +144,4 @@ export async function getProfessionalCalendar({
     return null;
   }
 }
+

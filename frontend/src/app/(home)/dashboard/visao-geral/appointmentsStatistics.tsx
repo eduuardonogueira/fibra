@@ -1,4 +1,4 @@
-import StatusBadge from "@/components/statusBadge";
+import { StatusBadge } from "@/components/index";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart3 } from "lucide-react";
@@ -123,3 +123,4 @@ export default function AppointmentsStatistics({
     </Tabs>
   );
 }
+

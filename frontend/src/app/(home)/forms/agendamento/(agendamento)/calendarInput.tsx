@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -5,13 +6,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { IRegisterCustomerForm } from "@/types/registerCustomerForm";
+import { Label } from "@/components/ui/label";
+import { IRegisterCustomerForm } from "@/types/index";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
 import { ptBR } from "date-fns/locale";
-import { Label } from "@/components/ui/label";
-import SelectDisabled from "@/components/selectDisabled";
 import {
   Select,
   SelectContent,
@@ -19,12 +18,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IProfessionalCalendar } from "@/types/users";
-import { IServiceList } from "@/types/services";
-import { myToast } from "@/components/myToast";
-import { useGetAvailableTimeSlots } from "@/hooks/useGetAvailableTimeSlots";
-import { getAllDatesDisabled } from "@/hooks/useGetAllDatesDisabled";
-import { getProfessionalCalendar } from "@/hooks/useProfessionals";
+import { IProfessionalCalendar, IServiceList } from "@/types/index";
+import { myToast, SelectDisabled } from "@/components/index";
+import { useGetAvailableTimeSlots, getAllDatesDisabled } from "@/hooks/index";
+import { getProfessionalCalendar } from "@/api/index";
 
 interface ICalendarInput extends IRegisterCustomerForm {
   selectedService: IServiceList | undefined;
@@ -177,3 +174,4 @@ export function CalendarInput({
     </div>
   );
 }
+

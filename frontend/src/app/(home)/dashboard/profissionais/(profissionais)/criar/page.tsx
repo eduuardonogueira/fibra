@@ -2,13 +2,12 @@
 
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
-import { myToast } from "@/components/myToast";
+import { myToast, CustomerFormHeader } from "@/components/index";
 import { PROFESSIONALS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-import { createProfessional } from "@/hooks/useProfessionals";
+import { createProfessional } from "@/api/index";
 import { ICreateProfessional, UserRoles } from "@/types/users";
 import { ProfessionalFormContent } from "../professionalFormContent";
-import { CustomerFormHeader } from "@/components/customerFormHeader";
 import { ProfessionalFormFooter } from "../professionalFormFooter";
 import { userRoles } from "@/constants/roles";
 
@@ -71,7 +70,7 @@ export default function CreateCustomer() {
             title="Criar Profissional"
             description="Adicione os dados cadastrais do profissional"
           />
-          <div className='mt-4'>
+          <div className="mt-4">
             <ProfessionalFormContent
               handleRoleChange={handleRoleChange}
               handleInputChange={handleInputChange}
@@ -93,3 +92,4 @@ export default function CreateCustomer() {
     </div>
   );
 }
+

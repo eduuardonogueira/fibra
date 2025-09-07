@@ -15,17 +15,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { myToast } from "@/components/myToast";
-import { ICreateExpedient, IExpedient } from "@/types/expedient";
-import { IUserWithServicesAndExpedients } from "@/types/users";
+import { myToast } from "@/components/index";
+import {
+  ICreateExpedient,
+  IExpedient,
+  IUserWithServicesAndExpedients,
+} from "@/types/index";
 import ProfessionalExpedientCard from "./professionalExpedientCard";
 import CreateDialog from "./createDialog";
-import { getProfessionalsWithServicesAndExpedients } from "@/hooks/useProfessionals";
 import {
+  getProfessionalsWithServicesAndExpedients,
   createExpedient,
   deleteExpedient,
   updateExpedient,
-} from "@/hooks/useExpedients";
+} from "@/api/index";
 
 export default function PageContent({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -330,3 +333,4 @@ export default function PageContent({ children }: { children: ReactNode }) {
     </div>
   );
 }
+

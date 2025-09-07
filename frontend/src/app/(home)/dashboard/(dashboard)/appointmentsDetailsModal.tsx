@@ -1,5 +1,4 @@
-import { CustomerTypeBadge } from "@/components/customerTypeBadge";
-import StatusBadge from "@/components/statusBadge";
+import { CustomerTypeBadge, StatusBadge } from "@/components/index";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -177,3 +176,4 @@ export default function AppointmentsDetailsModal({
     </Dialog>
   );
 }
+

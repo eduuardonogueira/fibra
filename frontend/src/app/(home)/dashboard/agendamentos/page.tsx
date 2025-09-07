@@ -49,16 +49,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import DetailsModal from "./detailsModal";
-import { CustomerTypeBadge } from "@/components/customerTypeBadge";
 import {
   EnumAppointmentStatusMap,
   IAppointmentsDetails,
   IFormatedAppointment,
-} from "@/types/appointments";
+} from "@/types/index";
 import { Pagination } from "@/components/pagination";
-import { getAppointments } from "@/hooks/useAppointments";
-import { myToast } from "@/components/myToast";
-import StatusBadge from "@/components/statusBadge";
+import { getAppointments } from "@/api/index";
+import { myToast, StatusBadge, CustomerTypeBadge } from "@/components/index";
 import { ptBR } from "date-fns/locale";
 import { DeleteAppointment } from "./deleteAppointment";
 import EditModal from "./editModal";
@@ -278,7 +276,7 @@ export default function AppointmentsPage() {
 
   return (
     <div className="container mx-auto">
-      <Card>
+      <Card className="box-border w-full">
         <CardHeader>
           <CardTitle className="text-2xl">Agendamentos</CardTitle>
           <CardDescription>
@@ -292,7 +290,7 @@ export default function AppointmentsPage() {
             </div>
           ) : (
             <>
-              <div className="flex flex-col md:flex-row gap-4 mb-6 flex-wrap">
+              <div className="flex flex-col w-full md:flex-row gap-4 mb-6 flex-wrap box-border">
                 <div className="relative flex-1 min-w-[250px]">
                   <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -457,7 +455,7 @@ export default function AppointmentsPage() {
                 </Button>
               </div>
 
-              <div className="rounded-md border overflow-hidden">
+              <div className="flex flex-col rounded-md border overflow-hidden">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -486,7 +484,7 @@ export default function AppointmentsPage() {
                     {filteredAppointments && filteredAppointments.length > 0 ? (
                       filteredAppointments.map((appointment) => (
                         <TableRow key={appointment.id}>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium ">
                             {appointment.customer.fullName}
                           </TableCell>
                           <TableCell className="hidden lg:table-cell">
@@ -605,3 +603,4 @@ export default function AppointmentsPage() {
     </div>
   );
 }
+

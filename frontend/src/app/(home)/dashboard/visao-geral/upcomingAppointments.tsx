@@ -1,4 +1,4 @@
-import StatusBadge from "@/components/statusBadge";
+import { StatusBadge } from "@/components/index";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -91,3 +91,4 @@ export default function UpcomingAppointments({
     </Card>
   );
 }
+

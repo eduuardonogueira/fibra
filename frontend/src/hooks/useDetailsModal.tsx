@@ -1,6 +1,5 @@
-import { CustomerTypeBadge } from "@/components/customerTypeBadge";
-import StatusBadge from "@/components/statusBadge";
-import { IAppointmentsDetails } from "@/types/appointments";
+import { StatusBadge, CustomerTypeBadge } from "@/components/index";
+import { IAppointmentsDetails } from "@/types/index";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -64,3 +63,4 @@ export const detailsModal: IDetailsModal[] = [
     format: (string) => (string ? `${string}` : "Sem observações"),
   },
 ];
+

@@ -2,9 +2,9 @@
 
 import { Suspense } from "react";
 import PageContent from "./pageContent";
-import { getStatistics } from "@/hooks/useDashboard";
 import QuickLinks from "./quickLinks";
-import Loader from "@/components/loader";
+import { getStatistics } from "@/api/index";
+import { Loader } from "@/components/index";
 
 export default async function Overview() {
   const statsPromise = getStatistics();
@@ -17,3 +17,4 @@ export default async function Overview() {
     </div>
   );
 }
+

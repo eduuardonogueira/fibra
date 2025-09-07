@@ -7,14 +7,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CardDescription, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Filter } from "lucide-react";
 import { ptBR } from "date-fns/locale";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { getProfessionalsAndServices } from "@/hooks/useProfessionals";
-import { myToast } from "@/components/myToast";
-import { IUserWithServices } from "@/types/users";
-import { CardDescription, CardTitle } from "@/components/ui/card";
+import { getProfessionalsAndServices } from "@/api/index";
+import { myToast } from "@/components/index";
+import { IUserWithServices } from "@/types/index";
 
 interface IPageHeaderProps {
   weekStart: Date;

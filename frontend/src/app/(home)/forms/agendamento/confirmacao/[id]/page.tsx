@@ -1,7 +1,7 @@
 "use server";
-import { validate } from "@/hooks/useAuth";
+
+import { validate, getAppointmentById } from "@/api/index";
 import PageContent from "./pageContent";
-import { getAppointmentById } from "@/hooks/useAppointments";
 import { Suspense } from "react";
 import NotFound from "./notFound";
 
@@ -22,3 +22,4 @@ export default async function ConfirmationPage({
     </Suspense>
   );
 }
+

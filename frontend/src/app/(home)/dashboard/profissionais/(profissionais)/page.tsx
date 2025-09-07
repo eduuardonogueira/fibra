@@ -31,19 +31,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pagination } from "@/components/pagination";
 import {
   CREATE_PROFESSIONAL_ROUTE,
   UPDATE_PROFESSIONAL_ROUTE,
 } from "@/constants/routes";
-import { myToast } from "@/components/myToast";
 import { IUserWithServices } from "@/types/users";
 import { Badge } from "@/components/ui/badge";
-import { ProfessionalRoleBadge } from "@/components/professionalRoleBadge";
-import {
-  deleteProfessional,
-  getProfessionalsAndServices,
-} from "@/hooks/useProfessionals";
+import { ProfessionalRoleBadge, myToast, Pagination } from "@/components/index";
+import { deleteProfessional, getProfessionalsAndServices } from "@/api/index";
 
 export default function ProfessionalPage() {
   const router = useRouter();
@@ -295,3 +290,4 @@ export default function ProfessionalPage() {
     </div>
   );
 }
+

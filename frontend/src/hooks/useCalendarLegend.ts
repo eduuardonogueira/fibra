@@ -1,4 +1,4 @@
-export default function UseCalendarLegend() {
+export function UseCalendarLegend() {
   const legends = [
     {
       label: "Agendado",
@@ -19,3 +19,4 @@ export default function UseCalendarLegend() {
   ];
   return { legends };
 }
+

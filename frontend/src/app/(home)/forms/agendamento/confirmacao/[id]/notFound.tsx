@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { DASHBOARD_ROUTE, SCHEDULE_APPOINTMENT } from "@/constants/routes";
-import { validate } from "@/hooks/useAuth";
+import { validate } from "@/api/index";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -36,3 +36,4 @@ export default async function NotFound() {
     </div>
   );
 }
+

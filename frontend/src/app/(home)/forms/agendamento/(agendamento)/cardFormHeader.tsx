@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DASHBOARD_ROUTE } from "@/constants/routes";
-import { validate } from "@/hooks/useAuth";
+import { validate } from "@/api/index";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -35,3 +35,4 @@ export default async function CardFormHeader() {
     </CardHeader>
   );
 }
+

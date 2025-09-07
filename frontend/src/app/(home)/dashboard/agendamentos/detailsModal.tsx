@@ -7,11 +7,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Dispatch, SetStateAction } from "react";
-import { detailsModal, IDetailsModal } from "@/hooks/useDetailsModal";
+import { detailsModal, IDetailsModal } from "@/hooks/index";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2 } from "lucide-react";
-import { IAppointmentsDetails } from "@/types/appointments";
+import { IAppointmentsDetails } from "@/types/index";
 import { UPDATE_CUSTOMER_ROUTE } from "@/constants/routes";
 
 interface IModalProps {

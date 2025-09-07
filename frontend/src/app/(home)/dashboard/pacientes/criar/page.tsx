@@ -1,18 +1,15 @@
 "use client";
 
-import { CustomerFormContent } from "@/app/(home)/dashboard/pacientes/customerFormContent";
-import { CustomerFormFooter } from "@/app/(home)/dashboard/pacientes/customerFormFooter";
-import { CustomerFormHeader } from "@/components/customerFormHeader";
+import { CustomerFormContent } from "../customerFormContent";
+import { CustomerFormFooter } from "../customerFormFooter";
 import { Card } from "@/components/ui/card";
-import { ICustomerAndAppointments } from "@/types/customers";
 import { useEffect, useState } from "react";
-import { ICustomerType } from "@/types/customerTypes";
-import { myToast } from "@/components/myToast";
-import { CUSTOMERS_ROUTE } from "@/constants/routes";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { getCustomerTypes } from "@/hooks/useCustomerTypes";
-import { createCustomer } from "@/hooks/useCustomers";
+import { myToast, CustomerFormHeader } from "@/components/index";
+import { CUSTOMERS_ROUTE } from "@/constants/routes";
+import { ICustomerAndAppointments, ICustomerType } from "@/types/index";
+import { getCustomerTypes, createCustomer } from "@/api/index";
 
 export default function CreateCustomer() {
   const router = useRouter();
@@ -131,3 +128,4 @@ export default function CreateCustomer() {
     </div>
   );
 }
+

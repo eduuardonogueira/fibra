@@ -18,22 +18,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { getServices } from "@/hooks/useServices";
+import {
+  getServices,
+  getProfessionals,
+  getCustomers,
+  updateAppointment,
+} from "@/api/index";
 import { Briefcase, Loader2, Save, User, UserCheck } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { getProfessionals } from "@/hooks/useProfessionals";
-import { getCustomers } from "@/hooks/useCustomers";
-import { myToast } from "@/components/myToast";
-import { IServiceList } from "@/types/services";
-import { IUser } from "@/types/users";
-import { ICustomer } from "@/types/customers";
+import { myToast } from "@/components/index";
 import { format } from "date-fns";
-import { updateAppointment } from "@/hooks/useAppointments";
 import {
+  IUser,
+  IServiceList,
+  ICustomer,
   AppointmentStatus,
   IAppointmentsDetails,
   IFormatedAppointment,
-} from "@/types/appointments";
+} from "@/types/index";
 
 interface IFormData {
   serviceId: string;
@@ -360,3 +362,4 @@ export default function EditModal({
     </Dialog>
   );
 }
+
