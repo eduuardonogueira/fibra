@@ -1,5 +1,6 @@
 export const HOME_ROUTE = "/";
-export const LOGIN_ROUTE = "/login";
+export const LOGIN_ROUTE = "/auth/login";
+export const FORGOT_ROUTE = "/auth/recuperar-senha";
 
 export const DASHBOARD_ROUTE = "/dashboard";
 export const OVERVIEW_ROUTE = `${DASHBOARD_ROUTE}/visao-geral`;
@@ -21,3 +22,4 @@ export const EXPEDIENTS_ROUTE = `${PROFESSIONALS_ROUTE}/expedientes`;
 
 export const SCHEDULE_APPOINTMENT = "/forms/agendamento";
 export const CONFIRMATION_APPOINTMENT = `${SCHEDULE_APPOINTMENT}/confirmacao`;
+
