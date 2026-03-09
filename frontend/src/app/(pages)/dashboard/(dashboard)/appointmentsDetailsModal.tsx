@@ -38,7 +38,7 @@ export default function AppointmentsDetailsModal({
 
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125">
         <DialogHeader>
           <DialogTitle>Detalhes do Agendamento</DialogTitle>
           <DialogDescription>

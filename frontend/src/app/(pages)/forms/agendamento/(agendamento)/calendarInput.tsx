@@ -83,25 +83,25 @@ export function CalendarInput({
   }
 
   const daysOff = professionalCalendar?.dayOffs?.map(
-    (day) => new Date(day.dayOff)
+    (day) => new Date(day.dayOff),
   );
   const journey = professionalCalendar?.expedient?.filter(
-    (workSchedule) => workSchedule.weekday === selectedDate?.getDay()
+    (workSchedule) => workSchedule.weekday === selectedDate?.getDay(),
   );
   const appointments = professionalCalendar?.appointments?.filter(
     (appointment) =>
-      new Date(appointment.dateTime).getDate() === selectedDate?.getDate()
+      new Date(appointment.dateTime).getDate() === selectedDate?.getDate(),
   );
   const breaks = professionalCalendar?.timeOffs?.filter(
     (timeOff) =>
-      new Date(timeOff.startDateTime).getDate() === selectedDate?.getDate()
+      new Date(timeOff.startDateTime).getDate() === selectedDate?.getDate(),
   );
 
   const availableTimeSlots = useGetAvailableTimeSlots(
     journey,
     appointments,
     breaks,
-    selectedService?.duration
+    selectedService?.duration,
   );
 
   return (
@@ -131,12 +131,12 @@ export function CalendarInput({
                 mode="single"
                 selected={selectedDate}
                 onSelect={setSelectedDate}
-                initialFocus
+                autoFocus
                 disabled={(date) =>
                   getAllDatesDisabled(
                     date,
                     daysOff,
-                    professionalCalendar?.expedient
+                    professionalCalendar?.expedient,
                   )
                 }
               />

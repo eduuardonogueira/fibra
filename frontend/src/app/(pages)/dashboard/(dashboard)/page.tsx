@@ -123,7 +123,7 @@ export default function Overview() {
         <Card className="p-0">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <div className="min-w-[800px]">
+              <div className="min-w-200">
                 <CalendarHeader weekDays={weekDays} />
                 <CalendarTimeSlots
                   weekDays={weekDays}

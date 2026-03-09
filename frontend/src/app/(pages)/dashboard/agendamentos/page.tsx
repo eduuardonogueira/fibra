@@ -333,7 +333,7 @@ export default function AppointmentsPage() {
                       mode="single"
                       selected={dateFilter}
                       onSelect={setDateFilter}
-                      initialFocus
+                      autoFocus
                     />
                   </PopoverContent>
                 </Popover>

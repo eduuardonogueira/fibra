@@ -1,5 +1,5 @@
 export const HOME_ROUTE = "/";
-export const LOGIN_ROUTE = "/login";
+export const LOGIN_ROUTE = "/auth/login";
 export const FORGOT_ROUTE = "/auth/recuperar-senha";
 
 export const DASHBOARD_ROUTE = "/dashboard";
