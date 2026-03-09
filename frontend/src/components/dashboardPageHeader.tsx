@@ -31,7 +31,7 @@ export async function DashboardPageHeader({
         <Link href={CREATE_CUSTOMER_ROUTE} className="w-full sm:w-fit">
           <Button variant="outline" className="w-full hover:cursor-pointer">
             <UserPlus2Icon className="mr-2 h-4 w-4" />
-            Novo Cliente
+            Novo Paciente
           </Button>
         </Link>
       </div>
