@@ -61,7 +61,7 @@ export default function Login() {
   return (
     <div>
       <Image
-        src="/logo-background.jpg"
+        src="/logo-background.webp"
         alt="Transladanção"
         width={1024}
         height={682}
