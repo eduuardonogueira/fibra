@@ -60,13 +60,13 @@ export default function Login() {
 
   return (
     <div>
-      <Image
+      {/* <Image
         src="/logo-background.webp"
-        alt="Transladanção"
+        alt="Transladação"
         width={1024}
         height={682}
         className="absolute -z-10 bg-cover h-full w-full"
-      />
+      /> */}
       <div className="container mx-auto flex w-full h-screen max-w-200 items-center px-4">
         <Card className="flex flex-col items-center w-full py-20">
           <div className="flex flex-col items-center justify-around gap-4">

@@ -346,7 +346,7 @@ export default function AppointmentsPage() {
                     >
                       {serviceTypeFilter.length > 0
                         ? `Serviço (${serviceTypeFilter.length})`
-                        : "Tipo de Atendimento"}
+                        : "Serviço"}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="min-w-62.5">
@@ -372,8 +372,8 @@ export default function AppointmentsPage() {
                       className="min-w-37.5 hover:cursor-pointer"
                     >
                       {customerTypeFilter.length > 0
-                        ? `Tipo (${customerTypeFilter.length})`
-                        : "Tipo de Paciente"}
+                        ? `Categoria (${customerTypeFilter.length})`
+                        : "Categoria"}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-50">
@@ -468,15 +468,15 @@ export default function AppointmentsPage() {
                       <TableHead className="hidden lg:table-cell">
                         Telefone
                       </TableHead>
-                      <TableHead>Data Agendamento</TableHead>
+                      <TableHead>Data</TableHead>
                       <TableHead className="hidden lg:table-cell">
-                        Tipo de Atendimento
+                        Serviço
                       </TableHead>
                       <TableHead className="hidden sm:table-cell">
                         Duração
                       </TableHead>
                       <TableHead className="hidden md:table-cell">
-                        Tipo
+                        Categoria
                       </TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead className="text-center">Ações</TableHead>
